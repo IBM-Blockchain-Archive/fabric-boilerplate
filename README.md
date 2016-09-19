@@ -36,7 +36,7 @@ WORKSPACE/
 ------app.js  
 ------blockchain/  
 ---------blockchain.js  
----------chaincodeconfig.js 
+---------chaincodeconfig.js
 ------chaincode/
 ---------[project-chaincode]/
 -------------chaincode.go
@@ -62,7 +62,7 @@ Important: you need to enable security by changing a line in the file "$GO_Path/
 
 ### Synchronize Vagrant chaincode folder with your local one
 Important: you need to add the following line to "$GO_Path/src/github.com/hyperledger/fabric/devenv/Vagrantfile" in order to make the chaincode accessible inside the Vagrant box. Replace "LOCAL_PATH_TO_CHAINCODE_FOLDER" with the path to you chaincode:
-  
+
 > config.vm.synced_folder "LOCAL_PATH_TO_CHAINCODE_FOLDER", "/opt/gopath/src/chaincode"
 
 LOCAL_PATH_TO_CHAINCODE_FOLDER should point to your [general-chaincode] directory, while you can keep the same path for the second argument. For instance:
@@ -86,10 +86,10 @@ chaincode:{
     invoke_test_data: true 					            // Whether it should fill the chaincode with test data after deployment or not.
 }
 
-# Architecture 
+# Architecture
 The 'server' directory contains a NodeJS server. The connection to the blockchain is managed from the blockchain subdirectory.
 
-Credentials.json has the connection details for the IBM Blockchain service. 
+Credentials.json has the connection details for the IBM Blockchain service.
 
 
 # Running Local Blockchain nodes
@@ -125,7 +125,7 @@ Make sure you have the npm package `nodemon` installed. You can do so with `sudo
 > cd [project-folder]  
 > npm start
 
-If you want to run it manually, do 'node bin/www'. 
+If you want to run it manually, do 'node bin/www'.
 
 The server will start with deploying the chaincode.
 
@@ -148,7 +148,7 @@ Follow these steps: https://github.com/hyperledger/fabric/blob/master/docs/API/C
 
 ### Running it
 
-Follow these steps in your terminal (locally): 
+Follow these steps in your terminal (locally):
 > cd /opt/gopath/src/github.com/hyperledger/fabric/core/rest
 > http-server -a 0.0.0.0 -p 5554 --cors
 
@@ -162,7 +162,7 @@ To see the logging of your chaincode:
 2. Start a seperate 'vagrant ssh' session
 3. Run 'docker ps'
 4. Copy the newest docker image name (it is the first one, the name looks something like this: dev-jdoe-c814cf80954dccf7334db9d3ad765009376fed5d742cda0479c75e245e2d85aa770157225034b272d2188b80eb91d07726f663c3f743200c12d2c6c20c52b02b)
-5. Run 'docker attach IMAGE_NAME' 
+5. Run 'docker attach IMAGE_NAME'
 
 # Support and documentation
 Hyperledger project:                https://www.hyperledger.org/
