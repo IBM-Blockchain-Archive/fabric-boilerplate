@@ -1,0 +1,43 @@
+vp0:
+  extends:
+    file: compose-defaults.yml
+    service: vp
+  environment:
+    - CORE_PEER_ID=vp0
+    - CORE_PEER_DISCOVERY_PERIOD=1s
+    - CORE_PEER_DISCOVERY_TOUCHPERIOD=1s
+    - CORE_SECURITY_ENROLLID=test_vp0
+    - CORE_SECURITY_ENROLLSECRET=MwYpmSRjupbT
+    - CORE_PEER_PKI_ECA_PADDR=membersrvc:50051
+    - CORE_PEER_PKI_TCA_PADDR=membersrvc:50051
+    - CORE_PEER_PKI_TLSCA_PADDR=membersrvc:50051
+  ports:
+    - "5000:5000"
+    - "30303:30303"
+  links:
+    - membersrvc
+
+vp1:
+  extends:
+    file: compose-defaults.yml
+    service: vp
+  environment:
+    - CORE_PEER_ID=vp1
+    - CORE_PEER_DISCOVERY_ROOTNODE=vp0:30303
+    - CORE_SECURITY_ENROLLID=test_vp1
+    - CORE_SECURITY_ENROLLSECRET=5wgHK9qqYaPy
+    - CORE_PEER_PKI_ECA_PADDR=membersrvc:50051
+    - CORE_PEER_PKI_TCA_PADDR=membersrvc:50051
+    - CORE_PEER_PKI_TLSCA_PADDR=membersrvc:50051
+  links:
+    - vp0
+    - membersrvc
+
+membersrvc:
+   image: hyperledger/fabric-membersrvc:master-6daedfd
+#   image: hyperledger/fabric-membersrvc:latest
+   volumes:
+     - ./blockchain/membersrvc.yaml:/opt/gopath/src/github.com/hyperledger/fabric/membersrvc/membersrvc.yaml
+   ports:
+     - "50051:50051"
+   command: membersrvc

@@ -1,0 +1,34 @@
+{
+	"users":[
+		{
+			"userId":"emma1",
+			"password":"passw0rd",
+			"firstName":"Emma",
+			"lastName":"Seybold",
+			"things":["12345678","87654321"],
+            "address": "David Ricardostraat 12, Amsterdam, The Netherlands",
+            "phoneNumber": "0900 0048",
+            "emailAddress": "emma.seybold@nl.ibm.com"
+		},
+		{
+			"userId":"bob1",
+			"password":"passw0rd",
+			"firstName":"Bob",
+			"lastName":"Payne",
+			"things":["87654321"],
+            "address": "Johan Huizingalaan 763, Amsterdam, The Netherlands",
+            "phoneNumber": "0900 0024",
+            "emailAddress": "bob.payne@nl.ibm.com"
+		}
+	],
+	"things":[
+		{
+			"id":"12345678",
+			"description":"Lorem Ipsum"
+		},
+		{
+			"id":"87654321",
+			"description":"Ipsum Lorem"
+		}
+	]
+}

@@ -1,0 +1,10 @@
+node_modules/*
+client/assets/node_modules/*
+blockchain/data/*
+blockchain/data/cc_summaries/*.json
+logs/*
+!blockchain/data/cc_summaries
+/.idea
+*.css
+!core.css
+.project

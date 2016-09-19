@@ -1,0 +1,72 @@
+<div class="outer-div">
+    <div class="wrapper">
+        <header-bar></header-bar>
+        <div id="main" class="container-fluid master-overview" role="main">
+
+            <div class="panel panel-default search-panel">
+
+                <div class="panel-body">
+
+                    <h2>Search transactions</h2>
+<!--
+                    <div class="input-group case-files-checkbox">
+                        <div class="checkbox checkbox-inline case-files-checkbox">
+                            <input id="inlineCheckbox" type="checkbox" ng-model="" ng-click="">
+                            <input id="inlineCheckbox" type="checkbox" ng-click="">
+                            <label for="inlineCheckbox">All </label>
+                        </div>
+                    </div>
+-->
+                    <input placeholder="Enter search terms" class="form-control" ng-model="monitor.query">
+
+                </div>
+            </div>
+
+            <error-message data-ng-show="" error=""></error-message>
+
+            <div ng-hide="">
+
+                <h3 class="no-search-results" ng-show="filtered.length == '0'">No search results</h3>
+                <div ng-hide="filtered.length == '0'">
+
+                    <div class="row">
+                        <div class="col-xs-12 page-title">
+                            <h2 class="panel-title">Timeline</h2>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <ul class="notificationBar">   
+                                <li data-ng-repeat="block in monitor.blocks | orderBy : block.timeStamp : true | filter:monitor.query as filtered">
+                                    <div>
+                                        <span class="glyphicon glyphicon-ok-circle"></span>
+                                        <h2>{{ block.timeStamp | date: 'dd-MM-yyyy HH:mm:ss' }}</h2>
+                                    </div>
+
+                                    <div class="row details hashes">
+                                        <p class="col-xs-2">State: </p><p class="col-xs-10">{{ block.stateHash | truncate: 60 }}</p>
+                                        <p class="col-xs-2">Previous Block Hash: </p><p class="col-xs-10">{{ block.previousBlockHash | truncate: 60}}</p>
+                                    </div>
+
+                                    <div class="transactions-box">
+                                        <h4 class="transaction-header">Transactions - {{ block.transactions.length }}</h4>
+                                        <div class="row details transaction" data-ng-repeat="trx in block.transactions | filter:monitor.query as filtered">
+                                            <span class="transaction-id"><span data-ng-if="trx.event.action" class="event">{{trx.event.action}}</span> <span data-ng-if="!trx.event.action" class="event">{{ trx.event}}</span> - {{ trx.timestamp.seconds | secondsToDateTime | date: 'dd-MM-yyyy HH:mm:ss':'+0400' }}  </span><br>
+                                            <p class="col-xs-2">UUID: </p><p class="col-xs-10">{{trx.uuid}}</p>
+                                            <p class="col-xs-2">Payload: </p><p class="col-xs-10">{{trx.payload | truncate : 200 }}</p>
+                                        </div>
+
+                                    </div>
+
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="push"></div>
+    </div>
+    <footer-bar id="footer"></footer-bar>
+</div>
