@@ -4,7 +4,6 @@ const morgan        = require('morgan');
 const logger        = require('./utils/logger');
 const cookieParser  = require('cookie-parser');
 const bodyParser    = require('body-parser');
-const config        = require('./config');
 const blockchain    = require('./blockchain/blockchain');
 
 const port = (process.env.VCAP_APP_PORT || 8080);

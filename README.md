@@ -9,29 +9,30 @@
 
 ## Clone this repo
 Use git clone from you preferred workspace folder to clone your project-code with:
-1. git clone [ project git url ]  
+1. git clone https://github.com/IBM-Blockchain/fabric-boilerplate.git 
 2. cd `fabric-boilerplate` and run `npm install`
 
 ## Setting up Hyperledgerr
-Create the following folder structure in your Go path: $GOPATH/src/github.com/hyperledger  
+Create the following folder structure in your Go path: $GOPATH/src/github.com/
 
 $GOPATH/src/github.com/  
 ----hyperledger/  
 ----chaincode/  
----------fabric-boilerplate/ 
+---------fabric-boilerplate/  
 ------------vendor/  
 ---------------github.com/  
 ------------------hyperledger/ 
 
-Go to the hyperleder folder and clone the fabric code:
+Go to the $GOPATH/src/github.com/hyperleder folder and clone the fabric code:
 > cd $GOPATH/src/github.com/hyperledger     
 > git clone https://github.com/hyperledger-archives/fabric.git
+> cd fabric
 > git checkout v0.5-developer-preview
 
 Once the repository is cloned, run the following command:
-> bash fabric/scripts/provision/docker.sh 0.0.10
+> bash scripts/provision/docker.sh 0.0.10
 
-This will prepare a docker baseimage in which the chaincode will be launched and deployed.
+This will prepare a docker baseimage in which the chaincode will be launched and deployed. This process takes quite a while.
 
 
 Copy the fabric folder that you just cloned and past it in 
@@ -47,11 +48,15 @@ Copy the chaincode.go file from the /chaincode/fabric-boilerplate folder inside 
 From you WORKSPACE/fabric-boilerplate folder:
 > ./start.sh
 
+The first time you run this, it will download the neccesary images for the peer and memberserivce. This takes a while. 
+
 Carefull if you also have other docker containers running
 
-Check if it's running by visiting `localhost:7050/chain` in your browser. 
+Check if the app is running at `http://localhost:8080/` in your browser. You can login with the user credentials you find in `testData/testData.json`
+You can also see if your local blockchain network is running at `localhost:7050/chain` in your browser. 
 
 # Running on Bluemix
+First run the app locally once, so that you are sure that a css file is created
 Deploying the application on Bluemix is not yet as easy as we would like. 
 There are two reasons that make it more difficult:
 
@@ -63,14 +68,13 @@ The easiest way to deploy a chaincode is to do it from you local environment bef
 
 Do the following steps to run the application on Bluemix
 
-1. Create a Blockchain Service on Bluemix
-2. Update line 10 of the manifest.yaml in the project root folder with the name of the Blockchain service you just created
-3. Copy the credentials of the Blockchain Service and save as `credentials.json` in blockchain/deployBluemix
-4. Download the tls certificate, you can find the url at the bottom of the credentials.json
-5. Save the certificate in blockchain/deployBluemix
-6. Copy the cerfificate to `$GOPATH/src/github.com/chaincode/fabric-boilerplate/` and rename the file to certificate.pem
+1. Create a Blockchain Service on Bluemix and name it `blockchain-fabric-boilerplate`
+2. Copy the credentials of the Blockchain Service and save as `credentials.json` in blockchain/deployBluemix
+3. Download the tls certificate, you can find the url at the bottom of the credentials.json
+4. Save the certificate in blockchain/deployBluemix
+5. Copy the cerfificate to `$GOPATH/src/github.com/chaincode/fabric-boilerplate/` and rename the file to certificate.pem
 
-7. Register users and deploy chaincode
+6. Register users and deploy chaincode
 go to fabric-boilerplate/blockchain/deployBluemix
 > node deployAndRegister.js
 
@@ -79,7 +83,9 @@ go to fabric-boilerplate/blockchain/deployBluemix
 This registers and enrolls the webappadmin user and all users listed in the testData/testData.json file and saves the eCerts in blockchain/deployBluemix/keyValueStore
 This also deploys the chaincode and saves the chaincodeID in blockchain/deployBluemix/latest_deployed
 
-8. Deploy app to bluemix
+7. Open the dashboard of the blockchain service on bluemix. Wait till you see the chaincode id appear on the `Network` tab, that it runs on all 4 peers and that all the way at the end it says `Up for x seconds/mintues` and that each of the 4 peers have the same amount of blocks. If this is the case, than you chaincode has been deployed succesfully!
+
+7. Deploy app to bluemix
 Go back to the project root folder
 use the cloud foundry cli, login to you bluemix environment and deploy the app with
 > cf push
