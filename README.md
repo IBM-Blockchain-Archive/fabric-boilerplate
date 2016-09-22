@@ -68,13 +68,13 @@ The easiest way to deploy a chaincode is to do it from you local environment bef
 
 Do the following steps to run the application on Bluemix
 
-1. Create a Blockchain Service on Bluemix and name it `blockchain-fabric-boilerplate`
-2. Copy the credentials of the Blockchain Service and save as `credentials.json` in blockchain/deployBluemix
-3. Download the tls certificate, you can find the url at the bottom of the credentials.json
-4. Save the certificate in blockchain/deployBluemix
-5. Copy the cerfificate to `$GOPATH/src/github.com/chaincode/fabric-boilerplate/` and rename the file to certificate.pem
+- Create a Blockchain Service on Bluemix and name it `blockchain-fabric-boilerplate`
+- Copy the credentials of the Blockchain Service and save as `credentials.json` in blockchain/deployBluemix
+- Download the tls certificate, you can find the url at the bottom of the credentials.json
+- Save the certificate in blockchain/deployBluemix
+- Copy the cerfificate to `$GOPATH/src/github.com/chaincode/fabric-boilerplate/` and rename the file to certificate.pem
 
-6. Register users and deploy chaincode
+- Register users and deploy chaincode
 go to fabric-boilerplate/blockchain/deployBluemix
 > node deployAndRegister.js
 
@@ -83,9 +83,9 @@ go to fabric-boilerplate/blockchain/deployBluemix
 This registers and enrolls the webappadmin user and all users listed in the testData/testData.json file and saves the eCerts in blockchain/deployBluemix/keyValueStore
 This also deploys the chaincode and saves the chaincodeID in blockchain/deployBluemix/latest_deployed  
 
-7. Open the dashboard of the blockchain service on bluemix. Wait till you see the chaincode id appear on the `Network` tab, that it runs on all 4 peers and that all the way at the end it says `Up for x seconds/mintues` and that each of the 4 peers have the same amount of blocks. If this is the case, than you chaincode has been deployed succesfully! 
+- Open the dashboard of the blockchain service on bluemix. Wait till you see the chaincode id appear on the `Network` tab, that it runs on all 4 peers and that all the way at the end it says `Up for x seconds/mintues` and that each of the 4 peers have the same amount of blocks. If this is the case, than you chaincode has been deployed succesfully! 
 
-8. Deploy app to bluemix
+- Deploy app to bluemix
 Go back to the project root folder
 use the cloud foundry cli, login to you bluemix environment and deploy the app with
 > cf push
