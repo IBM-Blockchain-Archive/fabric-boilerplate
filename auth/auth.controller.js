@@ -1,9 +1,9 @@
 'use strict';
-const AuthService   = require('../blockchainServices/auth.blockchainSrvc.js');
-const config        = require('../config');
-const crypto        = require('crypto');
-const jwt           = require('jsonwebtoken');
-const logger        = require('../utils/logger');
+const BlockchainService     = require('../blockchainServices/blockchainSrvc.js');
+const config                = require('../config');
+const crypto                = require('crypto');
+const jwt                   = require('jsonwebtoken');
+const logger                = require('../utils/logger');
 /*
     Authenticate user
 
@@ -11,11 +11,11 @@ const logger        = require('../utils/logger');
     URL : /auth/login
     Body:
         {
-            credentials.username,
-            credentials.password
+            username,
+            password
         }
     Response:
-        { token }
+        { useObject }
 */
 exports.login = function(req, res) {
 
@@ -23,7 +23,7 @@ exports.login = function(req, res) {
     
     const args = [req.body.username, req.body.password ];
     
-    AuthService.authenticate(args).then(function(result){
+    BlockchainService.query("authenticate", args, req.body.username).then(function(result){
         
         if (!result.user) {
             res.json({ success: false, message: 'Authentication failed. User not found.' });

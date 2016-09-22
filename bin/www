@@ -88,7 +88,3 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
-
-// Startup websocket
-var webSocket = require("../utils/websocket.js");
-webSocket.startWebSocket(server);

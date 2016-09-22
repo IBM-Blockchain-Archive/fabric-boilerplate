@@ -11,11 +11,8 @@ app.config(function ($routeProvider, $httpProvider) {
         templateUrl: 'app/components/master/master.html',
         controller: 'MasterController as master',
         resolve: {
-            loginCheck: function (CommonService) {
-                return CommonService.isLoggedIn();
-            },
-            caseFiles: function (CaseFilesService) {
-                return CaseFilesService.getCaseFiles();
+            things: function (ThingsService) {
+                return ThingsService.getAllThings();
             }
         }
     })
@@ -24,30 +21,14 @@ app.config(function ($routeProvider, $httpProvider) {
         templateUrl: 'app/components/detail/detail.html',
         controller: 'DetailController as detail',
         resolve: {
-            loginCheck: function (CommonService) {
-                return CommonService.isLoggedIn();
-            },
-            clientInfo: function (CaseFileService) {
-                return CaseFileService.getClientInfo();
-            }
-        }
-    })
-
-    .when('/monitor', {
-        templateUrl: 'app/components/monitor/monitor.html',
-        controller: 'MonitorController as monitor',
-        resolve: {
-            loginCheck: function (CommonService) {
-                return CommonService.isLoggedIn();
-            },
-            blocks: function (MonitorService) {
-                return MonitorService.getBlocks();
+            thing: function (ThingsService) {
+                return ThingsService.getThing();
             }
         }
     })
 
     .otherwise({
-        redirectTo: '/404'
+        redirectTo: '/'
     });
 
     $httpProvider.interceptors.push(['$q', '$location', '$localStorage', function ($q, $location, $localStorage) {

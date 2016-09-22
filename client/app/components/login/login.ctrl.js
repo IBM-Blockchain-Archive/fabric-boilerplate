@@ -1,4 +1,4 @@
-app.controller("LoginController", ["$location", "$rootScope", "CaseFileService", "LoginService", "$scope", "$localStorage", function ($location, $rootScope, CaseFileService, LoginService, $scope, $localStorage) {
+app.controller("LoginController",["$location", "LoginService", "$localStorage", function ($location, LoginService, $localStorage) {
 
     var vm = this;
 
@@ -21,27 +21,19 @@ app.controller("LoginController", ["$location", "$rootScope", "CaseFileService",
                     vm.showAuthenticatingSpinner = false;
 
                     // set user and navigation information on rootscope
-                    $rootScope.user.userId = result.user.userId;
-                    $rootScope.user.certRole = result.certRole;
-                    $rootScope.user.username = result.user.firstName + " " + result.user.lastName;
+                    $localStorage.user = result.user;
 
                     // store the token in localStorage
                     $localStorage.token = result.token;
+                    
+                    delete $localStorage.selectedThing;
 
-                    // route based on role
-                    if ($rootScope.user.certRole == 1) {
-                        $location.path("/master");
-                    } else if ($rootScope.user.certRole == 2) {
-                        $rootScope.currentKvkNumber = result.user.clients[0];
-                        $location.path("/client");
-                    }
+                    $location.path("/master");
                 } else {
                     vm.showAuthenticatingSpinner = false;
                     vm.invalidCredentials = true;
                 }
-
             }, function (error) {
-
                 console.log("Failed to authorize");
                 console.log(error);
                 vm.showAuthenticatingSpinner = false;

@@ -1,7 +1,7 @@
 #!/bin/bash
 DIR="$(pwd)"
 # Change to the project name
-PROJECT="BCBP"
+PROJECT="fabric-boilerplate"
 BC="$DIR/blockchain"
 # Make sure that the directory under /chaincode is the same as the project name
 CC="$DIR/chaincode/$PROJECT"
@@ -14,12 +14,15 @@ printf "Blockchain directory: $BC \n"
 
 clear_all()
 {
-    rm $BC/data/latest_deployed 2>/dev/null
+    rm $BC/deployLocal/latest_deployed 2>/dev/null
     printf "Latest deployed removed\n"
-    rm -rf /var/hyperledger/production && rm -rf /tmp/keyValStore 2>/dev/null
+    
+    rm -rf /var/hyperledger/production && rm -rf $BC/deployLocal/keyValueStore 2>/dev/null
     printf "keyValStore and var files removed\n"
+    
     docker rm -f $(docker ps -a -q) 2>/dev/null
     printf "All docker containers removed\n"
+    
     docker rmi $(docker images | grep "dev-" | awk '{print $1}') 2>/dev/null
     docker rmi $(docker images -qf "dangling=true") 2>/dev/null
     printf "All docker useless images removed\n"

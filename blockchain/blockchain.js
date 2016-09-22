@@ -5,37 +5,52 @@ var fs = require('fs-extra');
 var crypto = require('crypto')
 var logger = require('../utils/logger');
 var config = require('./chaincodeconfig');
-var testData = require('../testdata/testdata')
+var testData = require('../testData/testData.js')
 
-var chain, chaincodeID;
+var chain, chaincodeID, onBluemix;
 
 // Initialize blockchain.
 exports.init = function(){
     logger.info("[SDK] Initializing the blockchain")
 
+    // Creating a local chain object
     chain = hfc.newChain("chain-network");
 
+    // Setting the memberservice and peer urls
     var ca = config.network.ca[Object.keys(config.network.ca)[0]]
     var peer = config.network.peers[0]
 
+    // Check if we are running on bluemix or local
     if (process.env.NODE_ENV == "production"){
         logger.info("[SDK] Running in bluemix mode")
-
-        chain.setKeyValStore(hfc.newFileKeyValStore('blockchain/data/bluemixKeyValStore'));
+        onBluemix = true;     
+    } else {
+        logger.info("[SDK] Running in local mode")
+        onBluemix = false;
+    }
+    
+    // Connecting to memberservice and peer and setting key store depending in which environment we are
+    if (onBluemix){
+        
+        // Set the key value store that holds the user certifictes
+        chain.setKeyValStore(hfc.newFileKeyValStore('blockchain/deployBluemix/keyValueStore'));
 
         chain.setECDSAModeForGRPC(true);
         chain.setDevMode(false);
 
-        var cert = fs.readFileSync("blockchain/us.blockchain.ibm.com.cert");
+        // Get the tls certificate, needed to connect to the Bluemix Blockchain service
+        var cert = fs.readFileSync("blockchain/deployBluemix/us.blockchain.ibm.com.cert");
 
+        // Connect to memberservice and peer
         chain.setMemberServicesUrl("grpcs://"+ca.url,{pem:cert});
         chain.addPeer("grpcs://"+peer.discovery_host+":"+peer.discovery_port,{pem:cert});
 
     } else {
-        logger.info("[SDK] Running in local mode")
+        
+        // Set the key value store that holds the user certifictes
+        chain.setKeyValStore(hfc.newFileKeyValStore('blockchain/deployLocal/keyValueStore'));
 
-        chain.setKeyValStore(hfc.newFileKeyValStore('/tmp/keyValStore'));
-
+        // Connect to memberservice and peer
         chain.setMemberServicesUrl("grpc://"+ca.url);
         chain.addPeer("grpc://"+peer.discovery_host+":"+peer.discovery_port);
     }
@@ -51,13 +66,13 @@ var registerAdmin = function(){
     // Getting admin user
     var adminUser;
     for (var i= 0;i<config.network.users.length;i++){
-        if (config.network.users[i].username == "WebAppAdmin"){
+        if (config.network.users[i].enrollId == "WebAppAdmin"){
             adminUser = config.network.users[i]
             break
         }
     }
 
-    // Enroll "WebAppAdmin" which is already registered because it is
+    // Enroll admin user which is already registered because it is
     // listed in fabric/membersrvc/membersrvc.yaml with it's one time password.
     chain.enroll(adminUser.enrollId, adminUser.enrollSecret, function(err, webAppAdmin) {
        if (err) {
@@ -89,28 +104,26 @@ var registerUsers = function(){
     // Register and enroll all the user that are in the chaincodeconfig.js
     config.network.app_users.forEach(function(user) {
 
-        chain.getUser(user.username, function (err, userObject) {
+        chain.getUser(user.userId, function (err, userObject) {
             if (err) {
-                logger.error("[SDK] Error getting user ",user.username)
+                logger.error("[SDK] Error getting user ",user.userId)
                 logger.info(err)
             } else if (userObject.isEnrolled()) {
-                logger.info("[SDK] User "+ user.username +" is already enrolled")
+                logger.info("[SDK] User "+ user.userId +" is already enrolled")
             } else {
-
-                // In our current way of working the below will only be done locally, on bluemix this code is not executed
 
                 // User is not enrolled yet, so perform both registration and enrollment
                 var registrationRequest = {
-                    enrollmentID: user.username,
+                    enrollmentID: user.userId,
                     affiliation: "institution_a",
-                    account: "group1"
+                    account: ""
                 }
                 chain.registerAndEnroll(registrationRequest, function (err) {
                     if (err) {
-                        logger.error("[SDK] Error registering and enrolling user",user.username)
+                        logger.error("[SDK] Error registering and enrolling user",user.userId)
                         logger.info(err)
                     } else {
-                        logger.info("[SDK] User "+ user.username +" successfully registered and enrolled")
+                        logger.info("[SDK] User "+ user.userId +" successfully registered and enrolled")
                     }
                 });
             }
@@ -121,15 +134,26 @@ var registerUsers = function(){
 
 // Store chaincode id for later use (so we don't have to redeploy).
 var saveLatestDeployed = function() {
-	fs.writeFile('blockchain/data/latest_deployed', chaincodeID);
+	fs.writeFile('blockchain/deployLocal/latest_deployed', chaincodeID);
 };
 
 // Get chaincode id from file
 var loadLatestDeployed = function(cb){
-	fs.readFile('blockchain/data/latest_deployed', function read(err, data) {
-	    var latestDeployed = data ? data.toString() : null;
-	    return cb(err, latestDeployed);
-	});
+    
+    // Get the path to the latestDeployed file
+    var path;
+    if(onBluemix){
+        path = 'blockchain/deployBluemix/latest_deployed'  
+    } else {
+        path = 'blockchain/deployLocal/latest_deployed'  
+    }
+    
+    // Read the chaincodeId from the latest deployed file
+    fs.readFile(path, function read(err, data) {
+        var latestDeployed = data ? data.toString() : null;
+        return cb(latestDeployed);
+    });    
+	
 };
 
 // Generate a unique string
@@ -139,30 +163,40 @@ var createHash = function(){
     return md5.digest('base64').toString();
 };
 
+// Function to get the user
+var getUser = function(userName, cb) {
+
+    chain.getUser(userName, function (err, user) {
+        if (err) {
+            return cb(err);
+        } else if (user.isEnrolled()) {
+            return cb(null, user)
+        } else {
+            return cb("user is not yet registered and enrolled")
+        }
+    });
+}
+
 // Function to deploy the chaincode
 var deployChaincode = function(forceRedeploy){
 
-    if (process.env.NODE_ENV == "production"){
+    if (onBluemix){
 
-        // We are in Bluemix Land
-        // Deploying is not needed, no need to save the latest deployment etc
-
-        chaincodeID = config.chaincode.deployed_name
-
-        // Place test data on blockchain
-        testData.invokeTestData();
-
-
+        loadLatestDeployed(function(latestDeployed){
+            config.chaincode.deployed_name = latestDeployed;
+            afterDeployment(config.chaincode.deployed_name)
+        })
+            
     } else {
 
         // We are running locally
         logger.info("[SDK] Checking if redeploy is needed")
 
         // Load the previously deployed chaincode
-        loadLatestDeployed(function(err, latestDeployed){
+        loadLatestDeployed(function(latestDeployed){
 
             // Don't overwrite the deployed_name if it's already set
-            if (!config.deployed_name && !err) {
+            if (!config.deployed_name) {
                 config.chaincode.deployed_name = latestDeployed;
             }
 
@@ -173,11 +207,10 @@ var deployChaincode = function(forceRedeploy){
                 logger.info("[SDK] Going to deploy chaincode")
 
                 // Including a unique string as an argument to make sure each new deploy has a unique id
-                logger.info("[SDK] Global path to chaincode: " + config.chaincode.global_path);
                 var deployRequest = {
                     fcn: "init",
                     args: [createHash()],
-                    chaincodePath: config.chaincode.global_path // Path to the global directory containing the chaincode project under $GOPATH/src/
+                    chaincodePath: config.chaincode.global_path
                 };
 
                 var webAppAdmin = chain.getRegistrar();
@@ -206,22 +239,26 @@ var deployChaincode = function(forceRedeploy){
 
 // Save details for deployed code
 var afterDeployment = function(newChaincodeID) {
-
+    
+    logger.info("[SDK] Executing after deployment")
+    
     // Store the chaincodeId
     chaincodeID = newChaincodeID;
+    
+    if (!onBluemix){
+    
+        // store deployed_name in a file
+        saveLatestDeployed();
 
-    logger.info("[SDK] Executing after deployment")
-
-	// store deployed_name in a file
-	saveLatestDeployed();
-
+        // Start watching the chaincode for changes
+        if (config.chaincode.auto_redeploy) watchChaincodeLocalFile();
+        
+    }
+    
 	// Place test data on blockchain
 	testData.invokeTestData();
-
-    // Start watching the chaincode for changes
-    if (config.chaincode.auto_redeploy) watchChaincodeLocalFile();
+ 
 }
-
 
 // Watch filesystem for changes in the local chaincode and copy the file to the folder inside the $GOPATH
 var watchChaincodeLocalFile = function() {
@@ -248,32 +285,13 @@ var watchChaincodeLocalFile = function() {
 	logger.info('[SDK] Watching ' + config.chaincode.local_path + ' for changes...');
 }
 
-// Function to get the user and the user certificata
-var getUser = function(userName, cb) {
-
-    chain.getUser(userName, function (err, user) {
-        if (err) {
-            return cb(err);
-        } else if (user.isEnrolled()) {
-            user.getUserCert(null, function (err, userCert) {
-                if (err) {
-                    logger.error("Failed to get user certificate")
-                    return cb(err)
-                } else {
-                    return cb(null, user)
-                }
-            })
-        } else {
-            return cb("user is not yet registered and enrolled")
-        }
-    });
-}
+//=============================================================================================
+//      Query and Invoke functions                 
+//=============================================================================================
 
 // Execute a invoke request
-exports.invoke = function (fcn, userName, args, cb) {
-    // Temporary? fix for new hyperledger version [august 2016]
-    args.push(userName);
-
+exports.invoke = function(fcn, args, userName, cb) {
+    
     getUser(userName, function (err, user) {
         if (err) {
             logger.error("[SDK] Failed to get " + userName + " ---> ", err);
@@ -284,8 +302,7 @@ exports.invoke = function (fcn, userName, args, cb) {
             var invokeRequest = {
                 chaincodeID: chaincodeID,
                 fcn: fcn,
-                args: args,
-                attrs: ['userName']
+                args: args
             }
 
             // Invoke the request from the user object.
@@ -307,22 +324,19 @@ exports.invoke = function (fcn, userName, args, cb) {
 }
 
 // Execute a query request
-exports.query = function(fcn, userName, args, cb) {
-    // Temporary? fix for new hyperledger version [august 2016]
-    args.push(userName);
+exports.query = function(fcn, args, userName, cb) {
 
     getUser(userName, function (err, user) {
         if (err) {
             logger.error("[SDK] Failed to get " + userName + " ---> ", err);
             cb(err)
         } else {
-
+            
             // Issue an invoke request
             var queryRequest = {
                 chaincodeID: chaincodeID,
                 fcn: fcn,
-                args: args,
-                attrs: ['userName']
+                args: args
             }
 
             // Trigger the query from the user object.
@@ -332,7 +346,7 @@ exports.query = function(fcn, userName, args, cb) {
                 logger.info("[SDK] submitted query: %j",results);
             });
             tx.on('complete', function(results) {
-                logger.info("[SDK] completed query: %j",results.result.toString());
+                logger.info("[SDK] completed query: %j",results.result.toString());                
                 cb(null, JSON.parse(results.result.toString()))
             });
             tx.on('error', function(err) {

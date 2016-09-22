@@ -8,12 +8,12 @@ vp0:
     - CORE_PEER_DISCOVERY_TOUCHPERIOD=1s
     - CORE_SECURITY_ENROLLID=test_vp0
     - CORE_SECURITY_ENROLLSECRET=MwYpmSRjupbT
-    - CORE_PEER_PKI_ECA_PADDR=membersrvc:50051
-    - CORE_PEER_PKI_TCA_PADDR=membersrvc:50051
-    - CORE_PEER_PKI_TLSCA_PADDR=membersrvc:50051
+    - CORE_PEER_PKI_ECA_PADDR=membersrvc:7054
+    - CORE_PEER_PKI_TCA_PADDR=membersrvc:7054
+    - CORE_PEER_PKI_TLSCA_PADDR=membersrvc:7054
   ports:
-    - "5000:5000"
-    - "30303:30303"
+    - "7050:7050"
+    - "7051:7051"
   links:
     - membersrvc
 
@@ -23,21 +23,18 @@ vp1:
     service: vp
   environment:
     - CORE_PEER_ID=vp1
-    - CORE_PEER_DISCOVERY_ROOTNODE=vp0:30303
+    - CORE_PEER_DISCOVERY_ROOTNODE=vp0:7051
     - CORE_SECURITY_ENROLLID=test_vp1
     - CORE_SECURITY_ENROLLSECRET=5wgHK9qqYaPy
-    - CORE_PEER_PKI_ECA_PADDR=membersrvc:50051
-    - CORE_PEER_PKI_TCA_PADDR=membersrvc:50051
-    - CORE_PEER_PKI_TLSCA_PADDR=membersrvc:50051
+    - CORE_PEER_PKI_ECA_PADDR=membersrvc:7054
+    - CORE_PEER_PKI_TCA_PADDR=membersrvc:7054
+    - CORE_PEER_PKI_TLSCA_PADDR=membersrvc:7054
   links:
     - vp0
     - membersrvc
 
 membersrvc:
-   image: hyperledger/fabric-membersrvc:master-6daedfd
-#   image: hyperledger/fabric-membersrvc:latest
-   volumes:
-     - ./blockchain/membersrvc.yaml:/opt/gopath/src/github.com/hyperledger/fabric/membersrvc/membersrvc.yaml
+   image: rikmoedt/fabric-membersrvc:0.5-dp
    ports:
-     - "50051:50051"
+     - "7054:7054"
    command: membersrvc

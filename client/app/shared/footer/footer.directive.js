@@ -6,7 +6,7 @@
             restrict: "E",
             templateUrl: "app/shared/footer/footer.html",
             controller: function () {},
-            controllerAs: "footerbar"
+            controllerAs: "footer"
         };
     }]);
 

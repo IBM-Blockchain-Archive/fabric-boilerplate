@@ -5,7 +5,7 @@ const logger        = require('./utils/logger');
 const cookieParser  = require('cookie-parser');
 const bodyParser    = require('body-parser');
 const config        = require('./config');
-const blockchain = require('./blockchain/blockchain');
+const blockchain    = require('./blockchain/blockchain');
 
 const port = (process.env.VCAP_APP_PORT || 8080);
 const host = (process.env.VCAP_APP_HOST || 'localhost');
@@ -68,6 +68,6 @@ if (process.env.NODE_ENV !== 'development') {
   app.listen(port);
 }
 // print a message when the server starts listening
-console.log('Express server listening at http://' + host + ':' + port);
+logger.info("[NodeJS] Express server listening at http://" + host + ':' + port)
 
 module.exports = app;
