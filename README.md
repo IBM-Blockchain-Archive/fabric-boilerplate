@@ -8,9 +8,9 @@
 # Preparing your environment
 
 ## Clone this repo
-Use git clone from you preferred workspace folder to clone your project-code with:
-1. git clone https://github.com/IBM-Blockchain/fabric-boilerplate.git 
-2. cd `fabric-boilerplate` and run `npm install`
+Use git clone from you preferred workspace folder to clone your project-code with:  
+1. git clone https://github.com/IBM-Blockchain/fabric-boilerplate.git   
+2. cd `fabric-boilerplate` and run `npm install`  
 
 ## Setting up Hyperledgerr
 Create the following folder structure in your Go path: $GOPATH/src/github.com/
@@ -52,7 +52,7 @@ The first time you run this, it will download the neccesary images for the peer 
 
 Carefull if you also have other docker containers running
 
-Check if the app is running at `http://localhost:8080/` in your browser. You can login with the user credentials you find in `testData/testData.json`
+Check if the app is running at `http://localhost:8080/` in your browser. You can login with the user credentials you find in `testData/testData.json`  
 You can also see if your local blockchain network is running at `localhost:7050/chain` in your browser. 
 
 # Running on Bluemix
@@ -81,11 +81,11 @@ go to fabric-boilerplate/blockchain/deployBluemix
 (This can take about 30 seconds)
 
 This registers and enrolls the webappadmin user and all users listed in the testData/testData.json file and saves the eCerts in blockchain/deployBluemix/keyValueStore
-This also deploys the chaincode and saves the chaincodeID in blockchain/deployBluemix/latest_deployed
+This also deploys the chaincode and saves the chaincodeID in blockchain/deployBluemix/latest_deployed  
 
-7. Open the dashboard of the blockchain service on bluemix. Wait till you see the chaincode id appear on the `Network` tab, that it runs on all 4 peers and that all the way at the end it says `Up for x seconds/mintues` and that each of the 4 peers have the same amount of blocks. If this is the case, than you chaincode has been deployed succesfully!
+7. Open the dashboard of the blockchain service on bluemix. Wait till you see the chaincode id appear on the `Network` tab, that it runs on all 4 peers and that all the way at the end it says `Up for x seconds/mintues` and that each of the 4 peers have the same amount of blocks. If this is the case, than you chaincode has been deployed succesfully! 
 
-7. Deploy app to bluemix
+8. Deploy app to bluemix
 Go back to the project root folder
 use the cloud foundry cli, login to you bluemix environment and deploy the app with
 > cf push
@@ -102,26 +102,11 @@ If you want to run it manually, do 'node bin/www'.
 
 The server will start with deploying the chaincode.
 
-# Troubleshooting
 
-"Error: sql: no rows in result set" or "Error: identity or token do not match". Shutdown your docker container and the nodejs app and run `rm -rf /var/hyperledger/production && rm -rf /tmp/keyValStore` this remove the stored keys/certificates. Now restart the containers and your app. If that alone did not solve it, remove the ubstf_vp_1 and ubstf_membersrvc_1 containers and run `docker-compose up` again and restart the app. 
-
-"Error:Failed to launch chaincode spec(Could not get deployment transaction for ....... - LedgerError - ResourceNotFound: ledger: resource not found)"
-The application is setup to use a previously deployed chaincode so you don't have to redploy the chaincode everytime you make a change to the nodeJS app. But sometimes (after restarting you containers for example) it does need to redeploy. To make this happen remove the reference to the old deploy by removing `latest_deployed` file inside the [project]/blockchain/data/ folder. 
-
-
-# Bluemix
-Make sure you have the cloud foundry cli installed. You can install the cf command line interface by following the instruction on https://docs.cloudfoundry.org/cf-cli/install-go-cli.html.
-
-Push the application from the terminal with:
-> cf push [application name] -c "node app.js"
-
-You can change the settings of deployment in the manifest.yml file. For instructions on possible parameters have a look at https://docs.cloudfoundry.org/devguide/deploy-apps/manifest.html.
-
-# Support and documentation
-Hyperledger project:                https://www.hyperledger.org/  
-Offical Hyperledger slack channel:  https://hyperledgerproject.slack.com 
-IRC:                                #hyperledger on freenode.net  
-Working Group Meetings:             https://github.com/hyperledger/hyperledger/wiki/PublicMeetingCalendar  
-Wiki:                               https://github.com/hyperledger/hyperledger/wiki   
-Learn chaincode:                    https://github.com/IBM-Blockchain/learn-chaincode  
+# Support and documentation 
+Hyperledger project:                https://www.hyperledger.org/    
+Offical Hyperledger slack channel:  https://hyperledgerproject.slack.com   
+IRC:                                #hyperledger on freenode.net    
+Working Group Meetings:             https://github.com/hyperledger/hyperledger/wiki/PublicMeetingCalendar    
+Wiki:                               https://github.com/hyperledger/hyperledger/wiki     
+Learn chaincode:                    https://github.com/IBM-Blockchain/learn-chaincode    
