@@ -1,6 +1,7 @@
 # Fabric boilerplate
 This is a boilerplate application to get you up and running quickly with your own blockchain application. With this boilerplate you get an application that you can run locally as well as on IBM Bluemix. There is a simple AngularJS frontend application, a NodeJS backend application and off course a blockchain network. Locally the boilerplate start up a blockchain network using Docker containers, on Bluemix you can use the Blockchain service.
 
+This boilerplate has been created and is maintained by the IBM CIC Groningen Blockchain team
 
 # Prerequisites
 - Go
