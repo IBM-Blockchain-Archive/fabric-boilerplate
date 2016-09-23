@@ -1,9 +1,12 @@
+# Fabric boilerplate
+This is a boilerplate application to get you up and running quickly with your own blockchain application. With this boilerplate you get an application that you can run locally as well as on IBM Bluemix. There is a simple AngularJS frontend application, a NodeJS backend application and off course a blockchain network. Locally the boilerplate start up a blockchain network using Docker containers, on Bluemix you can use the Blockchain service.
+
+
 # Prerequisites
 - Go
 - NodeJS
 - Docker
 - Nodemon (npm install nodemon -g)
-
 
 # Preparing your environment
 
@@ -12,7 +15,7 @@ Use git clone from you preferred workspace folder to clone your project-code wit
 1. git clone https://github.com/IBM-Blockchain/fabric-boilerplate.git   
 2. cd `fabric-boilerplate` and run `npm install`  
 
-## Setting up Hyperledgerr
+## Setting up Hyperledger
 Create the following folder structure in your Go path: $GOPATH/src/github.com/
 
 $GOPATH/src/github.com/  
@@ -46,7 +49,7 @@ From your WORKSPACE/fabric-boilerplate folder:
 > docker-compose up
 
 This will start up a local blockchain network with two validating peers and a memberservice.
-THis first time you run this script it will take a little while to download the neccesary images.
+The first time you run this script it will take a little while to download the neccesary images.
 
 You can see if your local blockchain network is running by going to `localhost:7050/chain` in your browser. 
 Once the network is up and running open a second terminal and from your WORKSPACE/fabric-boilerplate folder:
@@ -65,17 +68,17 @@ To make local development easier there is a script that will cleanup your enviro
 > ./start.sh
 
 # Running on Bluemix
-First run the app locally once, so that you are sure that a css file is created
-Deploying the application on Bluemix is not yet as easy as we would like. 
-There are two reasons that make it more difficult:
+First run the app locally once, This way nodeSass will create the css file, and the latest version of the chaincode has been copied to the folder inside the $GOPATH.
+Deploying the application on Bluemix is not yet as easy as we would like. There are two reasons that make it more difficult:
 
 Registering and enrolling users
-The SDK needs to register and enroll an admin user and any other user you would like to add. When this takes place the SDK receives enrollment certficates (eCerts) for each user. You only get these certificates ones. So if you would redeploy or restart you app on bluemix and the SDK wants to register and enroll the users again this would fail. Our solution to this problem is to register and enroll the users from you local environment before you deploy. When the eCerts are received, you can then push the app to bluemix, including the eCerts. So The app that runs on bluemix does not have to register and enroll the users again, because the eCerts are already available.
+The SDK needs to register and enroll an admin user and any other user you would like to add. When this takes place the SDK receives enrollment certificates (eCerts) for each user. You only get these certificates ones. So if you would redeploy or restart your app on Bluemix and the SDK wants to register and enroll the users again this would fail. Our solution to this problem is to register and enroll the users from your local environment before you deploy. When the eCerts are received, you can then push the app to bluemix, including the eCerts. So The app that runs on Bluemix does not have to register and enroll the users again, because the eCerts are already available.
+
 
 Deploying chaincode
-The easiest way to deploy a chaincode is to do it from you local environment before you push the app to bluemix. We made a script that deploys the chaincode and stores the chaincodeID in a file. After that you push the app to bluemix (including the chaincodeID file) and you app can interact with the chaincode
+The easiest way to deploy a chaincode is to do it from you local environment before you push the app to Bluemix. We made a script that deploys the chaincode and stores the chaincodeID in a file. After that you push the app to Bluemix (including the chaincodeID file) and you app can interact with the chaincode
 
-Do the following steps to run the application on Bluemix
+Do the following steps to run the application on Bluemix:
 
 - Create a Blockchain Service on Bluemix and name it `blockchain-fabric-boilerplate`
 - Copy the credentials of the Blockchain Service and save as `credentials.json` in blockchain/deployBluemix
@@ -83,8 +86,8 @@ Do the following steps to run the application on Bluemix
 - Save the certificate in blockchain/deployBluemix
 - Copy the cerfificate to `$GOPATH/src/github.com/chaincode/fabric-boilerplate/` and rename the file to certificate.pem
 
-- Register users and deploy chaincode
-go to fabric-boilerplate/blockchain/deployBluemix
+- Register users and deploy chaincode  
+Go to fabric-boilerplate/blockchain/deployBluemix
 > node deployAndRegister.js
 
 (This can take about 30 seconds)
@@ -92,12 +95,16 @@ go to fabric-boilerplate/blockchain/deployBluemix
 This registers and enrolls the webappadmin user and all users listed in the testData/testData.json file and saves the eCerts in blockchain/deployBluemix/keyValueStore
 This also deploys the chaincode and saves the chaincodeID in blockchain/deployBluemix/latest_deployed  
 
-- Open the dashboard of the blockchain service on bluemix. Wait till you see the chaincode id appear on the `Network` tab, that it runs on all 4 peers and that all the way at the end it says `Up for x seconds/mintues` and that each of the 4 peers have the same amount of blocks. If this is the case, than you chaincode has been deployed succesfully! 
+- Open the dashboard of the blockchain service on Bluemix. Wait till you see the chaincode id appear on the `Network` tab, that it runs on all 4 peers and that all the way at the end it says `Up for x seconds/mintues` and that each of the 4 peers have the same amount of blocks. If this is the case, then your chaincode has been deployed succesfully! 
 
-- Deploy app to bluemix
+
+- Deploy app to Bluemix
 Go back to the project root folder
-use the cloud foundry cli, login to you bluemix environment and deploy the app with
+use the cloud foundry cli, login to you Bluemix environment and deploy the app with
 > cf push
+
+After the app has been pushed to Bluemix you can view the logs with 
+> cf logs fabric-boilerplate --recent
 
 # Support and documentation 
 Hyperledger project:                https://www.hyperledger.org/    
