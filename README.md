@@ -40,20 +40,29 @@ $GOPATH/src/github.com/chaincode/fabric-boilerplate/vendor/github.com/hyperledge
 
 Copy the chaincode.go file from the /chaincode/fabric-boilerplate folder inside the project to the fabric-boilerplate folder inside your $GOPATH
 
-
-
 # Running the application automatically
+From your WORKSPACE/fabric-boilerplate folder:
 
+> docker-compose up
 
-From you WORKSPACE/fabric-boilerplate folder:
-> ./start.sh
+This will start up a local blockchain network with two validating peers and a memberservice.
+THis first time you run this script it will take a little while to download the neccesary images.
 
-The first time you run this, it will download the neccesary images for the peer and memberserivce. This takes a while. 
+You can see if your local blockchain network is running by going to `localhost:7050/chain` in your browser. 
+Once the network is up and running open a second terminal and from your WORKSPACE/fabric-boilerplate folder:
 
-Carefull if you also have other docker containers running
+> npm start
+
+This will start up a NodeJS application that serves the frontend, deploys the chaincode to the network and will register the users with the memberservice. The application is configured to run with nodemon and node-sass to automatically restart the server when you make changes during development.
 
 Check if the app is running at `http://localhost:8080/` in your browser. You can login with the user credentials you find in `testData/testData.json`  
-You can also see if your local blockchain network is running at `localhost:7050/chain` in your browser. 
+
+
+To make local development easier there is a script that will cleanup your environtment, start the blockchain network and run the app. From your WORKSPACE/fabric-boilerplate folder:
+
+!Warning: this script removes all the docker containers that are running. If you are using docker for other application as well at the moment and don't want to lose your container, don't run this script!
+
+> ./start.sh
 
 # Running on Bluemix
 First run the app locally once, so that you are sure that a css file is created
@@ -89,19 +98,6 @@ This also deploys the chaincode and saves the chaincodeID in blockchain/deployBl
 Go back to the project root folder
 use the cloud foundry cli, login to you bluemix environment and deploy the app with
 > cf push
-
-
-## NodeJS app
-The application is configured to run with nodemon and node-sass to automatically restart the server when you make changes during development.
-Make sure you have the npm package `nodemon` installed. You can do so with `sudo npm install -g nodemon`.
-
-> cd [project]  
-> npm start
-
-If you want to run it manually, do 'node bin/www'. 
-
-The server will start with deploying the chaincode.
-
 
 # Support and documentation 
 Hyperledger project:                https://www.hyperledger.org/    
