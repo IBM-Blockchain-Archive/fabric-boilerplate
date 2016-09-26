@@ -2,9 +2,9 @@ applications:
 - path: .
   memory: 512M
   instances: 1
-  name: fabric-boilerplate
-  host: fabric-boilerplate
+  name: APP_NAME
+  host: HOST_NAME
   disk_quota: 1024M
   command: "NODE_ENV=production node app.js"
 services:
-- blockchain-fabric-boilerplate
+- BLOCKCHAIN_SERVICE_NAME

@@ -44,7 +44,7 @@ This will prepare a docker baseimage in which the chaincode will be launched and
 Copy the fabric folder that you just cloned and past it in
 $GOPATH/src/github.com/chaincode/fabric-boilerplate/vendor/github.com/hyperledger
 
-Copy the chaincode.go file from the chaincode/fabric-boilerplate folder inside your project to the $GOPATH/src/github.com/chaincode/fabric-boilerplate/ folder
+Copy the chaincode.go file from the chaincode/fabric-boilerplate folder inside your project to the `$GOPATH/src/github.com/chaincode/fabric-boilerplate/` folder
 
 # Running the application automatically
 From your WORKSPACE/fabric-boilerplate folder:
@@ -83,7 +83,10 @@ The easiest way to deploy a chaincode is to do it from you local environment bef
 
 Do the following steps to run the application on Bluemix:
 
-- Create a Blockchain Service on Bluemix and name it `blockchain-fabric-boilerplate`
+- Create a Blockchain Service on Bluemix
+- Update the manifest.yml file (it is in the root of the project):
+    - replace the name and host on line 5 and 6. The values can be anything, as long as they are unique
+    - replace the name of the service on line 10. This should be the name of the Blockchain Service you just created
 - Copy the credentials of the Blockchain Service and overwrite the credentials in `credentials.json` in blockchain/deployBluemix
 - Download the tls certificate, you can find the url at the bottom of the credentials.json
 - Save the certificate in blockchain/deployBluemix
@@ -107,7 +110,9 @@ use the cloud foundry cli, login to you Bluemix environment and deploy the app w
 > cf push
 
 After the app has been pushed to Bluemix you can view the logs with
-> cf logs fabric-boilerplate --recent
+> cf logs [NAME_OF_THE_APP] --recent
+
+Where NAME_OF_THE_APP is the app name you provided in the manifest.yml file
 
 # Support and documentation
 Hyperledger project:                https://www.hyperledger.org/    
