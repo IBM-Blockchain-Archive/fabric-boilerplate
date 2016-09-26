@@ -31,8 +31,8 @@ $GOPATH/src/github.com/
 
 Go to the $GOPATH/src/github.com/hyperleder folder and clone the fabric code:
 > cd $GOPATH/src/github.com/hyperledger     
-> git clone https://github.com/hyperledger-archives/fabric.git
-> cd fabric
+> git clone https://github.com/hyperledger-archives/fabric.git  
+> cd fabric  
 > git checkout v0.5-developer-preview
 
 Once the repository is cloned, run the following command:
@@ -44,7 +44,7 @@ This will prepare a docker baseimage in which the chaincode will be launched and
 Copy the fabric folder that you just cloned and past it in
 $GOPATH/src/github.com/chaincode/fabric-boilerplate/vendor/github.com/hyperledger
 
-Copy the chaincode.go file from the /chaincode/fabric-boilerplate folder inside the project to the fabric-boilerplate folder inside your $GOPATH
+Copy the chaincode.go file from the chaincode/fabric-boilerplate folder inside your project to the $GOPATH/src/github.com/chaincode/fabric-boilerplate/ folder
 
 # Running the application automatically
 From your WORKSPACE/fabric-boilerplate folder:
