@@ -6,9 +6,9 @@ The boilerplate uses Hyperledger Fabric v0.5-developer-preview and HFC 0.5.3.
 This boilerplate has been created and is maintained by the IBM CIC Groningen Blockchain team
 
 # Prerequisites
-- Go
-- NodeJS
-- Docker
+- Go (https://golang.org/)
+- NodeJS (https://nodejs.org/)
+- Docker (https://www.docker.com/)
 - Nodemon (npm install nodemon -g)
 
 # Preparing your environment
