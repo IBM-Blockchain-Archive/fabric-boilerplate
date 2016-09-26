@@ -2,7 +2,6 @@ node_modules/*
 client/assets/node_modules/*
 blockchain/deployBluemix/keyValueStore/*
 !blockchain/deployBluemix/keyValueStore/.gitkeep
-blockchain/deployBluemix/credentials.json
 blockchain/deployBluemix/latest_deployed
 blockchain/deployLocal/*
 !blockchain/deployLocal/.gitkeep
