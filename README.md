@@ -27,7 +27,7 @@ $GOPATH/src/github.com/
 ---------fabric-boilerplate/  
 ------------vendor/  
 ---------------github.com/  
-------------------hyperledger/ 
+------------------hyperledger/
 
 Go to the $GOPATH/src/github.com/hyperleder folder and clone the fabric code:
 > cd $GOPATH/src/github.com/hyperledger     
@@ -41,7 +41,7 @@ Once the repository is cloned, run the following command:
 This will prepare a docker baseimage in which the chaincode will be launched and deployed. This process takes quite a while.
 
 
-Copy the fabric folder that you just cloned and past it in 
+Copy the fabric folder that you just cloned and past it in
 $GOPATH/src/github.com/chaincode/fabric-boilerplate/vendor/github.com/hyperledger
 
 Copy the chaincode.go file from the /chaincode/fabric-boilerplate folder inside the project to the fabric-boilerplate folder inside your $GOPATH
@@ -54,7 +54,7 @@ From your WORKSPACE/fabric-boilerplate folder:
 This will start up a local blockchain network with two validating peers and a memberservice.
 The first time you run this script it will take a little while to download the neccesary images.
 
-You can see if your local blockchain network is running by going to `localhost:7050/chain` in your browser. 
+You can see if your local blockchain network is running by going to `localhost:7050/chain` in your browser.
 Once the network is up and running open a second terminal and from your WORKSPACE/fabric-boilerplate folder:
 
 > npm start
@@ -84,7 +84,7 @@ The easiest way to deploy a chaincode is to do it from you local environment bef
 Do the following steps to run the application on Bluemix:
 
 - Create a Blockchain Service on Bluemix and name it `blockchain-fabric-boilerplate`
-- Copy the credentials of the Blockchain Service and save as `credentials.json` in blockchain/deployBluemix
+- Copy the credentials of the Blockchain Service and overwrite the credentials in `credentials.json` in blockchain/deployBluemix
 - Download the tls certificate, you can find the url at the bottom of the credentials.json
 - Save the certificate in blockchain/deployBluemix
 - Copy the cerfificate to `$GOPATH/src/github.com/chaincode/fabric-boilerplate/` and rename the file to certificate.pem
@@ -98,7 +98,7 @@ Go to fabric-boilerplate/blockchain/deployBluemix
 This registers and enrolls the webappadmin user and all users listed in the testData/testData.json file and saves the eCerts in blockchain/deployBluemix/keyValueStore
 This also deploys the chaincode and saves the chaincodeID in blockchain/deployBluemix/latest_deployed  
 
-- Open the dashboard of the blockchain service on Bluemix. Wait till you see the chaincode id appear on the `Network` tab, that it runs on all 4 peers and that all the way at the end it says `Up for x seconds/mintues` and that each of the 4 peers have the same amount of blocks. If this is the case, then your chaincode has been deployed succesfully! 
+- Open the dashboard of the blockchain service on Bluemix. Wait till you see the chaincode id appear on the `Network` tab, that it runs on all 4 peers and that all the way at the end it says `Up for x seconds/mintues` and that each of the 4 peers have the same amount of blocks. If this is the case, then your chaincode has been deployed succesfully!
 
 
 - Deploy app to Bluemix
@@ -106,10 +106,10 @@ Go back to the project root folder
 use the cloud foundry cli, login to you Bluemix environment and deploy the app with
 > cf push
 
-After the app has been pushed to Bluemix you can view the logs with 
+After the app has been pushed to Bluemix you can view the logs with
 > cf logs fabric-boilerplate --recent
 
-# Support and documentation 
+# Support and documentation
 Hyperledger project:                https://www.hyperledger.org/    
 Offical Hyperledger slack channel:  https://hyperledgerproject.slack.com   
 IRC:                                #hyperledger on freenode.net    
