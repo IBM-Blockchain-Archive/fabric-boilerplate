@@ -5,7 +5,7 @@ var fs = require('fs-extra');
 var crypto = require('crypto')
 var logger = require('../utils/logger');
 var config = require('./chaincodeconfig');
-var testData = require('../testData/testData.js')
+var testData = require('../testdata/testData.js')
 
 var chain, chaincodeID, onBluemix;
 
@@ -23,15 +23,15 @@ exports.init = function(){
     // Check if we are running on bluemix or local
     if (process.env.NODE_ENV == "production"){
         logger.info("[SDK] Running in bluemix mode")
-        onBluemix = true;     
+        onBluemix = true;
     } else {
         logger.info("[SDK] Running in local mode")
         onBluemix = false;
     }
-    
+
     // Connecting to memberservice and peer and setting key store depending in which environment we are
     if (onBluemix){
-        
+
         // Set the key value store that holds the user certifictes
         chain.setKeyValStore(hfc.newFileKeyValStore('blockchain/deployBluemix/keyValueStore'));
 
@@ -46,7 +46,7 @@ exports.init = function(){
         chain.addPeer("grpcs://"+peer.discovery_host+":"+peer.discovery_port,{pem:cert});
 
     } else {
-        
+
         // Set the key value store that holds the user certifictes
         chain.setKeyValStore(hfc.newFileKeyValStore('blockchain/deployLocal/keyValueStore'));
 
@@ -139,21 +139,21 @@ var saveLatestDeployed = function() {
 
 // Get chaincode id from file
 var loadLatestDeployed = function(cb){
-    
+
     // Get the path to the latestDeployed file
     var path;
     if(onBluemix){
-        path = 'blockchain/deployBluemix/latest_deployed'  
+        path = 'blockchain/deployBluemix/latest_deployed'
     } else {
-        path = 'blockchain/deployLocal/latest_deployed'  
+        path = 'blockchain/deployLocal/latest_deployed'
     }
-    
+
     // Read the chaincodeId from the latest deployed file
     fs.readFile(path, function read(err, data) {
         var latestDeployed = data ? data.toString() : null;
         return cb(latestDeployed);
-    });    
-	
+    });
+
 };
 
 // Generate a unique string
@@ -186,7 +186,7 @@ var deployChaincode = function(forceRedeploy){
             config.chaincode.deployed_name = latestDeployed;
             afterDeployment(config.chaincode.deployed_name)
         })
-            
+
     } else {
 
         // We are running locally
@@ -239,25 +239,25 @@ var deployChaincode = function(forceRedeploy){
 
 // Save details for deployed code
 var afterDeployment = function(newChaincodeID) {
-    
+
     logger.info("[SDK] Executing after deployment")
-    
+
     // Store the chaincodeId
     chaincodeID = newChaincodeID;
-    
+
     if (!onBluemix){
-    
+
         // store deployed_name in a file
         saveLatestDeployed();
 
         // Start watching the chaincode for changes
         if (config.chaincode.auto_redeploy) watchChaincodeLocalFile();
-        
+
     }
-    
+
 	// Place test data on blockchain
 	testData.invokeTestData();
- 
+
 }
 
 // Watch filesystem for changes in the local chaincode and copy the file to the folder inside the $GOPATH
@@ -286,12 +286,12 @@ var watchChaincodeLocalFile = function() {
 }
 
 //=============================================================================================
-//      Query and Invoke functions                 
+//      Query and Invoke functions
 //=============================================================================================
 
 // Execute a invoke request
 exports.invoke = function(fcn, args, userName, cb) {
-    
+
     getUser(userName, function (err, user) {
         if (err) {
             logger.error("[SDK] Failed to get " + userName + " ---> ", err);
@@ -331,7 +331,7 @@ exports.query = function(fcn, args, userName, cb) {
             logger.error("[SDK] Failed to get " + userName + " ---> ", err);
             cb(err)
         } else {
-            
+
             // Issue an invoke request
             var queryRequest = {
                 chaincodeID: chaincodeID,
@@ -346,7 +346,7 @@ exports.query = function(fcn, args, userName, cb) {
                 logger.info("[SDK] submitted query: %j",results);
             });
             tx.on('complete', function(results) {
-                logger.info("[SDK] completed query: %j",results.result.toString());                
+                logger.info("[SDK] completed query: %j",results.result.toString());
                 cb(null, JSON.parse(results.result.toString()))
             });
             tx.on('error', function(err) {
