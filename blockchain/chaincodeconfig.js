@@ -1,5 +1,5 @@
 var credentials = require('./deployBluemix/credentials.json').credentials;
-var app_users = require('../testData/testData.json').users;
+var app_users = require('../testdata/testData.json').users;
 
 var environments = {
 
