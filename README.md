@@ -121,3 +121,4 @@ IRC:                                #hyperledger on freenode.net
 Working Group Meetings:             https://github.com/hyperledger/hyperledger/wiki/PublicMeetingCalendar    
 Wiki:                               https://github.com/hyperledger/hyperledger/wiki     
 Learn chaincode:                    https://github.com/IBM-Blockchain/learn-chaincode    
+HFC:                                https://www.npmjs.com/package/hfc/
