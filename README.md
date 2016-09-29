@@ -42,7 +42,7 @@ This will prepare a docker baseimage in which the chaincode will be launched and
 
 
 Copy the fabric folder that you just cloned and paste it in
-$GOPATH/src/github.com/chaincode/fabric-boilerplate/vendor/github.com/hyperledger
+`$GOPATH/src/github.com/chaincode/fabric-boilerplate/vendor/github.com/hyperledger`
 
 Copy the chaincode.go file from the chaincode/fabric-boilerplate folder inside your project to the `$GOPATH/src/github.com/chaincode/fabric-boilerplate/` folder
 
