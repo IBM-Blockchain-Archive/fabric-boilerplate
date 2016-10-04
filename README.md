@@ -92,6 +92,9 @@ After the app has been pushed to Bluemix you can view the logs with:
 
 Where NAME_OF_THE_APP is the app name you provided in the manifest.yml file
 
+# Debugging chaincode
+To check if your chaincode compiles before you deploy it, run `npm run gobuild`
+
 # Support and documentation
 Hyperledger project:                https://www.hyperledger.org/    
 Official Hyperledger slack channel:  https://hyperledgerproject.slack.com   
