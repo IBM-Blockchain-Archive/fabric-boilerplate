@@ -19,32 +19,10 @@ Use git clone from your preferred workspace folder to clone your project-code wi
 2. cd `fabric-boilerplate` and run `npm install`  
 
 ### Setting up Hyperledger
-Create the following folder structure in your Go path: $GOPATH/src/github.com/
-
-$GOPATH/src/github.com/  
-----hyperledger/  
-----chaincode/  
----------fabric-boilerplate/  
-------------vendor/  
----------------github.com/  
-------------------hyperledger/
-
-Go to the $GOPATH/src/github.com/hyperleder folder and clone the fabric code:
-> cd $GOPATH/src/github.com/hyperledger     
-> git clone https://github.com/hyperledger-archives/fabric.git  
-> cd fabric  
-> git checkout v0.5-developer-preview
-
-Once the repository is cloned, run the following command:
-> bash scripts/provision/docker.sh 0.0.10
+1. go to `fabric-boilerplate/src/chaincode/vendor/github.com/hyperledger`
+2. run `bash fabric/scripts/provision/docker.sh 0.0.10`
 
 This will prepare a docker baseimage in which the chaincode will be launched and deployed. This process takes quite a while.
-
-
-Copy the fabric folder that you just cloned and paste it in
-`$GOPATH/src/github.com/chaincode/fabric-boilerplate/vendor/github.com/hyperledger`
-
-Copy the chaincode.go file from the chaincode/fabric-boilerplate folder inside your project to the `$GOPATH/src/github.com/chaincode/fabric-boilerplate/` folder
 
 ## Running the application automatically
 From your WORKSPACE/fabric-boilerplate folder:
@@ -64,7 +42,7 @@ This will start up a NodeJS application that serves the frontend, deploys the ch
 Check if the app is running at `http://localhost:8080/` in your browser. You can login with the user credentials you find in `testData/testData.json`  
 
 
-To make local development easier there is a script that will cleanup your environment, start the blockchain network and run the app. From your WORKSPACE/fabric-boilerplate folder:
+To make local development easier there is a script that will cleanup your environment, start the blockchain network and run the app. So you no longer need to run `docker-compose up` and `npm start` yourself. From your WORKSPACE/fabric-boilerplate folder:
 
 !Warning: this script removes all the docker containers that are running. If you are using docker for other applications as well at the moment and don't want to lose your container, don't run this script!
 
@@ -88,8 +66,8 @@ Perform the following steps to run the application on Bluemix:
     - replace the name of the service on line 10. This should be the name of the Blockchain Service you just created
 - Copy the credentials of the Blockchain Service and overwrite the credentials in `credentials.json` in blockchain/deployBluemix.  If you retrieve your Service Credentials from a [new console](https://new-console.ng.bluemix.net/#overview) instance of Bluemix then you will need to edit your credentials.json.  Add `"credentials": {` to line 2 and then add a closing `}` to the final line.  Your finished payload should be 202 lines.  
 - Download the tls certificate; you can find the url at the bottom of the credentials.json
-- Save the certificate in blockchain/deployBluemix
-- Copy the certificate to `$GOPATH/src/github.com/chaincode/fabric-boilerplate/` and rename the file to certificate.pem
+- Save the certificate in `blockchain/deployBluemix`
+- Copy the certificate to `src/chaincode/` and rename the file to certificate.pem
 
 - Register users and deploy chaincode  
 Go to fabric-boilerplate/blockchain/deployBluemix
