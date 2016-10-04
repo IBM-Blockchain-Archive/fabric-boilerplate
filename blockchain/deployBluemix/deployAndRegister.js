@@ -61,7 +61,7 @@ var deployChaincode = function(webappadmin){
     
     // Construct the deploy request
     var deployRequest = {
-        chaincodePath: config.chaincode.global_path,
+        chaincodePath: "chaincode",
         fcn: "init",
         args: [timestamp],
         certificatePath: "/certs/blockchain-cert.pem"
