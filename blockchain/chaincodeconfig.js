@@ -36,10 +36,8 @@ var environments = {
             app_users: app_users
         },
         chaincode:{
-            deployed_name: null,     	                          // hashed cc name from prev deployment. Makes sure no redeploy is needed!
-            global_path: 'github.com/chaincode/fabric-boilerplate',      // the path to the chaincode dir on this machine.
-            local_path: 'chaincode/fabric-boilerplate',                  // the path to your local chaincode related to the specific project
-            auto_redeploy: true 						    // watch the filesystem for changes to the chaincode file
+            deployed_name: null,  // hashed cc name from prev deployment. Makes sure no redeploy is needed!
+            auto_redeploy: true 	// watch the filesystem for changes to the chaincode file
         }
     }
 }

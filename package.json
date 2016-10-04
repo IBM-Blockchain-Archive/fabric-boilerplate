@@ -8,7 +8,8 @@
     "watch-css": "node-sass --watch --include-path scss client/assets/css/scss/main.scss client/assets/css/main.css",
     "build-materialize-css": "node-sass --include-path scss client/assets/css/materialize_scss/materialize.scss client/assets/css/materialize.css",
     "watch-materialize-css": "node-sass --watch --include-path scss client/assets/css/materialize_scss/materialize.scss client/assets/css/materialize.css",
-    "nodemon": "nodemon ./bin/www",
+    "gobuild": "cd src/chaincode && GOPATH=$(pwd)/../.. && go build chaincode.go || true",
+    "nodemon": "GOPATH=$(pwd) nodemon ./bin/www",
     "start": "npm run build-css | npm run watch-css | npm run nodemon"
   },
   "dependencies": {

@@ -210,7 +210,7 @@ var deployChaincode = function(forceRedeploy){
                 var deployRequest = {
                     fcn: "init",
                     args: [createHash()],
-                    chaincodePath: config.chaincode.global_path
+                    chaincodePath: "chaincode"
                 };
 
                 var webAppAdmin = chain.getRegistrar();
@@ -260,29 +260,21 @@ var afterDeployment = function(newChaincodeID) {
 
 }
 
-// Watch filesystem for changes in the local chaincode and copy the file to the folder inside the $GOPATH
+// Watch filesystem for changes in the local chaincode and redeploy if changed
 var watchChaincodeLocalFile = function() {
-    var goPath = process.env.GOPATH;
-    var globalChaincodePath = goPath + "/src/" + config.chaincode.global_path;
-    var chaincode = '/chaincode.go';
+    var chaincodePath = 'src/chaincode/chaincode.go';
     var fsTimeout;
-    fs.watch(config.chaincode.local_path, function(event){
-		if (!fsTimeout){
-			fsTimeout = setTimeout(function() { fsTimeout=null }, 5000);
-            // copy chaincode to global folder
-            logger.info("[SDK] Copying: "+config.chaincode.local_path+chaincode+" to: "+globalChaincodePath+chaincode);
-            fs.copy(config.chaincode.local_path+chaincode, globalChaincodePath+chaincode, function (err) {
-                if (err) {
-                    logger.error(err)
-                } else {
-                    logger.info("[SDK] Files synchronized");
-                    logger.info('[SDK] ' + event + ' event fired. Redeploying...');
-                    deployChaincode(true);
-                }
-            })
-		}
-	});
-	logger.info('[SDK] Watching ' + config.chaincode.local_path + ' for changes...');
+    fs.watch(chaincodePath, function(event) {
+        if (!fsTimeout) {
+            fsTimeout = setTimeout(function() {
+                fsTimeout = null
+            }, 5000);
+
+            logger.info('[SDK] ' + event + ' event fired. Redeploying...');
+            deployChaincode(true);
+        }
+    });
+    logger.info('[SDK] Watching ' + chaincodePath + ' for changes...');
 }
 
 //=============================================================================================
