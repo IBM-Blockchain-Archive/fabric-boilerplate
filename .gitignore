@@ -12,3 +12,4 @@ us.blockchain.ibm.com.cert
 logs/*
 npm-debug.log.*
 src/chaincode/chaincode
+src/chaincode/vendor/github.com/hyperledger/fabric
