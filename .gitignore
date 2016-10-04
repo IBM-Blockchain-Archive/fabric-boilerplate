@@ -11,3 +11,4 @@ blockchain/deployLocal/*
 us.blockchain.ibm.com.cert
 logs/*
 npm-debug.log.*
+src/chaincode/chaincode
