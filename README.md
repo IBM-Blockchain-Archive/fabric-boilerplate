@@ -20,7 +20,10 @@ Use git clone from your preferred workspace folder to clone your project-code wi
 
 ### Setting up Hyperledger
 1. go to `fabric-boilerplate/src/chaincode/vendor/github.com/hyperledger`
-2. run `bash fabric/scripts/provision/docker.sh 0.0.10`
+2. get the hyperledger code `git clone https://github.com/hyperledger-archives/fabric.git`
+3. go into the fabric folder `cd fabric`
+4. Switch to a seprate branch `git checkout v0.5-developer-preview`
+5. run `bash scripts/provision/docker.sh 0.0.10`
 
 This will prepare a docker baseimage in which the chaincode will be launched and deployed. This process takes quite a while.
 
