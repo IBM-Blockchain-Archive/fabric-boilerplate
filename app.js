@@ -1,9 +1,10 @@
 const express       = require('express');
 const path          = require('path');
 const morgan        = require('morgan');
-const logger        = require('./utils/logger');
 const cookieParser  = require('cookie-parser');
 const bodyParser    = require('body-parser');
+const logger        = require('./utils/logger');
+const blockchain    = require('./blockchain/blockchain');
 
 const port = (process.env.VCAP_APP_PORT || 8080);
 const host = (process.env.VCAP_APP_HOST || 'localhost');
@@ -35,7 +36,14 @@ try {
 // for more info, see: https://www.npmjs.com/package/cfenv
 const cfenv = require('cfenv');
 
-app.use(morgan('dev', { 'stream': logger.stream }));
+// Log requests
+app.use(morgan('dev', {
+  stream: logger.stream,
+  skip: function(req, res) {
+    var apiCall = req.originalUrl.includes('/api/v1');
+    return res.statusCode < 400 || !apiCall;
+  }
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -46,10 +54,10 @@ app.use('/auth', require('./auth'));
 app.use('/', require('./routes'));
 
 // catch 404 and forward to error handler
-app.use((req, res, next) => {
-  const err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+app.use(function(req, res, next) {
+    const err = new Error('Not Found: '+req.originalUrl);
+    err.status = 404;
+    next(err);
 });
 
 // error handlers
@@ -57,24 +65,24 @@ app.use((req, res, next) => {
 // development error handler
 // will print stacktrace
 if (process.env.NODE_ENV === 'development') {
-  app.use((err, req, res) => {
+  app.use(function(err, req, res) {
     logger.error(err);
     res.status(err.status || 500);
     res.json({
       message: err.message,
-      error: err,
+      error: err
     });
   });
 }
 
 // production error handler
 // no stacktraces leaked to user
-app.use((err, req, res) => {
+app.use(function(err, req, res) {
   logger.error(err);
   res.status(err.status || 500);
   res.json({
     message: err.message,
-    error: true,
+    error: true
   });
 });
 
@@ -84,6 +92,6 @@ if (process.env.NODE_ENV !== 'development') {
   app.listen(port);
 }
 // print a message when the server starts listening
-logger.info("[NodeJS] Express server listening at http://" + host + ':' + port)
+logger.info("[NodeJS] Express server listening at http://" + host + ':' + port);
 
 module.exports = app;

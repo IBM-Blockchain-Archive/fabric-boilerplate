@@ -7,10 +7,10 @@ This boilerplate has been created and is maintained by the IBM CIC Groningen Blo
 
 ## Prerequisites
 - Go (https://golang.org/)
+- Govend (go get -u github.com/govend/govend)
 - NodeJS (https://nodejs.org/)
 - Docker (https://www.docker.com/)
 - Nodemon (npm install nodemon -g)
-- Govend (https://github.com/govend/govend)
 
 ## Preparing your environment
 
@@ -45,7 +45,7 @@ This will start up a NodeJS application that serves the frontend, deploys the ch
 Check if the app is running at `http://localhost:8080/` in your browser. You can login with the user credentials you find in `testData/testData.json`  
 
 
-To make local development easier there is a script that will cleanup your environment, start the blockchain network and run the app. So you no longer need to run `docker-compose up` and `npm start` yourself. From your WORKSPACE/fabric-boilerplate folder:
+To make local development easier there is a script that will cleanup your environment, start the blockchain network and run the app. From your WORKSPACE/fabric-boilerplate folder:
 
 !Warning: this script removes all the docker containers that are running. If you are using docker for other applications as well at the moment and don't want to lose your container, don't run this script!
 
@@ -88,7 +88,7 @@ Then you can run:
 
 > cf push
 
-For assistance with the cloud foundry cli, visit the [cloud foundry](https://github.com/cloudfoundry/cli#downloads) repo.  There are prerequisites for using the cf cli, such as homebrew. 
+For assistance with the cloud foundry cli, visit the [cloud foundry](https://github.com/cloudfoundry/cli#downloads) repo.  There are prerequisites for using the cf cli, such as homebrew.
 
 **Manual deployment**
 
