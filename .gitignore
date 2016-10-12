@@ -1,13 +1,11 @@
 node_modules/*
 client/assets/node_modules/*
-blockchain/deployBluemix/keyValueStore/*
-!blockchain/deployBluemix/keyValueStore/.gitkeep
-blockchain/deployBluemix/latest_deployed
 blockchain/deployLocal/*
 !blockchain/deployLocal/.gitkeep
 *.css
 .DS_Store
 /.idea
-us.blockchain.ibm.com.cert
-logs/*
+logs/*.log
 npm-debug.log.*
+src/build-chaincode/vendor
+blockchain/deployBluemix/keyValueStore/

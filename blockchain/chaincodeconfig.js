@@ -12,6 +12,7 @@ var environments = {
         },
         chaincode:{
             deployed_name: null,
+            projectName: 'build-chaincode'
         }
     },
     development : {
@@ -19,7 +20,7 @@ var environments = {
             peers: [
                 {
                     discovery_host: 'localhost',
-                    discovery_port: 7051,
+                    discovery_port: 7051
                 }
             ],
             ca : {
@@ -36,13 +37,12 @@ var environments = {
             app_users: app_users
         },
         chaincode:{
-            deployed_name: null,     	                          // hashed cc name from prev deployment. Makes sure no redeploy is needed!
-            global_path: 'github.com/chaincode/fabric-boilerplate',      // the path to the chaincode dir on this machine.
-            local_path: 'chaincode/fabric-boilerplate',                  // the path to your local chaincode related to the specific project
-            auto_redeploy: true 						    // watch the filesystem for changes to the chaincode file
+            projectName: 'build-chaincode', // The directory under src where your chaincode is
+            auto_redeploy: true, 			// watch the filesystem for changes to the chaincode file,
+            deployed_name: null
         }
     }
-}
+};
 
 
 // cf env to check if we are in bluemix.

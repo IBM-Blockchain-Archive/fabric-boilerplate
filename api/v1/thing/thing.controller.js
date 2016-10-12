@@ -2,7 +2,6 @@
 
 const Thing = require('./thing.model');
 const BlockchainService = require('../../../blockchainServices/blockchainSrvc.js');
-const enrollID = require('../../../utils/enrollID')
 
 /*
     Retrieve list of all things
@@ -13,15 +12,12 @@ const enrollID = require('../../../utils/enrollID')
         [{'thing'}, {'thing'}]
 */
 exports.list = function(req, res) {
-    console.log("-- Query all things --")
-    
-    var userID = enrollID.getID(req);
-    
-    const functionName = "get_all_things"
-    const args = [userID];
-    const enrollmentId = userID;
-    
-    BlockchainService.query(functionName,args,enrollmentId).then(function(things){
+    console.log("-- Query all things --");
+
+    const functionName = "get_all_things";
+    const args = [req.userId];
+
+    BlockchainService.query(functionName,args,req.userId).then(function(things){
         if (!things) {
             res.json([]);
         } else {
@@ -32,7 +28,7 @@ exports.list = function(req, res) {
         console.log("Error", err);
         res.sendStatus(500);   
     }); 
-}
+};
 
 /*
     Retrieve thing object
@@ -43,13 +39,12 @@ exports.list = function(req, res) {
         { thing }
 */
 exports.detail = function(req, res) {
-    console.log("-- Query thing --")
+    console.log("-- Query thing --");
     
-    const functionName = "get_thing"
+    const functionName = "get_thing";
     const args = [req.params.thingId];
-    const enrollmentId = enrollID.getID(req);
     
-    BlockchainService.query(functionName,args,enrollmentId).then(function(thing){
+    BlockchainService.query(functionName,args,req.userId).then(function(thing){
         if (!thing) {
             res.json([]);
         } else {
@@ -60,7 +55,7 @@ exports.detail = function(req, res) {
         console.log("Error", err);
         res.sendStatus(500);   
     }); 
-}
+};
 
 /*
     Add thing object
@@ -71,17 +66,16 @@ exports.detail = function(req, res) {
         {  }
 */
 exports.add = function(req, res) {
-    console.log("-- Adding thing --")
+    console.log("-- Adding thing --");
       
-    const functionName = "add_thing"
+    const functionName = "add_thing";
     const args = [req.body.thingId, JSON.stringify(req.body.thing)];
-    const enrollmentId = enrollID.getID(req);
     
-    BlockchainService.invoke(functionName,args,enrollmentId).then(function(thing){
+    BlockchainService.invoke(functionName,args,req.userId).then(function(thing){
         res.sendStatus(200);
     }).catch(function(err){
         console.log("Error", err);
         res.sendStatus(500);   
     }); 
-}
+};
 

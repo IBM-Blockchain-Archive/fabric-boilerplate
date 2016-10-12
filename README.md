@@ -7,6 +7,7 @@ This boilerplate has been created and is maintained by the IBM CIC Groningen Blo
 
 ## Prerequisites
 - Go (https://golang.org/)
+- Govend (go get -u github.com/govend/govend)
 - NodeJS (https://nodejs.org/)
 - Docker (https://www.docker.com/)
 - Nodemon (npm install nodemon -g)
@@ -19,32 +20,11 @@ Use git clone from your preferred workspace folder to clone your project-code wi
 2. cd `fabric-boilerplate` and run `npm install`  
 
 ### Setting up Hyperledger
-Create the following folder structure in your Go path: $GOPATH/src/github.com/
 
-$GOPATH/src/github.com/  
-----hyperledger/  
-----chaincode/  
----------fabric-boilerplate/  
-------------vendor/  
----------------github.com/  
-------------------hyperledger/
-
-Go to the $GOPATH/src/github.com/hyperleder folder and clone the fabric code:
-> cd $GOPATH/src/github.com/hyperledger     
-> git clone https://github.com/hyperledger-archives/fabric.git  
-> cd fabric  
-> git checkout v0.5-developer-preview
-
-Once the repository is cloned, run the following command:
-> bash scripts/provision/docker.sh 0.0.10
+If everything went fine until now, you should have a folder called vendor in src/build-chaincode.  
+> bash src/build-chaincode/vendor/github.com/hyperledger/fabric/scripts/provision/docker.sh 0.0.10
 
 This will prepare a docker baseimage in which the chaincode will be launched and deployed. This process takes quite a while.
-
-
-Copy the fabric folder that you just cloned and paste it in
-`$GOPATH/src/github.com/chaincode/fabric-boilerplate/vendor/github.com/hyperledger`
-
-Copy the chaincode.go file from the chaincode/fabric-boilerplate folder inside your project to the `$GOPATH/src/github.com/chaincode/fabric-boilerplate/` folder
 
 ## Running the application automatically
 From your WORKSPACE/fabric-boilerplate folder:
@@ -87,13 +67,10 @@ Perform the following steps to run the application on Bluemix:
     - replace the name and host on lines 5 and 6. The values can be anything, as long as they are unique
     - replace the name of the service on line 10. This should be the name of the Blockchain Service you just created
 - Copy the credentials of the Blockchain Service and overwrite the credentials in `credentials.json` in blockchain/deployBluemix.  If you retrieve your Service Credentials from a [new console](https://new-console.ng.bluemix.net/#overview) instance of Bluemix then you will need to edit your credentials.json.  Add `"credentials": {` to line 2 and then add a closing `}` to the final line.  Your finished payload should be 202 lines.  
-- Download the tls certificate; you can find the url at the bottom of the credentials.json
-- Save the certificate in blockchain/deployBluemix
-- Copy the certificate to `$GOPATH/src/github.com/chaincode/fabric-boilerplate/` and rename the file to certificate.pem
 
 - Register users and deploy chaincode  
 Go to fabric-boilerplate/blockchain/deployBluemix
-> node deployAndRegister.js
+> GOPATH="$(pwd)/../.." node deployAndRegister.js
 
 (This can take about 30 seconds)
 

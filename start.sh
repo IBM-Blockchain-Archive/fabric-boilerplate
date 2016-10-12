@@ -1,23 +1,19 @@
 #!/bin/bash
 DIR="$(pwd)"
 # Change to the project name
-PROJECT="fabric-boilerplate"
+PROJECT="$(pwd)"
 BC="$DIR/blockchain"
-# Make sure that the directory under /chaincode is the same as the project name
-CC="$DIR/chaincode/$PROJECT"
-CC_GLOBAL="/usr/local/go/src/github.com/chaincode/$PROJECT"
 
-printf "\nCurrent directory: $DIR \n"
-printf "Local chaincode directory: $CC \n"
-printf "Global chaincode directory: $CC_GLOBAL \n"
+printf "\nProject: $PROJECT \n"
+printf "Current directory: $DIR \n"
 printf "Blockchain directory: $BC \n"
 
 clear_all()
 {
-    rm $BC/deployLocal/latest_deployed 2>/dev/null
+    rm $BC/deployLocal/chaincode_id 2>/dev/null
     printf "Latest deployed removed\n"
     
-    rm -rf /var/hyperledger/production && rm -rf $BC/deployLocal/keyValueStore 2>/dev/null
+    rm -rf $BC/deployLocal/keyValueStore 2>/dev/null
     printf "keyValStore and var files removed\n"
     
     docker rm -f $(docker ps -a -q) 2>/dev/null
@@ -29,10 +25,6 @@ clear_all()
 }
 
 clear_all
-
-# copy chaincode in main folder
-yes | cp -rf $CC/chaincode.go $CC_GLOBAL/chaincode.go
-printf "Latest chaincode copied from local to global folder\n"
 
 # run docker-compose
 docker-compose up -d 2>/dev/null
