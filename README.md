@@ -73,8 +73,7 @@ Perform the following steps to run the application on Bluemix:
 - Copy the certificate to `src/chaincode/` and rename the file to certificate.pem
 
 - Register users and deploy chaincode  
-Go to fabric-boilerplate/blockchain/deployBluemix
-> node deployAndRegister.js
+> npm deployAndRegister
 
 (This can take about 30 seconds)
 
