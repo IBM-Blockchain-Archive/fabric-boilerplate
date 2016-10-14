@@ -11,6 +11,9 @@ var credentials = require('./credentials.json').credentials;
 var config = require('../chaincodeconfig');
 var certFilename = process.env.GOPATH + "/src/" + config.chaincode.projectName + '/' + 'certificate.pem';
 var chain = hfc.newChain("deploy-chain-network");
+
+if(!credentials.users) throw "Credentials not found. Copy them from your Bluemix blockchain service";
+
 var adminUser = credentials.users.filter(function(u){
     return u.enrollId === "WebAppAdmin";
 })[0];
