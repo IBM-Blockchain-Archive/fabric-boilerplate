@@ -9,3 +9,4 @@ logs/*.log
 npm-debug.log.*
 src/build-chaincode/vendor
 blockchain/deployBluemix/keyValueStore/
+blockchain/deployBluemix/chaincode_id
