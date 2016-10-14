@@ -9,6 +9,7 @@
     "logs": "docker logs -f $(docker ps -aq | head -n 1)",
     "installgo": "cd src/build-chaincode && GOPATH=$(pwd)/../.. && govend -v",
     "gobuild": "cd src/build-chaincode && GOPATH=$(pwd)/../.. && go build",
+    "deploy-bluemix": "cd blockchain/deployBluemix && GOPATH=$(pwd)/../.. && node deployAndRegister.js",
     "build-css": "node-sass --include-path scss client/assets/css/scss/main.scss client/assets/css/main.css",
     "watch-css": "node-sass --watch --include-path scss client/assets/css/scss/main.scss client/assets/css/main.css",
     "build-materialize-css": "node-sass --include-path scss client/assets/css/materialize_scss/materialize.scss client/assets/css/materialize.css",

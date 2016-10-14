@@ -68,9 +68,7 @@ Perform the following steps to run the application on Bluemix:
     - replace the name of the service on line 10. This should be the name of the Blockchain Service you just created
 - Copy the credentials of the Blockchain Service and overwrite the credentials in `credentials.json` in blockchain/deployBluemix.  If you retrieve your Service Credentials from a [new console](https://new-console.ng.bluemix.net/#overview) instance of Bluemix then you will need to edit your credentials.json.  Add `"credentials": {` to line 2 and then add a closing `}` to the final line.  Your finished payload should be 202 lines.  
 
-- Register users and deploy chaincode  
-Go to fabric-boilerplate/blockchain/deployBluemix
-> GOPATH="$(pwd)/../.." node deployAndRegister.js
+- Register users and deploy chaincode: `npm run deploy-bluemix`  
 
 (This can take about 30 seconds)
 
@@ -90,6 +88,9 @@ After the app has been pushed to Bluemix you can view the logs with:
 > cf logs [NAME_OF_THE_APP] --recent
 
 Where NAME_OF_THE_APP is the app name you provided in the manifest.yml file
+
+# Debugging chaincode
+To check if your chaincode compiles before you deploy it, run `npm run gobuild`
 
 # Support and documentation
 Hyperledger project:                https://www.hyperledger.org/    
