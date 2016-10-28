@@ -19,7 +19,8 @@ Use git clone from your preferred workspace folder to clone your project-code wi
 1. git clone https://github.com/IBM-Blockchain/fabric-boilerplate.git   
 2. cd `fabric-boilerplate` and run `npm install`  
 
-### Setting up Hyperledger
+### Setting up Hyperledger Fabric
+
 1. Pull _peer_ image: `docker pull rikmoedt/fabric-peer:0.5-dp`
 2. Pull _membersrvc_ image: `docker pull rikmoedt/fabric-membersrvc:0.5-dp`
 3. Pull _fabric-baseimage_ image: `docker pull rikmoedt/fabric-baseimage`
