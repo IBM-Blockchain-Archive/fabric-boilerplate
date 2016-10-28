@@ -18,12 +18,12 @@ Use git clone from your preferred workspace folder to clone your project-code wi
 1. git clone https://github.com/IBM-Blockchain/fabric-boilerplate.git   
 2. cd `fabric-boilerplate` and run `npm install`  
 
-### Setting up Hyperledger
-1. go to `fabric-boilerplate/src/chaincode/vendor/github.com/hyperledger`
-2. get the hyperledger code `git clone https://github.com/hyperledger-archives/fabric.git`
-3. go into the fabric folder `cd fabric`
-4. Switch to a seprate branch `git checkout v0.5-developer-preview`
-5. run `bash scripts/provision/docker.sh 0.0.10`
+### Setting up Hyperledger Fabric
+
+1. Pull _peer_ image: `docker pull rikmoedt/fabric-peer:0.5-dp`
+2. Pull _membersrvc_ image: `docker pull rikmoedt/fabric-membersrvc:0.5-dp`
+3. Pull _fabric-baseimage_ image: `docker pull rikmoedt/fabric-baseimage`
+4. Change tag to the _fabric-baseimage_: `docker tag rikmoedt/fabric-baseimage hyperledger/fabric-baseimage` (note: be sure you do not have already an image with the same tag, in that case, rename first the current _hyperledger/fabric-baseimage_ to something else)
 
 This will prepare a docker baseimage in which the chaincode will be launched and deployed. This process takes quite a while.
 
