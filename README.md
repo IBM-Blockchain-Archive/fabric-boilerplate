@@ -29,7 +29,6 @@ You can test the installation running the following command (once you cloned the
 Use git clone from your preferred workspace folder to clone your project-code with:  
 1. git clone https://github.com/IBM-Blockchain/fabric-boilerplate.git   
 2. cd `fabric-boilerplate` and run `npm install`  
-If everything went fine until now, you should have a folder called vendor in src/build-chaincode.
 
 ### Setting up Hyperledger Fabric
 

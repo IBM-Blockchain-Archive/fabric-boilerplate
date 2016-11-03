@@ -17,7 +17,6 @@
     "build-materialize-css": "node-sass --include-path scss client/assets/css/materialize_scss/materialize.scss client/assets/css/materialize.css",
     "watch-materialize-css": "node-sass --watch --include-path scss client/assets/css/materialize_scss/materialize.scss client/assets/css/materialize.css",
     "nodemon": "GOPATH=$(pwd) nodemon ./bin/www",
-    "deployAndRegister": "GOPATH=$(pwd) node blockchain/deployBluemix/deployAndRegister.js",
     "start": "npm run build-css | npm run watch-css | npm run nodemon"
   },
   "dependencies": {

@@ -1,10 +1,9 @@
 const express       = require('express');
 const path          = require('path');
 const morgan        = require('morgan');
+const logger        = require('./utils/logger');
 const cookieParser  = require('cookie-parser');
 const bodyParser    = require('body-parser');
-const logger        = require('./utils/logger');
-const blockchain    = require('./blockchain/blockchain');
 
 const port = (process.env.VCAP_APP_PORT || 8080);
 const host = (process.env.VCAP_APP_HOST || 'localhost');
@@ -13,7 +12,7 @@ const app = express();
 
 // initialize blockchain
 const blockchain = require('./blockchain/blockchain');
-const testData = require('./testdata');
+const testData = require('./testData');
 
 try {
   blockchain.init(function (err) {

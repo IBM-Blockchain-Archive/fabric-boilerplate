@@ -54,10 +54,13 @@ exports.login = function(req, res) {
         }
         
     }).catch(function(err){
-        logger.error(err);
-        throw err;   
-    }); 
-}
+        logger.warn(err);
+        return res.status(401).send({
+            success: false,
+            message: 'Server error.'
+        });
+    });
+};
 
 function validPassword(user, password) {
         var hash = crypto.pbkdf2Sync(password, user.salt, 1000, 64).toString('hex');

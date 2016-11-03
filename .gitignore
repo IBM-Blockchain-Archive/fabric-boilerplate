@@ -1,5 +1,5 @@
-node_modules/*
-client/assets/node_modules/*
+node_modules/
+client/assets/node_modules/
 blockchain/deployLocal/*
 !blockchain/deployLocal/.gitkeep
 *.css
@@ -10,5 +10,4 @@ npm-debug.log.*
 src/build-chaincode/vendor
 blockchain/deployBluemix/keyValueStore/
 blockchain/deployBluemix/chaincode_id
-/src/build-chaincode/vendor
-/src/build-chaincode/build-chaincode
+src/build-chaincode/build-chaincode
