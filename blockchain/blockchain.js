@@ -6,7 +6,7 @@ const hfc = require('hfc');
 const fs = require('fs-extra');
 const logger = require('../utils/logger');
 const config = require('./chaincodeconfig');
-const testData = require('../testData');
+const testData = require('../testdata');
 
 const chaincodeFilename = 'chaincode.go';
 const chaincodeIdFile = 'chaincode_id';

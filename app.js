@@ -12,7 +12,7 @@ const app = express();
 
 // initialize blockchain
 const blockchain = require('./blockchain/blockchain');
-const testData = require('./testData');
+const testData = require('./testdata');
 
 try {
   blockchain.init(function (err) {
