@@ -11,31 +11,34 @@ var logger = require('../../../utils/logger');
         "things"        :   [ thing, thing ],
         "address"       :   String,
         "phoneNumber"   :   String,
-        "emailAddress"  :   String`
+        "emailAddress"  :   String,
+        "role"          :   Int,
+        `
     }
 
     ROLE is retrieved from Certificate Authority
 */
 
-function User   (   userId,
+function User   (   id,
                     password,
                     firstName,
                     lastName,
                     things,
                     address,
                     phoneNumber,
-                    emailAddress
+                    emailAddress,
+                    role
                 ) {
   
     for (var key in arguments){
-        if(!arguments[key]){
+        if(arguments[key] == null){
             logger.debug(arguments);
             throw new Error('Incorrect arguments for new User.');
         }
     }
 
     // Attributes for user object
-    this.userId             =   userId;
+    this.id                 =   id;
     this.firstName          =   firstName;
     this.lastName           =   lastName;
     this.things             =   things;
@@ -45,6 +48,7 @@ function User   (   userId,
     this.address            =   address;
     this.phoneNumber        =   phoneNumber;
     this.emailAddress       =   emailAddress;
+    this.role               =   role;
 
 }
 

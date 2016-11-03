@@ -5,8 +5,8 @@ var controller = require('./thing.controller');
 
 var router = express.Router();
 
-router.get('/', controller.list);
-router.get('/:thingId', controller.detail);
-router.post('/', controller.add);
+router.get('/', controller.getAllThings);
+router.get('/:thingId', controller.getThing);
+router.post('/', controller.addThing);
 
 module.exports = router;
