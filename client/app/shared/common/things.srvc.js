@@ -4,7 +4,7 @@ app.service('ThingsService', ["$q", "$http", "$localStorage", function ($q, $htt
         getAllThings: function () {
             var deferred = $q.defer();
             
-            console.log("ThingsService -- Get assigned things based on userId: ", $localStorage.user.userId);
+            console.log("ThingsService -- Get assigned things based on userId: ", $localStorage.user.id);
                         
             $http({
                 method: 'GET',

@@ -13,7 +13,7 @@ function Thing(    id,
                ){
 
     for (var key in arguments){
-        if(!arguments[key]){
+        if(arguments[key] == null){
             throw new Error("Incorrect arguments for new Thing.");
         }
     }

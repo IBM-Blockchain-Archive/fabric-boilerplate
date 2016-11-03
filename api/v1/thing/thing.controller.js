@@ -1,7 +1,7 @@
 'use strict';
 
 const Thing = require('./thing.model');
-const BlockchainService = require('../../../blockchainServices/blockchainSrvc.js');
+const BlockchainService = require('../../../services/blockchainSrvc.js');
 const enrollID = require('../../../utils/enrollID')
 
 /*
@@ -12,7 +12,7 @@ const enrollID = require('../../../utils/enrollID')
     Response:
         [{'thing'}, {'thing'}]
 */
-exports.list = function(req, res) {
+exports.getAllThings = function(req, res) {
     console.log("-- Query all things --")
     
     var userID = enrollID.getID(req);
@@ -20,7 +20,7 @@ exports.list = function(req, res) {
     const functionName = "get_all_things"
     const args = [userID];
     const enrollmentId = userID;
-    
+    console.log("userId",userID)
     BlockchainService.query(functionName,args,enrollmentId).then(function(things){
         if (!things) {
             res.json([]);
@@ -42,7 +42,7 @@ exports.list = function(req, res) {
     Response:
         { thing }
 */
-exports.detail = function(req, res) {
+exports.getThing = function(req, res) {
     console.log("-- Query thing --")
     
     const functionName = "get_thing"
@@ -70,7 +70,7 @@ exports.detail = function(req, res) {
     Response:
         {  }
 */
-exports.add = function(req, res) {
+exports.addThing = function(req, res) {
     console.log("-- Adding thing --")
       
     const functionName = "add_thing"

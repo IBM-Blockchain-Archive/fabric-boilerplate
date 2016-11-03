@@ -1,24 +1,26 @@
 {
 	"users":[
 		{
-			"userId":"john1",
+			"id":"john1",
 			"password":"passw0rd",
 			"firstName":"John",
 			"lastName":"Doe",
 			"things":["12345678","87654321"],
             "address": "Dam 1, 1012 JS Amsterdam, The Netherlands",
             "phoneNumber": "0900 0048",
-            "emailAddress": "johndoe@gmail.com"
+            "emailAddress": "johndoe@gmail.com",
+            "role": 0
 		},
 		{
-			"userId":"jane1",
+			"id":"jane1",
 			"password":"passw0rd",
 			"firstName":"Jane",
 			"lastName":"Doe",
 			"things":["87654321"],
             "address": "128 West 44th Street, New York, NY 10036, United States",
             "phoneNumber": "0900 0024",
-            "emailAddress": "janedoe@gmail.com"
+            "emailAddress": "janedoe@gmail.com",
+            "role": 1
 		}
 	],
 	"things":[

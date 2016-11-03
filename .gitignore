@@ -8,8 +8,7 @@ blockchain/deployLocal/*
 *.css
 .DS_Store
 /.idea
-us.blockchain.ibm.com.cert
-logs/*
+*.log
 npm-debug.log.*
-src/chaincode/chaincode
-src/chaincode/vendor/github.com/hyperledger/fabric
+/src/build-chaincode/vendor
+/src/build-chaincode/chaincode
