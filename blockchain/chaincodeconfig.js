@@ -1,5 +1,5 @@
 const serviceRegex = /^ibm-blockchain/;
-var app_users = require('../testData/testData.json').users;
+var app_users = require('../testdata/testData.json').users;
 
 // if the app is running in Bluemix, get credentials from env var. Otherwise from json.
 function getCredentials(){
