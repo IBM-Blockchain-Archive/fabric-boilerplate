@@ -11,4 +11,4 @@ blockchain/deployLocal/*
 *.log
 npm-debug.log.*
 /src/build-chaincode/vendor
-/src/build-chaincode/chaincode
+/src/build-chaincode/build-chaincode
