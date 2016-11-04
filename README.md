@@ -22,9 +22,8 @@ Use git clone from your preferred workspace folder to clone your project-code wi
 ### Setting up Hyperledger
 1. Pull _peer_ image: `docker pull rikmoedt/fabric-peer:0.5-dp`
 2. Pull _membersrvc_ image: `docker pull rikmoedt/fabric-membersrvc:0.5-dp`
-3. Go to `fabric-boilerplate/src/build-chaincode/vendor/github.com/hyperledger`
-4. Go into the fabric folder `cd fabric`
-5. Run `bash scripts/provision/docker.sh 0.0.10`
+3. Pull _fabric-baseimage_ image: `docker pull rikmoedt/fabric-baseimage`
+4. Change tag to the _fabric-baseimage_: `docker tag rikmoedt/fabric-baseimage hyperledger/fabric-baseimage` (note: be sure you do not have already an image with the same tag, in that case, rename first the current _hyperledger/fabric-baseimage_ to something else)
 
 This will prepare a docker baseimage in which the chaincode will be launched and deployed. This process takes quite a while.
 
