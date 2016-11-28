@@ -1,12 +1,14 @@
 package main
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"strconv"
-	"os"
+    "os"
 )
 
 var logger = shim.NewLogger("fabric-boilerplate")
@@ -36,8 +38,8 @@ type User struct {
 }
 
 type Thing struct {
-	Id          string `json:"id"`
-	Description string `json:"description"`
+	Id             string `json:"id"`
+	Description    string `json:"description"`
 }
 
 //=================================================================================================================================
@@ -73,7 +75,7 @@ var indexes = []string{usersIndexStr, thingsIndexStr}
 //==============================================================================================================================
 
 func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-	logger.Infof("Invoke is running " + function)
+    fmt.Println("invoke is running " + function +", with args",len(args))
 
 	if function == "init" {
 		return t.Init(stub, "init", args)
@@ -93,8 +95,8 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
 //  		initial arguments passed are passed on to the called function.
 //=================================================================================================================================
 func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-	logger.Infof("Query is running " + function)
-
+    fmt.Println("query is running " + function +", with args",len(args))
+    
 	if function == "get_user" {
 		return t.get_user(stub, args[1])
 	} else if function == "get_thing" {
@@ -113,13 +115,13 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
 //=================================================================================================================================
 
 func main() {
+    
+     // LogDebug, LogInfo, LogNotice, LogWarning, LogError, LogCritical (Default: LogDebug)
+    logger.SetLevel(shim.LogInfo)
 
-	// LogDebug, LogInfo, LogNotice, LogWarning, LogError, LogCritical (Default: LogDebug)
-	logger.SetLevel(shim.LogInfo)
-
-	logLevel, _ := shim.LogLevel(os.Getenv("SHIM_LOGGING_LEVEL"))
-	shim.SetLoggingLevel(logLevel)
-
+    logLevel, _ := shim.LogLevel(os.Getenv("SHIM_LOGGING_LEVEL"))
+    shim.SetLoggingLevel(logLevel)
+    
 	err := shim.Start(new(SimpleChaincode))
 	if err != nil {
 		fmt.Printf("Error starting SimpleChaincode: %s", err)
@@ -169,26 +171,34 @@ func append_id(stub *shim.ChaincodeStub, indexStr string, id string, create bool
 
 }
 
+func calculate_hash(args []string) string {
+	var str = ""
+	for _, v := range args {
+		str += v
+	}
+	hasher := md5.New()
+	hasher.Write([]byte(str))
+	return hex.EncodeToString(hasher.Sum(nil))
+}
+
 //==============================================================================================================================
 //  Invoke Functions
 //==============================================================================================================================
 func (t *SimpleChaincode) reset_indexes(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
-	for _, i := range indexes {
-		// Marshal the index
-		var emptyIndex []string
+    for _,i := range indexes {
+        // Marshal the index
+        var emptyIndex []string
 
-		empty, err := json.Marshal(emptyIndex)
-		if err != nil {
-			return nil, errors.New("Error marshalling")
-		}
-		err = stub.PutState(i, empty);
+        empty, err := json.Marshal(emptyIndex)
+	    if err != nil {
+		  return nil,errors.New("Error marshalling")
+	    }
+        err = stub.PutState(i,empty);
 
-		if err != nil {
-			return nil, errors.New("Error deleting index")
-		}
-		logger.Infof("Delete with success from ledger: " + i)
-	}
-	return nil, nil
+        if err != nil { return nil, errors.New("Error deleting index") }
+        logger.Infof("Delete with success from ledger: "+i)
+    }
+    return nil, nil
 }
 
 func (t *SimpleChaincode) add_user(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
@@ -272,7 +282,7 @@ func (t *SimpleChaincode) get_all_things(stub *shim.ChaincodeStub, args []string
 	// Unmarshal the index
 	var thingsIndex []string
 	json.Unmarshal(indexAsBytes, &thingsIndex)
-
+    
 	var things []Thing
 	for _, thing := range thingsIndex {
 
@@ -280,7 +290,7 @@ func (t *SimpleChaincode) get_all_things(stub *shim.ChaincodeStub, args []string
 		if err != nil {
 			return nil, errors.New("Unable to get thing with ID: " + thing)
 		}
-
+        
 		var t Thing
 		json.Unmarshal(bytes, &t)
 		things = append(things, t)
@@ -306,7 +316,7 @@ func (t *SimpleChaincode) authenticate(stub *shim.ChaincodeStub, args []string) 
 
 	user, err := t.get_user(stub, username)
 
-	// If user can not be found in ledgerstore, return authenticated false
+    // If user can not be found in ledgerstore, return authenticated false
 	if err != nil {
 		return []byte(`{ "authenticated": false }`), nil
 	}
@@ -317,14 +327,14 @@ func (t *SimpleChaincode) authenticate(stub *shim.ChaincodeStub, args []string) 
 		return []byte(`{ "authenticated": false}`), nil
 	}
 
-	// Marshal the user object
-	userAsBytes, err := json.Marshal(u)
+    // Marshal the user object
+    userAsBytes, err := json.Marshal(u)
 	if err != nil {
 		return []byte(`{ "authenticated": false}`), nil
 	}
 
-	// Return authenticated true, and include the user object
-	str := `{ "authenticated": true, "user": ` + string(userAsBytes) + `  }`
+    // Return authenticated true, and include the user object
+    str := `{ "authenticated": true, "user": ` + string(userAsBytes) + `  }`
 
 	return []byte(str), nil
 }

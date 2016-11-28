@@ -28,6 +28,6 @@ var method = Thing.prototype;
 // Add a method to the CaseFile prototype
 method.example = function(){
     return true;
-}
+};
 
 module.exports = Thing;

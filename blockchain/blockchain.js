@@ -2,30 +2,35 @@
 
 var hfc = require('hfc');
 var fs = require('fs-extra');
-var crypto = require('crypto')
+var crypto = require('crypto');
 var logger = require('../utils/logger');
 var config = require('./chaincodeconfig');
-var testData = require('../testdata/testData.js')
+var testData = require('../testdata/testData.js');
 
 var chain, chaincodeID, onBluemix;
+var chaincodePath = process.env.GOPATH + "/src/" + config.chaincode.projectName;
+var certFilename = 'certificate.pem';
+var chaincodeFilename = 'chaincode.go';
+var chaincodeIdFile = 'chaincode_id';
+
 
 // Initialize blockchain.
 exports.init = function(){
-    logger.info("[SDK] Initializing the blockchain")
+    logger.info("[SDK] Initializing the blockchain");
 
     // Creating a local chain object
     chain = hfc.newChain("chain-network");
 
     // Setting the memberservice and peer urls
-    var ca = config.network.ca[Object.keys(config.network.ca)[0]]
-    var peer = config.network.peers[0]
+    var ca = config.network.ca[Object.keys(config.network.ca)[0]];
+    var peer = config.network.peers[0];
 
     // Check if we are running on bluemix or local
     if (process.env.NODE_ENV == "production"){
-        logger.info("[SDK] Running in bluemix mode")
+        logger.info("[SDK] Running in bluemix mode");
         onBluemix = true;
     } else {
-        logger.info("[SDK] Running in local mode")
+        logger.info("[SDK] Running in local mode");
         onBluemix = false;
     }
 
@@ -39,7 +44,7 @@ exports.init = function(){
         chain.setDevMode(false);
 
         // Get the tls certificate, needed to connect to the Bluemix Blockchain service
-        var cert = fs.readFileSync("blockchain/deployBluemix/us.blockchain.ibm.com.cert");
+        var cert = fs.readFileSync('src/' + config.chaincode.projectName + '/' + certFilename);
 
         // Connect to memberservice and peer
         chain.setMemberServicesUrl("grpcs://"+ca.url,{pem:cert});
@@ -55,10 +60,10 @@ exports.init = function(){
         chain.addPeer("grpc://"+peer.discovery_host+":"+peer.discovery_port);
     }
 
-    logger.info("[SDK] Connected to memberservice and peer")
+    logger.info("[SDK] Connected to memberservice and peer");
 
-    registerAdmin()
-}
+    registerAdmin();
+};
 
 // Register Admin user
 var registerAdmin = function(){
@@ -67,7 +72,7 @@ var registerAdmin = function(){
     var adminUser;
     for (var i= 0;i<config.network.users.length;i++){
         if (config.network.users[i].enrollId == "WebAppAdmin"){
-            adminUser = config.network.users[i]
+            adminUser = config.network.users[i];
             break
         }
     }
@@ -76,37 +81,35 @@ var registerAdmin = function(){
     // listed in fabric/membersrvc/membersrvc.yaml with it's one time password.
     chain.enroll(adminUser.enrollId, adminUser.enrollSecret, function(err, webAppAdmin) {
        if (err) {
-           logger.error("[SDK] Failed to register WebAppAdmin, ",err)
-           console.log(err)
-           console.log(webAppAdmin)
+           logger.error("[SDK] Failed to register WebAppAdmin, ", err);
        } else {
-           logger.info("[SDK] Successfully registered WebAppAdmin")
+           logger.info("[SDK] Successfully registered WebAppAdmin");
 
            // Set WebAppAdmin as the chain's registrar which is authorized to register other users.
            chain.setRegistrar(webAppAdmin);
 
            // Register and enroll the users
-           registerUsers()
+           registerUsers();
 
            // Deploy the chaincode
-           deployChaincode()
+           deployChaincode();
        }
 
     });
 
-}
+};
 
 // Register the users
 var registerUsers = function(){
 
-    logger.info("[SDK] Going to register users")
+    logger.info("[SDK] Going to register users");
 
     // Register and enroll all the user that are in the chaincodeconfig.js
     config.network.app_users.forEach(function(user) {
 
         chain.getUser(user.userId, function (err, userObject) {
             if (err) {
-                logger.error("[SDK] Error getting user ",user.userId)
+                logger.error("[SDK] Error getting user ",user.userId);
                 logger.info(err)
             } else if (userObject.isEnrolled()) {
                 logger.info("[SDK] User "+ user.userId +" is already enrolled")
@@ -117,24 +120,24 @@ var registerUsers = function(){
                     enrollmentID: user.userId,
                     affiliation: "institution_a",
                     account: ""
-                }
+                };
                 chain.registerAndEnroll(registrationRequest, function (err) {
                     if (err) {
-                        logger.error("[SDK] Error registering and enrolling user",user.userId)
+                        logger.error("[SDK] Error registering and enrolling user",user.userId);
                         logger.info(err)
                     } else {
-                        logger.info("[SDK] User "+ user.userId +" successfully registered and enrolled")
+                        logger.info("[SDK] User "+ user.userId +" successfully registered and enrolled");
                     }
                 });
             }
         });
 
     })
-}
+};
 
 // Store chaincode id for later use (so we don't have to redeploy).
 var saveLatestDeployed = function() {
-	fs.writeFile('blockchain/deployLocal/latest_deployed', chaincodeID);
+	fs.writeFile('blockchain/deployLocal/' + chaincodeIdFile, chaincodeID);
 };
 
 // Get chaincode id from file
@@ -143,9 +146,9 @@ var loadLatestDeployed = function(cb){
     // Get the path to the latestDeployed file
     var path;
     if(onBluemix){
-        path = 'blockchain/deployBluemix/latest_deployed'
+        path = 'blockchain/deployBluemix/' + chaincodeIdFile
     } else {
-        path = 'blockchain/deployLocal/latest_deployed'
+        path = 'blockchain/deployLocal/' + chaincodeIdFile
     }
 
     // Read the chaincodeId from the latest deployed file
@@ -175,7 +178,7 @@ var getUser = function(userName, cb) {
             return cb("user is not yet registered and enrolled")
         }
     });
-}
+};
 
 // Function to deploy the chaincode
 var deployChaincode = function(forceRedeploy){
@@ -184,13 +187,13 @@ var deployChaincode = function(forceRedeploy){
 
         loadLatestDeployed(function(latestDeployed){
             config.chaincode.deployed_name = latestDeployed;
-            afterDeployment(config.chaincode.deployed_name)
+            afterDeployment(config.chaincode.deployed_name, true)
         })
 
     } else {
 
         // We are running locally
-        logger.info("[SDK] Checking if redeploy is needed")
+        logger.info("[SDK] Checking if redeploy is needed");
 
         // Load the previously deployed chaincode
         loadLatestDeployed(function(latestDeployed){
@@ -204,13 +207,13 @@ var deployChaincode = function(forceRedeploy){
 
             if (notDeployedYet || forceRedeploy){
 
-                logger.info("[SDK] Going to deploy chaincode")
+                logger.info("[SDK] Going to deploy chaincode");
 
                 // Including a unique string as an argument to make sure each new deploy has a unique id
                 var deployRequest = {
                     fcn: "init",
                     args: [createHash()],
-                    chaincodePath: "chaincode"
+                    chaincodePath: config.chaincode.projectName // Path to the global directory containing the chaincode project under $GOPATH/src/
                 };
 
                 var webAppAdmin = chain.getRegistrar();
@@ -219,9 +222,9 @@ var deployChaincode = function(forceRedeploy){
                 var deployTx = webAppAdmin.deploy(deployRequest);
                 deployTx.on('complete', function(results) {
                     logger.info("[SDK] Successfully deployed chaincode");
-                    logger.info("[SDK] Deploy result: ",results)
+                    logger.info("[SDK] Deploy result: ",results);
 
-                    afterDeployment(results.chaincodeID);
+                    afterDeployment(results.chaincodeID, true);
 
                 });
                 deployTx.on('error', function(err) {
@@ -229,18 +232,18 @@ var deployChaincode = function(forceRedeploy){
                     logger.error("[SDK] Deploy error: ",err)
                 });
             } else {
-                logger.info("[SDK] Using previously deployed chaincode: " + config.chaincode.deployed_name)
+                logger.info("[SDK] Using previously deployed chaincode: " + config.chaincode.deployed_name);
 
                 afterDeployment(config.chaincode.deployed_name);
             }
         });
     }
-}
+};
 
 // Save details for deployed code
-var afterDeployment = function(newChaincodeID) {
+var afterDeployment = function(newChaincodeID, withTestData) {
 
-    logger.info("[SDK] Executing after deployment")
+    logger.info("[SDK] Executing after deployment");
 
     // Store the chaincodeId
     chaincodeID = newChaincodeID;
@@ -251,31 +254,27 @@ var afterDeployment = function(newChaincodeID) {
         saveLatestDeployed();
 
         // Start watching the chaincode for changes
-        if (config.chaincode.auto_redeploy) watchChaincodeLocalFile();
+        if (config.chaincode.auto_redeploy) watchChaincode();
 
     }
 
 	// Place test data on blockchain
-	testData.invokeTestData();
+	if(withTestData) testData.invokeTestData();
+};
 
-}
-
-// Watch filesystem for changes in the local chaincode and redeploy if changed
-var watchChaincodeLocalFile = function() {
-    var chaincodePath = 'src/chaincode/chaincode.go';
-    var fsTimeout;
-    fs.watch(chaincodePath, function(event) {
-        if (!fsTimeout) {
-            fsTimeout = setTimeout(function() {
-                fsTimeout = null
-            }, 5000);
-
-            logger.info('[SDK] ' + event + ' event fired. Redeploying...');
+// Watch filesystem for changes in the local chaincode
+var fsTimeout;
+var watchChaincode = function() {
+    fs.watch(chaincodePath + '/' + chaincodeFilename, function(eventType, filename){
+        if (!fsTimeout){
+            fsTimeout = setTimeout(function() { fsTimeout=null }, 5000);
+            logger.debug("[SDK] Chaincode changed. Redeploying...");
             deployChaincode(true);
         }
     });
-    logger.info('[SDK] Watching ' + chaincodePath + ' for changes...');
-}
+    logger.info("[SDK] Watching " + chaincodePath + " for changes...");
+};
+
 
 //=============================================================================================
 //      Query and Invoke functions
@@ -295,7 +294,7 @@ exports.invoke = function(fcn, args, userName, cb) {
                 chaincodeID: chaincodeID,
                 fcn: fcn,
                 args: args
-            }
+            };
 
             // Invoke the request from the user object.
             var tx = user.invoke(invokeRequest);
@@ -313,7 +312,7 @@ exports.invoke = function(fcn, args, userName, cb) {
             });
         }
     })
-}
+};
 
 // Execute a query request
 exports.query = function(fcn, args, userName, cb) {
@@ -329,7 +328,7 @@ exports.query = function(fcn, args, userName, cb) {
                 chaincodeID: chaincodeID,
                 fcn: fcn,
                 args: args
-            }
+            };
 
             // Trigger the query from the user object.
             var tx = user.query(queryRequest);
@@ -346,6 +345,5 @@ exports.query = function(fcn, args, userName, cb) {
                 cb(err)
             });
         }
-
     })
-}
+};

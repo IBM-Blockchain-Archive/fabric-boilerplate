@@ -7,6 +7,7 @@ This boilerplate has been created and is maintained by the IBM CIC Groningen Blo
 
 ## Prerequisites
 - Go (https://golang.org/)
+- Govend (go get -u github.com/govend/govend)
 - NodeJS (https://nodejs.org/)
 - Docker (https://www.docker.com/)
 - Nodemon (npm install nodemon -g)
@@ -17,6 +18,7 @@ This boilerplate has been created and is maintained by the IBM CIC Groningen Blo
 Use git clone from your preferred workspace folder to clone your project-code with:  
 1. git clone https://github.com/IBM-Blockchain/fabric-boilerplate.git   
 2. cd `fabric-boilerplate` and run `npm install`  
+If everything went fine until now, you should have a folder called vendor in src/build-chaincode.
 
 ### Setting up Hyperledger Fabric
 
@@ -45,7 +47,7 @@ This will start up a NodeJS application that serves the frontend, deploys the ch
 Check if the app is running at `http://localhost:8080/` in your browser. You can login with the user credentials you find in `testData/testData.json`  
 
 
-To make local development easier there is a script that will cleanup your environment, start the blockchain network and run the app. So you no longer need to run `docker-compose up` and `npm start` yourself. From your WORKSPACE/fabric-boilerplate folder:
+To make local development easier there is a script that will cleanup your environment, start the blockchain network and run the app. From your WORKSPACE/fabric-boilerplate folder:
 
 !Warning: this script removes all the docker containers that are running. If you are using docker for other applications as well at the moment and don't want to lose your container, don't run this script!
 
@@ -67,13 +69,9 @@ Perform the following steps to run the application on Bluemix:
 - Update the manifest.yml file (it is in the root of the project):
     - replace the name and host on lines 5 and 6. The values can be anything, as long as they are unique
     - replace the name of the service on line 10. This should be the name of the Blockchain Service you just created
-- Copy the credentials of the Blockchain Service and overwrite the credentials in `credentials.json` in blockchain/deployBluemix.  If you retrieve your Service Credentials from a [new console](https://new-console.ng.bluemix.net/#overview) instance of Bluemix then you will need to edit your credentials.json.  Add `"credentials": {` to line 2 and then add a closing `}` to the final line.  Your finished payload should be 202 lines.  
-- Download the tls certificate; you can find the url at the bottom of the credentials.json
-- Save the certificate in `blockchain/deployBluemix`
-- Copy the certificate to `src/chaincode/` and rename the file to certificate.pem
+- Copy the credentials of the Blockchain Service and overwrite the credentials in `credentials.json` in blockchain/deployBluemix.  If you retrieve your Service Credentials from a [new console](https://new-console.ng.bluemix.net/#overview) instance of Bluemix then you will need to edit your credentials.json.  Add `"credentials": {` to line 2 and then add a closing `}` to the final line.  Your finished payload should be 202 lines.
 
-- Register users and deploy chaincode  
-> npm deployAndRegister
+- Register users and deploy chaincode: `npm run deploy-bluemix`
 
 (This can take about 30 seconds)
 
