@@ -8,16 +8,28 @@ This boilerplate has been created and is maintained by the IBM CIC Groningen Blo
 ## Prerequisites
 - Go (https://golang.org/)
 - Govend (go get -u github.com/govend/govend)
-- NodeJS (https://nodejs.org/)
+**Important:** Be sure your `GOPATH` variable is defined, the directory exists, you have the right permissions to read/write in it and the installation (command above) completes correctly (empty output in console). Furthermore, to be able to use `govend` bin to download the _vendor_ directory, you need to add your `GOPATH/src/bin` to the global `PATH` variable. For instance, add them to *.bash_profile* (e.g.):
+```
+export GOPATH=/Users/Me/gopath
+export PATH=$PATH:$GOPATH/src/bin
+```
+Remember to restart any instance of terminal running.
+
+You can test the installation running the following command (once you cloned the project):
+`npm run installgo`
+
+**Please pay attention to this step or you will not be able to build your chaincode.**
+- NodeJS < 7.x (https://nodejs.org/)
 - Docker (https://www.docker.com/)
 - Nodemon (npm install nodemon -g)
 
 ## Preparing your environment
 
-### Clone this repo
+### Cloning and installing
 Use git clone from your preferred workspace folder to clone your project-code with:  
 1. git clone https://github.com/IBM-Blockchain/fabric-boilerplate.git   
 2. cd `fabric-boilerplate` and run `npm install`  
+If everything went fine until now, you should have a folder called vendor in src/build-chaincode.
 
 ### Setting up Hyperledger Fabric
 
@@ -112,6 +124,17 @@ Where NAME_OF_THE_APP is the app name you provided in the manifest.yml file
 
 # Debugging chaincode
 To check if your chaincode compiles before you deploy it, run `npm run gobuild`
+
+# Troubleshooting
+**T:** I have troubles with registering and enrolling users / Login / Invoking and Querying / I get the following errore in console `msg: 'Error:Failed to launch chaincode spec(Could not get deployment transaction for ... - LedgerError - ResourceNotFound: ledger: resource not found)' }`
+
+**S:** Check `govend` is installed correctly (Prerequisites, `npm run installgo`) and you have a `vendor` directory under `src/build-chaincode`.
+If everything is good with your _vendors_, try to run `npm run gobuild` and see if you are able to build your chaincode, to be sure there are no errors in your code.
+If any of these steps help, search for a similar error in the issues section and open eventually a new one.
+
+**T:** I am using a Windows machine and I have troubles running `npm install` / `node-gyp` .
+
+**S:** Consider to have all the necessary to build node modules on Windows. Have a look at this [discussion](https://github.com/IBM-Blockchain/fabric-boilerplate/issues/7).
 
 # Support and documentation
 Hyperledger project:                https://www.hyperledger.org/    
