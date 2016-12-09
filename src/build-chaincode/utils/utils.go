@@ -19,7 +19,7 @@ func main() {
 
 
 // Get an object from the world state by id (key)
-func Get(stub *shim.ChaincodeStub, item interface{}, id string) (error) {
+func Get(stub shim.ChaincodeStubInterface, item interface{}, id string) (error) {
 	logger.Infof("Getting %v with id %v", reflect.TypeOf(item), id)
 	if id == "" { return errors.New("Id is empty.")}
 
@@ -31,7 +31,7 @@ func Get(stub *shim.ChaincodeStub, item interface{}, id string) (error) {
 }
 
 // Put an object onto the world state
-func Put(stub *shim.ChaincodeStub, object interface{}, indexStr string, id string) (error) {
+func Put(stub shim.ChaincodeStubInterface, object interface{}, indexStr string, id string) (error) {
 	// append the id to the array of indexes
 	logger.Debugf("Storing %v %v", indexStr, id)
 
@@ -51,7 +51,7 @@ func Put(stub *shim.ChaincodeStub, object interface{}, indexStr string, id strin
 }
 
 // if "toAppend" is false then "id" contains the prefix to create a new ID
-func append_id(stub *shim.ChaincodeStub, indexStr string, id string, toAppend bool) ([]byte,error) {
+func append_id(stub shim.ChaincodeStubInterface, indexStr string, id string, toAppend bool) ([]byte,error) {
 	// Retrieve existing index
     logger.Debugf("Appending ID "+id+" in indexes "+indexStr)
 	tmpIndex, err := GetIndex(stub, indexStr)
@@ -84,12 +84,12 @@ func append_id(stub *shim.ChaincodeStub, indexStr string, id string, toAppend bo
 }
 
 // Create a new id and append to index
-func CreateId(stub *shim.ChaincodeStub, indexStr string, idPrefix string) ([]byte,error) {
+func CreateId(stub shim.ChaincodeStubInterface, indexStr string, idPrefix string) ([]byte,error) {
 	return append_id(stub, indexStr, idPrefix, false)
 }
 
 
-func GetIndex(stub *shim.ChaincodeStub, indexStr string) (map[string]bool, error) {
+func GetIndex(stub shim.ChaincodeStubInterface, indexStr string) (map[string]bool, error) {
 	indexAsBytes, err := stub.GetState(indexStr)
 	if err != nil { return nil,errors.Wrap(err, "Failed to get: " + indexStr)}
 	var index map[string]bool

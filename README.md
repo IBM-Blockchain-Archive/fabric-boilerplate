@@ -1,7 +1,7 @@
 # Fabric boilerplate
 This is a boilerplate application to get you up and running quickly with your own blockchain application. With this boilerplate you get an application that you can run locally as well as on IBM Bluemix. There is a simple AngularJS frontend application, a NodeJS backend application and of course a blockchain network. Locally, the boilerplate starts up a blockchain network using Docker containers; on Bluemix you can use the Blockchain service.
 
-The boilerplate uses Hyperledger Fabric **v0.5-developer-preview** and **HFC 0.5.4**.
+The boilerplate uses Hyperledger Fabric **v0.6.1-developer-preview** and **HFC 0.6.5**.
 
 This boilerplate has been created and is maintained by the IBM CIC Groningen Blockchain team
 
@@ -19,7 +19,7 @@ You can test the installation running the following command (once you cloned the
 `npm run installgo`
 
 **Please pay attention to this step or you will not be able to build your chaincode.**
-- NodeJS < 7.x (https://nodejs.org/)
+- NodeJS (https://nodejs.org/)
 - Docker (https://www.docker.com/)
 - Nodemon (npm install nodemon -g)
 
@@ -32,11 +32,10 @@ Use git clone from your preferred workspace folder to clone your project-code wi
 
 ### Setting up Hyperledger Fabric
 
-1. Pull _peer_ image: `docker pull rikmoedt/fabric-peer:0.5-dp`
-2. Pull _membersrvc_ image: `docker pull rikmoedt/fabric-membersrvc:0.5-dp`
-3. Pull _fabric-baseimage_ image: `docker pull rikmoedt/fabric-baseimage`
-4. Change tag to the _fabric-baseimage_: `docker tag rikmoedt/fabric-baseimage hyperledger/fabric-baseimage` (note: be sure you do not have already an image with the same tag, in that case, rename first the current _hyperledger/fabric-baseimage_ to something else)
-
+1. Pull _peer_ image: `docker pull hyperledger/fabric-peer:x86_64-0.6.1-preview`
+2. Pull _membersrvc_ image: `docker pull hyperledger/fabric-membersrvc:x86_64-0.6.1-preview`
+3. Pull _fabric-baseimage_ image: `docker pull hyperledger/fabric-baseimage:x86_64-0.2.1` (note: be sure you do not have already an image with the same tag, in that case, rename/tag first the current _hyperledger/fabric-baseimage_ to something else)
+4. Change tag to the _fabric-baseimage:xx_ to _latest_: `docker tag hyperledger/fabric-baseimage:x86_64-0.2.1 hyperledger/fabric-baseimage:latest`
 This will prepare a docker baseimage in which the chaincode will be launched and deployed. This process takes quite a while.
 
 ## Running the application automatically
@@ -59,7 +58,7 @@ Check if the app is running at `http://localhost:8080/` in your browser. You can
 
 To make local development easier there is a script that will cleanup your environment, start the blockchain network and run the app. From your WORKSPACE/fabric-boilerplate folder:
 
-!Warning: this script removes all the docker containers that are running. If you are using docker for other applications as well at the moment and don't want to lose your container, don't run this script!
+**Warning:** This script ask you either to clean or not your environment. Be aware answering **yes** you will **permanently deleted** all your containers (not images).
 
 > ./start.sh
 
@@ -69,7 +68,6 @@ Much easier now! :)
 
 ### Registering and enrolling users
 The SDK needs to register and enroll an admin user and any other users you would like to add. When this takes place the SDK receives enrollment certificates (eCerts) for each user. You only get these certificates once. So if you would redeploy or restart your app on Bluemix and the SDK wants to register and enroll the users again this would fail. Our solution to this problem is to register and enroll the users from your local environment before you deploy. When the eCerts are received, you can then push the app to Bluemix, including the eCerts. So the app that runs on Bluemix does not have to register and enroll the users again, because the eCerts are already available.
-
 
 ### Deploying chaincode
 We managed to make all the procedure as much automatic as possible. Now you can upload your app and it will deploys on Bluemix and push all testData automatically with one command! (explained below)
@@ -95,6 +93,8 @@ If you want only to push a new version of the application, you have to be sure t
 To avoid the auto-deployment be sure `blockchain/deployBluemix/chaincode_id` exists (do not add it in your .cfignore!).
 
 Viceversa - Remove `blockchain/deployBluemix/chaincode_id` if you want your application to deploy a new chaincode.
+
+**Important:** Be sure your `manifest.yml` is configured correctly before executing the command below.
 
 Then you can run:
 

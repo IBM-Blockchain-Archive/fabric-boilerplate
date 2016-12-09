@@ -7,4 +7,4 @@ applications:
   disk_quota: 1024M
   command: "NODE_ENV=production node app.js"
 services:
-- Blockchain-xt
+- BLOCKCHAIN_SERVICE

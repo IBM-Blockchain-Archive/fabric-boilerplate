@@ -11,7 +11,7 @@ import (
 
 var logger = shim.NewLogger("query")
 
-var Functions = map[string]func(*shim.ChaincodeStub,[]string)([]byte, error) {
+var Functions = map[string]func(shim.ChaincodeStubInterface,[]string)([]byte, error) {
     "authenticate": authenticate,
     "get_user": get_user,
     "get_thing": get_thing,
@@ -23,7 +23,7 @@ var Functions = map[string]func(*shim.ChaincodeStub,[]string)([]byte, error) {
 //  		initial arguments passed are passed on to the called function.
 //
 //=================================================================================================================================
-func Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+func Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	logger.Infof("-- Querying function %v with args %v", function, args)
 
 	return Functions[function](stub, args)
@@ -44,7 +44,7 @@ func main() {
 //		Query Functions
 //==============================================================================================================================
 
-func authenticate(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func authenticate(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	userId := args[0]
 
 	logger.Infof("Trying to authenticate user: %v", userId)
@@ -70,7 +70,7 @@ func authenticate(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	return []byte(str), nil
 }
 
-func get_user(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func get_user(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var item data.User
 	err := utils.Get(stub, &item, args[0])
 	if err != nil { return nil, errors.Wrap(err, "Could not get user") }
@@ -79,7 +79,7 @@ func get_user(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	return itemJson, err
 }
 
-func get_thing(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func get_thing(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var item data.Thing
 	err := utils.Get(stub, &item, args[0])
 	if err != nil { return nil, errors.Wrap(err, "Could not get thing") }
@@ -88,7 +88,7 @@ func get_thing(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	return itemJson, err
 }
 
-func get_all_things(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func get_all_things(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	item, err := get_user(stub, []string{args[0]})
 	if err != nil {
 		return nil, errors.Wrap(err, "Could not get user "+args[0])

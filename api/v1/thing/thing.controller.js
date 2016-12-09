@@ -1,7 +1,7 @@
 'use strict';
 
 const Thing = require('./thing.model');
-const BlockchainService = require('../../../blockchainServices/blockchainSrvc.js');
+const BlockchainService = require('../../../services/blockchainSrvc.js');
 
 /*
     Retrieve list of all things

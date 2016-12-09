@@ -28,7 +28,7 @@
     "debug": "~2.2.0",
     "express": "~4.13.1",
     "fs-extra": "^0.30.0",
-    "hfc": "0.5.4",
+    "hfc": "0.6.5",
     "jsonwebtoken": "^5.7.0",
     "morgan": "~1.6.1",
     "watchjs": "0.0.0",

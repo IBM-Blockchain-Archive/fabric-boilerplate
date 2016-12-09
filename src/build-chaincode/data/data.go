@@ -82,7 +82,7 @@ func GetIndexString(objectName string) string {
 
 
 // Save an object to the blockchain (and to the index). Generate an id if it doesn't exist yet.
-func Save(stub *shim.ChaincodeStub, object BlockchainItemer) error {
+func Save(stub shim.ChaincodeStubInterface, object BlockchainItemer) error {
 	id := object.GetId()
 	indexString := object.GetIndexStr()
 	idPrefix := object.GetIdPrefix()
@@ -103,7 +103,7 @@ func Save(stub *shim.ChaincodeStub, object BlockchainItemer) error {
 }
 
 // Reset all index strings.
-func ResetIndexes(stub *shim.ChaincodeStub) error {
+func ResetIndexes(stub shim.ChaincodeStubInterface) error {
 	indexes := indexStrings
 	logger.Infof("indexes: %v", indexes)
 	for _, v := range indexes {
