@@ -1,5 +1,5 @@
 'use strict';
-const BlockchainService     = require('../blockchainServices/blockchainSrvc.js');
+const BlockchainService     = require('../services/blockchainSrvc.js');
 const config                = require('../config');
 const crypto                = require('crypto');
 const jwt                   = require('jsonwebtoken');
@@ -54,10 +54,13 @@ exports.login = function(req, res) {
         }
         
     }).catch(function(err){
-        logger.error(err);
-        throw err;   
-    }); 
-}
+        logger.warn(err);
+        return res.status(401).send({
+            success: false,
+            message: 'Server error.'
+        });
+    });
+};
 
 function validPassword(user, password) {
         var hash = crypto.pbkdf2Sync(password, user.salt, 1000, 64).toString('hex');
@@ -79,7 +82,7 @@ exports.verify = function(req, res, next) {
               } else {
                     // if everything is good, save to request for use in other routes
                     req.decoded = decoded;
-                    req.userId = decoded.userId; // for quick access
+                    req.userId = decoded.id; // for quick access
                     logger.debug("Token approved");
                     next();
               }

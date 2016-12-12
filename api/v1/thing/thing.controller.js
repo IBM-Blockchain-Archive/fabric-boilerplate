@@ -1,7 +1,7 @@
 'use strict';
 
 const Thing = require('./thing.model');
-const BlockchainService = require('../../../blockchainServices/blockchainSrvc.js');
+const BlockchainService = require('../../../services/blockchainSrvc.js');
 
 /*
     Retrieve list of all things
@@ -11,7 +11,7 @@ const BlockchainService = require('../../../blockchainServices/blockchainSrvc.js
     Response:
         [{'thing'}, {'thing'}]
 */
-exports.list = function(req, res) {
+exports.getAllThings = function(req, res) {
     console.log("-- Query all things --");
 
     const functionName = "get_all_things";
@@ -38,9 +38,9 @@ exports.list = function(req, res) {
     Response:
         { thing }
 */
-exports.detail = function(req, res) {
-    console.log("-- Query thing --");
-    
+exports.getThing = function(req, res) {
+    console.log("-- Query thing --")
+
     const functionName = "get_thing";
     const args = [req.params.thingId];
     
@@ -65,8 +65,8 @@ exports.detail = function(req, res) {
     Response:
         {  }
 */
-exports.add = function(req, res) {
-    console.log("-- Adding thing --");
+exports.addThing = function(req, res) {
+    console.log("-- Adding thing --")
       
     const functionName = "add_thing";
     const args = [req.body.thingId, JSON.stringify(req.body.thing)];

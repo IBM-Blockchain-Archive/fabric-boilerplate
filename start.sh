@@ -1,30 +1,37 @@
 #!/bin/bash
 DIR="$(pwd)"
-# Change to the project name
-PROJECT="$(pwd)"
 BC="$DIR/blockchain"
+NETWORK_PEER="dev-"
+NPM_SCRIPT="start"
 
-printf "\nProject: $PROJECT \n"
-printf "Current directory: $DIR \n"
-printf "Blockchain directory: $BC \n"
+printf "###################################################\n"
+printf "#####     HYPERLEDGER FABRIC START SCRIPT     #####\n"
+printf "###################################################\n\n"
+printf "Blockchain directory: $BC \n\n"
 
-clear_all()
-{
-    rm $BC/deployLocal/chaincode_id 2>/dev/null
+clear_all() {
+    rm -rf $BC/deployLocal/* 2>/dev/null
+    printf "keyValStore removed\n"
     printf "Latest deployed removed\n"
-    
-    rm -rf $BC/deployLocal/keyValueStore 2>/dev/null
-    printf "keyValStore and var files removed\n"
-    
     docker rm -f $(docker ps -a -q) 2>/dev/null
     printf "All docker containers removed\n"
-    
-    docker rmi $(docker images | grep "dev-" | awk '{print $1}') 2>/dev/null
+    docker rmi `docker images | grep $NETWORK_PEER | awk '{print $1}'` 2>/dev/null
+    printf "All chaincode images removed\n"
     docker rmi $(docker images -qf "dangling=true") 2>/dev/null
-    printf "All docker useless images removed\n"
+    printf "All untagged images removed\n"
 }
 
-clear_all
+ask() {
+  local response
+  local msg="${1:-$1} [y/N] "; shift
+  read -r $4 -p "$msg" response || echo
+  case "$response" in
+    [yY][eE][sS]|[yY]) $1 ;;
+    *) $2 ;;
+  esac
+}
+
+ask "Do you want to clear the environment?" clear_all return
 
 # run docker-compose
 docker-compose up -d 2>/dev/null
@@ -34,10 +41,10 @@ printf "Docker containers up and running\n"
 
 # start server, catch ctrl+c to clean up
 trap 'kill -TERM "$PID" 2>/dev/null' SIGINT
-npm start &
+npm run $NPM_SCRIPT &
 PID=$!
 wait $PID
 
-clear_all
+ask "Do you want to clear the environment?" clear_all return
 
 exit 0

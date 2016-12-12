@@ -1,10 +1,9 @@
 const express       = require('express');
 const path          = require('path');
 const morgan        = require('morgan');
+const logger        = require('./utils/logger');
 const cookieParser  = require('cookie-parser');
 const bodyParser    = require('body-parser');
-const logger        = require('./utils/logger');
-const blockchain    = require('./blockchain/blockchain');
 
 const port = (process.env.VCAP_APP_PORT || 8080);
 const host = (process.env.VCAP_APP_HOST || 'localhost');
@@ -12,7 +11,25 @@ const host = (process.env.VCAP_APP_HOST || 'localhost');
 const app = express();
 
 // initialize blockchain
-blockchain.init();
+const blockchain = require('./blockchain/blockchain');
+const testData = require('./testdata');
+
+try {
+  blockchain.init(function (err) {
+    if(err) process.exit(1);
+    testData.invokeTestData();
+
+    if (process.env.DEPLOYANDEXIT) {
+      console.log('Invokes sent. Waiting 120 seconds before exiting...');
+      setTimeout(function () {
+        process.exit();
+      }, 120000);
+    }
+  });
+} catch(err) {
+  logger.error(err);
+  process.env.exit(1);
+}
 
 // cfenv provides access to your Cloud Foundry environment
 // for more info, see: https://www.npmjs.com/package/cfenv

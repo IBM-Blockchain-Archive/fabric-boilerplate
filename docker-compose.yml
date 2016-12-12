@@ -1,40 +1,67 @@
+membersrvc:
+  image: hyperledger/fabric-membersrvc:x86_64-0.6.1-preview
+  ports:
+    - "7054:7054"
+  environment:
+    - MEMBERSRVC_CA_ACA_ENABLED=true
+    - MEMBERSRVC_LOGGING_LEVEL=DEBUG
+#  volumes:
+#    - ./blockchain/membersrvc.yaml:/opt/gopath/src/github.com/hyperledger/fabric/membersrvc/membersrvc.0.6.yaml
+  command: membersrvc
+
 vp0:
   extends:
     file: compose-defaults.yml
     service: vp
+  ports:
+    - "7050:7050"
+    - "7051:7051"
+    - "7053:7053"
   environment:
     - CORE_PEER_ID=vp0
     - CORE_PEER_DISCOVERY_PERIOD=1s
     - CORE_PEER_DISCOVERY_TOUCHPERIOD=1s
     - CORE_SECURITY_ENROLLID=test_vp0
     - CORE_SECURITY_ENROLLSECRET=MwYpmSRjupbT
-    - CORE_PEER_PKI_ECA_PADDR=membersrvc:7054
-    - CORE_PEER_PKI_TCA_PADDR=membersrvc:7054
-    - CORE_PEER_PKI_TLSCA_PADDR=membersrvc:7054
-  ports:
-    - "7050:7050"
-    - "7051:7051"
   links:
     - membersrvc
 
-vp1:
-  extends:
-    file: compose-defaults.yml
-    service: vp
-  environment:
-    - CORE_PEER_ID=vp1
-    - CORE_PEER_DISCOVERY_ROOTNODE=vp0:7051
-    - CORE_SECURITY_ENROLLID=test_vp1
-    - CORE_SECURITY_ENROLLSECRET=5wgHK9qqYaPy
-    - CORE_PEER_PKI_ECA_PADDR=membersrvc:7054
-    - CORE_PEER_PKI_TCA_PADDR=membersrvc:7054
-    - CORE_PEER_PKI_TLSCA_PADDR=membersrvc:7054
-  links:
-    - vp0
-    - membersrvc
-
-membersrvc:
-   image: rikmoedt/fabric-membersrvc:0.5-dp
-   ports:
-     - "7054:7054"
-   command: membersrvc
+#vp1:
+#  extends:
+#    file: compose-defaults.yml
+#    service: vp
+#  environment:
+#    - CORE_PEER_ID=vp1
+#    - CORE_PEER_DISCOVERY_ROOTNODE=vp0:7051
+#    - CORE_SECURITY_ENROLLID=test_vp1
+#    - CORE_SECURITY_ENROLLSECRET=5wgHK9qqYaPy
+#  links:
+#    - vp0
+#    - membersrvc
+#
+#    activate for testing in a simulated bluemix blockchain service environment
+#vp2:
+#  extends:
+#    file: compose-defaults.yml
+#    service: vp
+#  environment:
+#    - CORE_PEER_ID=vp2
+#    - CORE_PEER_DISCOVERY_ROOTNODE=vp1:7051
+#    - CORE_SECURITY_ENROLLID=test_vp2
+#    - CORE_SECURITY_ENROLLSECRET=vQelbRvja7cJ
+#  links:
+#    - vp1
+#    - membersrvc
+#
+#vp3:
+#  extends:
+#    file: compose-defaults.yml
+#    service: vp
+#  environment:
+#    - CORE_PEER_ID=vp3
+#    - CORE_PEER_DISCOVERY_ROOTNODE=vp2:7051
+#    - CORE_SECURITY_ENROLLID=test_vp3
+#    - CORE_SECURITY_ENROLLSECRET=9LKqKH5peurL
+#  links:
+#    - vp2
+#    - membersrvc
