@@ -6,9 +6,10 @@ The boilerplate uses Hyperledger Fabric **v0.6.1-developer-preview** and **HFC 0
 This boilerplate has been created and is maintained by the IBM CIC Groningen Blockchain team
 
 ## Prerequisites
-- Go (https://golang.org/)
-- Govend (go get -u github.com/govend/govend)
-**Important:** Be sure your `GOPATH` variable is defined, the directory exists, you have the right permissions to read/write in it and the installation (command above) completes correctly (empty output in console). Furthermore, to be able to use `govend` bin to download the _vendor_ directory, you need to add your `GOPATH/src/bin` to the global `PATH` variable. For instance, add them to *.bash_profile* (e.g.):
+- [Go](https://golang.org/)
+- [Govend](https://github.com/govend/govend) 
+Once you have installed _go_, you can download the package with `go get -u github.com/govend/govend`.
+**Important:** Be sure your `GOPATH` variable is defined, the directory exists, you have the right permissions to read/write in it and the installation (command above) completes correctly (empty output in console). Furthermore, to be able to use `govend` bin to download the _vendor_ directory, you need to add your `GOPATH/bin` to the global `PATH` variable. For instance, add them to *.bash_profile* (e.g.):
 ```
 export GOPATH=/Users/Me/gopath
 export PATH=$PATH:$GOPATH/bin
@@ -19,9 +20,11 @@ You can test the installation running the following command (once you cloned the
 `npm run installgo`
 
 **Please pay attention to this step or you will not be able to build your chaincode.**
-- NodeJS (https://nodejs.org/)
-- Docker (https://www.docker.com/)
-- Nodemon (npm install nodemon -g)
+- [NodeJS](https://nodejs.org/)
+- [Docker](https://www.docker.com/)
+- [Nodemon](https://github.com/remy/nodemon)
+
+Once you have installed _node_ and _npm_, you can install the module with: `npm install nodemon -g`
 
 ## Preparing your environment
 
