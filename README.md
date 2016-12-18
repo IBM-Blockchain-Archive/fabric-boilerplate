@@ -11,7 +11,7 @@ This boilerplate has been created and is maintained by the IBM CIC Groningen Blo
 **Important:** Be sure your `GOPATH` variable is defined, the directory exists, you have the right permissions to read/write in it and the installation (command above) completes correctly (empty output in console). Furthermore, to be able to use `govend` bin to download the _vendor_ directory, you need to add your `GOPATH/src/bin` to the global `PATH` variable. For instance, add them to *.bash_profile* (e.g.):
 ```
 export GOPATH=/Users/Me/gopath
-export PATH=$PATH:$GOPATH/src/bin
+export PATH=$PATH:$GOPATH/bin
 ```
 Remember to restart any instance of terminal running.
 
