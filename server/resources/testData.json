@@ -1,0 +1,16 @@
+{
+  "clients": [
+    {
+      "consumerID": "SJe4b6gZl",
+      "username": "john",
+      "password": "passw0rd"
+    }
+  ],
+  "things": [
+    {
+      "thingID": "871694840003082547",
+      "clientID": "SJe4b6gZl",
+      "someParameter": "8716948000003"
+    }
+  ]
+}

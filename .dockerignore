@@ -1,0 +1,7 @@
+server/dist
+server/node_modules
+client/node_modules
+client/dist
+.git
+blockchain/src/build-chaincode/chaincode
+#blockchain/src/build-chaincode/vendor

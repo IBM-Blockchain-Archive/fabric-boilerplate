@@ -1,0 +1,84 @@
+# Blockchain
+vp0:
+  extends:
+    file: compose-defaults.yml
+    service: vp
+  environment:
+    - CORE_PEER_ID=vp0
+    - CORE_PEER_DISCOVERY_PERIOD=1s
+    - CORE_PEER_DISCOVERY_TOUCHPERIOD=1s
+    - CORE_SECURITY_ENROLLID=test_vp0
+    - CORE_SECURITY_ENROLLSECRET=MwYpmSRjupbT
+    - CORE_PEER_PKI_ECA_PADDR=membersrvc:7054
+    - CORE_PEER_PKI_TCA_PADDR=membersrvc:7054
+    - CORE_PEER_PKI_TLSCA_PADDR=membersrvc:7054
+  ports:
+    - "7050:7050"
+    - "7051:7051"
+#  command: sh -c "while ! nc membersrvc 7054 </dev/null; do sleep 1; done; peer node start"
+  links:
+    - membersrvc
+
+# TODO: connection issues when started the second time
+#vp1:
+#  extends:
+#    file: compose-defaults.yml
+#    service: vp
+#  environment:
+#    - CORE_PEER_ID=vp1
+#    - CORE_PEER_DISCOVERY_ROOTNODE=vp0:7051
+#    - CORE_SECURITY_ENROLLID=test_vp1
+#    - CORE_SECURITY_ENROLLSECRET=5wgHK9qqYaPy
+#    - CORE_PEER_PKI_ECA_PADDR=membersrvc:7054
+#    - CORE_PEER_PKI_TCA_PADDR=membersrvc:7054
+#    - CORE_PEER_PKI_TLSCA_PADDR=membersrvc:7054
+#  links:
+#    - vp0
+#    - membersrvc
+
+membersrvc:
+   image: hyperledger/fabric-membersrvc:x86_64-0.6.1-preview
+   ports:
+     - "7054:7054"
+   command: membersrvc
+
+# NodeJS app. Deploys if needed, watches src dir for transpiling and reloading.
+server:
+  build: server
+  ports:
+    - "8080:8080"
+  environment:
+    - NODE_ENV=development
+    - MEMBERSRVC_ADDR=membersrvc:7054
+    - PEER_ADDR=vp0:7051
+  volumes:
+    - ./server/src:/usr/src/app/src
+    - ./server/resources:/usr/src/app/resources
+    - ./blockchain/src:/usr/src/blockchain/src
+  links:
+    - membersrvc
+    - vp0
+  command: bash -c "sleep 8; cat chaincodeId || (grunt build; npm run deploy;) && grunt"
+
+# Web client
+client:
+  build: client
+  ports:
+      - "4200:4200"
+      - "49153:49153"
+  volumes:
+      - ./client/src:/usr/src/app/src
+      - ./client/angular-cli.json:/usr/src/app/angular-cli.json
+      - ./client/tslint.json:/usr/src/app/tslint.json
+  command: ng serve --host 0.0.0.0
+
+# Utils: we have go and cf here
+utils:
+  image: cesarev/fabric-boilerplate
+#  user: $UID # TODO
+  environment:
+  - GOPATH=/usr/src/app
+  volumes:
+  - .:/usr/src/app
+  command: "true"
+  # bash -c "cd ../blockchain/src/build-chaincode && GOPATH=$(pwd)/../.. go test"

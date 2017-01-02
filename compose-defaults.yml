@@ -1,0 +1,20 @@
+vp:
+  image: hyperledger/fabric-peer:x86_64-0.6.1-preview
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+  environment:
+    - CORE_PEER_ADDRESSAUTODETECT=true
+    - CORE_SECURITY_ENABLED=true
+    - CORE_SECURITY_PRIVACY=true
+  expose:
+    - "7050"  # Rest
+    - "7051"  # Grpc
+    - "7052"  # Peer CLI
+    - "7053"  # Peer Event
+    - "7054"  # eCAP
+    - "7055"  # eCAA
+    - "7056"  # tCAP
+    - "7057"  # eCAA
+    - "7058"  # tlsCAP
+    - "7059"  # tlsCAA
+  command: sh -c "sleep 8; peer node start"

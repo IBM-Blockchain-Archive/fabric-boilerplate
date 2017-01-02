@@ -1,0 +1,33 @@
+{
+  "name": "hyperledger-app",
+  "version": "0.1.0",
+  "description": "Webapplication built on top of Hyperledger Fabric",
+  "main": "docker-compose up",
+  "os" : [ "darwin", "linux" ],
+  "scripts": {
+    "start": "docker-compose up",
+    "install": "npm run getbaseimage && npm run govend && docker-compose pull && docker-compose build",
+    "getbaseimage": "docker pull hyperledger/fabric-baseimage:x86_64-0.2.2 && docker tag hyperledger/fabric-baseimage:x86_64-0.2.2 hyperledger/fabric-baseimage:latest",
+    "govend": "docker-compose run utils bash -c 'cd blockchain/src/build-chaincode && GOPATH=$(pwd)/../.. govend -rv' && sudo chown -R $USER blockchain",
+    "test": "docker-compose run utils bash -c 'cd blockchain/src/build-chaincode && GOPATH=$(pwd)/../.. go test'",
+    "cf": "docker build --tag cf . && docker run -it --rm -v $(pwd)/server/resources:/usr/src/app/server/resources cf"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/Ewold/ts-refactured-bp.git"
+  },
+  "keywords": [
+    "hyperledger",
+    "fabric",
+    "nodejs",
+    "angular",
+    "typescript",
+    "blockchain"
+  ],
+  "author": "IBM Client Innovation Center Benelux",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://gitlab.com/Ewold/ts-refactured-bp/issues"
+  },
+  "homepage": "https://gitlab.com/Ewold/ts-refactured-bp#README"
+}
