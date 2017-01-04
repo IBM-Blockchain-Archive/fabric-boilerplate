@@ -2,7 +2,7 @@ import {Blockchain} from './Blockchain';
 import {ChaincodeEnvironmentConfiguration} from './ChaincodeEnvironmentConfiguration';
 import {LoggerInstance} from 'winston';
 import * as path from 'path';
-import { newFileKeyValStore, Chain } from 'hfc/lib/hfc';
+import {newFileKeyValStore, Chain} from 'hfc/lib/hfc';
 
 export class BlockchainLocal extends Blockchain {
   private chaincodePath: string;
@@ -11,7 +11,7 @@ export class BlockchainLocal extends Blockchain {
                      serverDirectory: string,
                      chaincodeEnvironmentConfiguration: ChaincodeEnvironmentConfiguration) {
     super(logger, serverDirectory, chaincodeEnvironmentConfiguration);
-    this.chaincodePath         = chaincodeEnvironmentConfiguration.chaincode.path;
+    this.chaincodePath = chaincodeEnvironmentConfiguration.chaincode.path;
 
     logger.info('[SDK] Running in local mode');
   }
@@ -22,7 +22,7 @@ export class BlockchainLocal extends Blockchain {
 
       // Connect to memberservice and peer
       let membersrvcAddr = 'grpc://' + process.env.MEMBERSRVC_ADDR || ca.url;
-      let peerAddr = 'grpc://' + process.env.PEER_ADDR || `${peer.discovery_host}:${peer.discovery_port}`;
+      let peerAddr       = 'grpc://' + process.env.PEER_ADDR || `${peer.discovery_host}:${peer.discovery_port}`;
 
       chain.setMemberServicesUrl(membersrvcAddr);
       chain.addPeer(peerAddr);
