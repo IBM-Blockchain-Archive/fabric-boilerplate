@@ -11,8 +11,7 @@ import * as path from 'path';
 
 export enum DeployPolicy {
   ALWAYS,
-  NEVER,
-  IF_NOT_EXISTS
+  NEVER
 }
 
 export abstract class Blockchain {
@@ -45,12 +44,6 @@ export abstract class Blockchain {
         return this.deployChaincode();
       case DeployPolicy.NEVER:
         return this.loadChaincodeId();
-      case DeployPolicy.IF_NOT_EXISTS:
-        let chaincodeId = await this.loadChaincodeId();
-        if (chaincodeId) {
-          return chaincodeId;
-        }
-        return this.deployChaincode();
     }
   }
 
