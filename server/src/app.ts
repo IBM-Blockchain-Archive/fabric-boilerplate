@@ -1,16 +1,15 @@
 'use strict';
 
-import {Options} from 'morgan';
 import {Routes} from './routes';
 import {BlockchainFactory} from './blockchain/BlockchainFactory';
 import {LoggerFactory} from './utils/LoggerFactory';
 import {Config} from './config';
 import {Response, NextFunction} from 'express';
-import morgan = require('morgan');
-import bodyParser = require('body-parser');
-import cookieParser = require('cookie-parser');
-import express = require('express');
-import path = require('path');
+import * as morgan from 'morgan';
+import * as bodyParser from 'body-parser';
+import * as cookieParser from 'cookie-parser';
+import * as express from 'express';
+import * as path from 'path';
 import { DeployPolicy } from './blockchain/Blockchain';
 
 class App {
@@ -29,7 +28,7 @@ class App {
     app.use(bodyParser.urlencoded({extended: false}));
     app.use(cookieParser());
     app.use('/', express.static(path.join(__dirname, '../client')));
-    app.use(morgan(null, <Options>{
+    app.use(morgan(null, <morgan.Options>{
       stream: {
         skip: (req: any, res: any) => res.statusCode < 400,
         write: (message: string): void => {
