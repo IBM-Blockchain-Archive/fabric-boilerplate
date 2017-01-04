@@ -24,7 +24,7 @@ This will start the three tiers of our application in separate containers:
 2. The memberservice  
 3. The NodeJS server, which registers the users and deploys the chaincode on first boot  
 4. The Angular frontend, which connects to the server through a REST API.  
-  
+
 The app is running on `http://localhost:4200/`. You can login with the user credentials you find in `resources/testData.json`  
 
 ## Development
@@ -50,27 +50,28 @@ Chaincode, angular and NodeJS should all be unit tested. We will create a contai
 
 ## Updating the Fabric
 1. Update the HFC client in the package.json  
-2. Update the commit level in `blockchain/src/build-chaincode/vendor.yml`. 
+2. Update the commit level in `blockchain/src/build-chaincode/vendor.yml`.
 3. Delete the `blockchain/src/build-chaincode/vendor` directory  
 4. `npm run govend` from the project root  
 5. Update the baseimage and tag as latest
 6. `docker-compose build`  
 
 # Troubleshooting
-`no rows in result set`: The memberservice remembers something outdated. Stop your app and run `./clear.sh`.  
-`name or token does not match`: The info in blockchain/data/keyValStore does not match with the connected memberservice. `./clear.sh`.  
-`Can't connect to docker daemon.`: `sudo usermod -aG docker $(whoami)`, logout and login again.  
- `Error: /usr/src/app/node_modules/grpc/src/node/extension_binary/grpc_node.node: invalid ELF header`: The node_modules of the server were built outside of the container. Delete this directory and make a change in `server/package.json`. Then do `docker-compose build server`.  
- 
-HFC:  
-`handshake failed`: is there a `certificate.pem` in the `blockchain/src/build-chaincode` dir?  
+- `no rows in result set`: The memberservice remembers something outdated. Stop your app and run `./clear.sh`.
+- `name or token does not match`: The info in blockchain/data/keyValStore does not match with the connected memberservice. `./clear.sh`.
+- `Can't connect to docker daemon.`: `sudo usermod -aG docker $(whoami)`, logout and login again.
+- `Error: /usr/src/app/node_modules/grpc/src/node/extension_binary/grpc_node.node: invalid ELF header`: The node_modules of the server were built outside of the container. Delete this directory and make a change in `server/package.json`. Then do `docker-compose build server`.
+
+HFC:
+
+- `handshake failed`: is there a `certificate.pem` in the `blockchain/src/build-chaincode` dir?
 
 ## Running on Bluemix
 
 ### Registering and enrolling users
 The SDK needs to register and enroll an admin user and any other users you would like to add. When this takes place the SDK receives enrollment certificates (eCerts) for each user. You only get these certificates once. So if you would redeploy or restart your app on Bluemix and the SDK wants to register and enroll the users again this would fail. Our solution to this problem is to register and enroll the users from your local environment before you deploy. When the eCerts are received, you can then push the app to Bluemix, including the eCerts. So the app that runs on Bluemix does not have to register and enroll the users again, because the eCerts are already available.  
 
-_Don't lose server/resources/keyValueStore-bluemix!_ or else you'll have to recreate the blockchain service on Bluemix.
+**Don't lose server/resources/keyValueStore-bluemix!** or else you'll have to recreate the blockchain service on Bluemix.
 
 ### Deploying chaincode and the app
 The easiest way to deploy a chaincode is to do it from you local environment before you push the app to Bluemix. We made a script that deploys the chaincode and stores the chaincodeID in a file. After that you push the app to Bluemix (including the chaincodeID file), your app can interact with the chaincode.
@@ -107,15 +108,17 @@ Working Group Meetings:             https://github.com/hyperledger/hyperledger/w
 Wiki:                               https://github.com/hyperledger/hyperledger/wiki     
 Learn chaincode:                    https://github.com/IBM-Blockchain/learn-chaincode    
 HFC:                                https://www.npmjs.com/package/hfc/
- 
-#Flow of the startup
-blockchainApp --> starts different components of the blockchain sequentially:
-    - A logger --> will be the logger for the process
-    - A blockchain --> Will configure the blockchain and checks if the blockchain needs to be deployed on bluemix or not. It uses the following files:
-        - BlockchainFactory --> determines if application is bluemix or not and start the following processes:
-            - BlockchainBluemix --> deploys on bluemix
-            - BlockchainLocal --> deploys locally
-        - ChaincodeBluemixConfig and ChaincodeLocalConfig
-            - both use ChaincodeEnviroment config to extend their own config.
-    - A blockchainService --> connects the node to the blockchain network, enrolls users who have the rights to invoke and query and check if a redeploy is needed
-    - Testdata --> creates an instance of testdata. Testdata.js/.ts will use resources/testdata to invoke new testdata
+
+# Flow of the startup
+
+blockchainApp - starts different components of the blockchain sequentially:
+
+- A logger: will be the logger for the process
+- A blockchain: Will configure the blockchain and checks if the blockchain needs to be deployed on bluemix or not. It uses the following files:
+    - BlockchainFactory: determines if application is bluemix or not and start the following processes:
+        - BlockchainBluemix: deploys on bluemix
+        - BlockchainLocal: deploys locally
+    - ChaincodeBluemixConfig and ChaincodeLocalConfig
+        - both use ChaincodeEnviroment config to extend their own config.
+- A blockchainService: connects the node to the blockchain network, enrolls users who have the rights to invoke and query and check if a redeploy is needed.
+- Testdata: creates an instance of testdata. Testdata.js/.ts will use resources/testdata to invoke new testdata.
