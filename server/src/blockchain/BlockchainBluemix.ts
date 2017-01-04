@@ -2,12 +2,12 @@ import {Blockchain} from './Blockchain';
 import {ChaincodeEnvironmentConfiguration} from './ChaincodeEnvironmentConfiguration';
 import {LoggerInstance} from 'winston';
 import * as path from 'path';
-import { newFileKeyValStore, Chain, GRPCOptions } from 'hfc/lib/hfc';
+import {newFileKeyValStore, Chain, GRPCOptions} from 'hfc/lib/hfc';
 import * as fs from 'fs';
 import * as https from 'https';
-import { IncomingMessage } from 'http';
-import { WriteStream } from 'fs';
-import { Stats } from 'fs';
+import {IncomingMessage} from 'http';
+import {WriteStream} from 'fs';
+import {Stats} from 'fs';
 
 export class BlockchainBluemix extends Blockchain {
   private certFilename: string;
@@ -41,8 +41,8 @@ export class BlockchainBluemix extends Blockchain {
         return reject(err);
       }
 
-      let cert = fs.readFileSync(this.certFilename);
-      let options = <GRPCOptions>{ pem: cert.toString() };
+      let cert    = fs.readFileSync(this.certFilename);
+      let options = <GRPCOptions>{pem: cert.toString()};
 
       // Connect to memberservice and peer
       chain.setMemberServicesUrl(`grpcs://${ca.url}`, options);
@@ -74,16 +74,17 @@ export class BlockchainBluemix extends Blockchain {
   }
 
   private async copyCert(): Promise<void> {
-      if (!this.certFilename2) {
-        return Promise.resolve();
-      }
-      return new Promise<void>((resolve: () => void, reject: (error: Error) => void) => {
-        let rd = fs.createReadStream(this.certFilename);
-        rd.on('error', reject);
-        let wr = fs.createWriteStream(this.certFilename2);
-        wr.on('error', reject);
-        wr.on('close', resolve);
-        rd.pipe(wr);
-      });
+    if (!this.certFilename2) {
+      return;
+    }
+
+    return new Promise<void>((resolve: () => void, reject: (error: Error) => void) => {
+      let rd = fs.createReadStream(this.certFilename);
+      rd.on('error', reject);
+      let wr = fs.createWriteStream(this.certFilename2);
+      wr.on('error', reject);
+      wr.on('close', resolve);
+      rd.pipe(wr);
+    });
   }
 }
