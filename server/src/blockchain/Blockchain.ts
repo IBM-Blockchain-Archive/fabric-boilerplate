@@ -48,7 +48,7 @@ export abstract class Blockchain {
       case DeployPolicy.IF_NOT_EXISTS:
         let chaincodeId = await this.loadChaincodeId();
         if (chaincodeId) {
-          return Promise.resolve(chaincodeId);
+          return chaincodeId;
         }
         return this.deployChaincode();
     }
