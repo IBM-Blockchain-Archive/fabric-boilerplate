@@ -1,10 +1,10 @@
 'use strict';
 
-import { ChaincodeEnvironmentConfiguration, UserConfig } from './ChaincodeEnvironmentConfiguration';
+import {ChaincodeEnvironmentConfiguration, UserConfig} from './ChaincodeEnvironmentConfiguration';
 import {LoggerInstance} from 'winston';
 import * as fs from 'fs';
 import {
-    newChain, Chain, Member, RegistrationRequest, DeployRequest, EventDeployComplete
+  newChain, Chain, Member, RegistrationRequest, DeployRequest, EventDeployComplete
 } from 'hfc/lib/hfc';
 import {BlockchainClient} from './client/blockchainClient';
 import * as path from 'path';
@@ -22,7 +22,7 @@ export abstract class Blockchain {
   public constructor(protected logger: LoggerInstance,
                      protected serverDirectory: string,
                      protected chaincodeEnvironmentConfiguration: ChaincodeEnvironmentConfiguration) {
-    this.chain  = newChain('deploy-chain-network');
+    this.chain = newChain('deploy-chain-network');
   }
 
   public async init(deployPolicy: DeployPolicy): Promise<string> {
@@ -129,8 +129,8 @@ export abstract class Blockchain {
 
   private async registerAndEnrollUsers(): Promise<void[]> {
     this.logger.info('[SDK] Going to register users');
-    let usersToRegister = this.chaincodeEnvironmentConfiguration.network.users.filter(
-        (u: UserConfig) => u.enrollId !== this.webAppAdminUserId
+    let usersToRegister                                = this.chaincodeEnvironmentConfiguration.network.users.filter(
+      (u: UserConfig) => u.enrollId !== this.webAppAdminUserId
     );
     let registerAndEnrollUserPromises: Promise<void>[] = [];
     usersToRegister.forEach((userToRegister: UserConfig) => {
@@ -193,7 +193,7 @@ export abstract class Blockchain {
 
       // Read the chaincodeId from the latest deployed file
       fs.readFile(this.getChaincodeIDFilename(), (err: any, data: any) => {
-         resolve(data ? data.toString() : null);
+        resolve(data ? data.toString() : null);
       });
     });
   }
