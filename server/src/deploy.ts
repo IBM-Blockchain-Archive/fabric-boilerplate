@@ -4,22 +4,22 @@ import {TestData} from './testdata/testData';
 import {BlockchainFactory} from './blockchain/BlockchainFactory';
 import {LoggerFactory} from './utils/LoggerFactory';
 import {Config} from './config';
-import winston = require('winston');
-import LoggerInstance = winston.LoggerInstance;
-import { DeployPolicy } from './blockchain/Blockchain';
+import * as winston from 'winston';
+import {DeployPolicy} from './blockchain/Blockchain';
 
 class DeployApp {
-  private logger: LoggerInstance;
+  private logger: winston.LoggerInstance;
+
   public constructor() {
-     this.logger = LoggerFactory.create();
+    this.logger = LoggerFactory.create();
   }
 
   public async deploy(): Promise<void> {
-    const logger = LoggerFactory.create();
+    const logger     = LoggerFactory.create();
     const blockchain = BlockchainFactory.create(logger, Config.getServerDirectory());
 
     try {
-      let chaincodeId = await blockchain.init(DeployPolicy.ALWAYS);
+      let chaincodeId      = await blockchain.init(DeployPolicy.ALWAYS);
       let blockchainClient = await blockchain.createClient(chaincodeId);
       blockchain.saveChaincodeId(chaincodeId);
 
