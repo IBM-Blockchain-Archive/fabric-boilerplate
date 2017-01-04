@@ -46,7 +46,6 @@ class App {
     app.use((req: any, res: any, next: any) => {
       res.status(404);
       res.json({message: 'Not found'});
-      next();
     });
 
     // error handlers
