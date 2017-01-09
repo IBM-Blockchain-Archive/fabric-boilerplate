@@ -26,7 +26,8 @@ export abstract class BlockchainRequest {
       let blockchainRequest = {
         chaincodeID: this.chaincodeID,
         fcn:         this.chaincodeFunctionName,
-        args:        this.chaincodeArguments
+        args:        this.chaincodeArguments,
+        attrs:       ['userID']
       };
 
       let transactionContext = this.doRequest(blockchainUser, blockchainRequest);

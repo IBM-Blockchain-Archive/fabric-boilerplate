@@ -3,7 +3,10 @@
     {
       "consumerID": "SJe4b6gZl",
       "username": "john",
-      "password": "passw0rd"
+      "password": "passw0rd",
+      "attributes": {
+        "userID": "john"
+      }
     }
   ],
   "things": [
