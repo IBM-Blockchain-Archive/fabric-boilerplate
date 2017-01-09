@@ -120,7 +120,7 @@ export abstract class Blockchain {
     return adminUser;
   }
 
-  private getUsersToRegisterAndEnroll(): any[] {
+  private getUsersToRegisterAndEnroll(): UserConfig[] {
     return this.chaincodeEnvironmentConfiguration.network.users.filter(
       (u: UserConfig) => u.enrollId !== this.webAppAdminUserId
     );
