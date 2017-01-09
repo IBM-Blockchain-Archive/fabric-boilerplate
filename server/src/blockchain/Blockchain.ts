@@ -126,10 +126,10 @@ export abstract class Blockchain {
     );
   }
 
-  private async registerAndEnrollUsers(usersToRegister: any[]): Promise<void> {
+  private async registerAndEnrollUsers(usersToRegister: UserConfig[]): Promise<void> {
     this.logger.info('[SDK] Going to register users');
     let registerAndEnrollUserPromises: Promise<void>[] = [];
-    usersToRegister.forEach((userToRegister: any) => {
+    usersToRegister.forEach((userToRegister: UserConfig) => {
       registerAndEnrollUserPromises.push(this.registerAndEnrollUser(userToRegister));
     });
 
