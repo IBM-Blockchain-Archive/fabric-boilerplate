@@ -36,7 +36,7 @@ export abstract class Blockchain {
     this.logger.info('[SDK] Connected to memberservice and peer');
 
     await this.registerAdmin(this.getAdminUser());
-    await this.registerAndEnrollUsers();
+    await this.registerAndEnrollUsers(this.getUsersToRegisterAndEnroll());
 
     // Do a deployment if so requested, otherwise return chaincode id
     switch (deployPolicy) {
@@ -120,17 +120,20 @@ export abstract class Blockchain {
     return adminUser;
   }
 
-  private async registerAndEnrollUsers(): Promise<void[]> {
-    this.logger.info('[SDK] Going to register users');
-    let usersToRegister                                = this.chaincodeEnvironmentConfiguration.network.users.filter(
+  private getUsersToRegisterAndEnroll(): any[] {
+    return this.chaincodeEnvironmentConfiguration.network.users.filter(
       (u: UserConfig) => u.enrollId !== this.webAppAdminUserId
     );
+  }
+
+  private async registerAndEnrollUsers(usersToRegister: any[]): Promise<void> {
+    this.logger.info('[SDK] Going to register users');
     let registerAndEnrollUserPromises: Promise<void>[] = [];
-    usersToRegister.forEach((userToRegister: UserConfig) => {
+    usersToRegister.forEach((userToRegister: any) => {
       registerAndEnrollUserPromises.push(this.registerAndEnrollUser(userToRegister));
     });
 
-    return Promise.all(registerAndEnrollUserPromises);
+    await Promise.all(registerAndEnrollUserPromises);
   }
 
   private async registerAndEnrollUser(userToRegister: UserConfig): Promise<void> {
@@ -153,7 +156,10 @@ export abstract class Blockchain {
           enrollmentID: userToRegister.enrollId,
           affiliation:  userToRegister.affiliation,
           account:      '',
-          roles:        [userToRegister.role]
+          roles:        [userToRegister.role],
+          attributes:   [
+            {name: 'userID', value: userToRegister.attributes.userID}
+          ]
         };
 
         this.chain.registerAndEnroll(registrationRequest, (err: Error) => {

@@ -8,7 +8,8 @@ export class ChaincodeLocalConfig {
       return {
         enrollId: client.username,
         role: 'client',
-        affiliation: 'institution_a'
+        affiliation: 'institution_a',
+        attributes: client.attributes
       };
     });
     users.push({

@@ -40,6 +40,8 @@ membersrvc:
    image: hyperledger/fabric-membersrvc:x86_64-0.6.1-preview
    ports:
      - "7054:7054"
+   environment:
+       - MEMBERSRVC_CA_ACA_ENABLED=true
    command: membersrvc
 
 # NodeJS app. Deploys if needed, watches src dir for transpiling and reloading.

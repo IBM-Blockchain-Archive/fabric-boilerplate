@@ -26,6 +26,7 @@ export interface UserConfig {
   enrollSecret?: string;
   role?: string;
   affiliation?: string;
+  attributes?: any;
 }
 
 export interface PeerConfig {
