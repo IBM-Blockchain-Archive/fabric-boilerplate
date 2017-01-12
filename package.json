@@ -14,9 +14,9 @@
     "gobuild": "cd src/build-chaincode && GOPATH=$(pwd)/../.. && go build",
     "build-css": "node-sass --include-path scss client/assets/css/scss/main.scss client/assets/css/main.css",
     "watch-css": "node-sass --watch --include-path scss client/assets/css/scss/main.scss client/assets/css/main.css",
-    "build-materialize-css": "node-sass --include-path scss client/assets/css/materialize_scss/materialize.scss client/assets/css/materialize.css",
-    "watch-materialize-css": "node-sass --watch --include-path scss client/assets/css/materialize_scss/materialize.scss client/assets/css/materialize.css",
     "nodemon": "GOPATH=$(pwd) nodemon ./bin/www",
+    "deploy": "NODE_ENV=production DEPLOYANDEXIT=true GOPATH=$(pwd) GPRC_TRACE=all DEBUG=hfc node app.js",
+    "push": "cf push",
     "start": "npm run build-css | npm run watch-css | npm run nodemon"
   },
   "dependencies": {

@@ -50,7 +50,7 @@ var environments = {
         },
         chaincode:{
             deployed_name: null,
-            projectName: 'chaincode',
+            projectName: 'build-chaincode',
             deployed_dir: 'blockchain/deployBluemix',
             webAppAdmin: {
                 enrollId: adminUser.enrollId,

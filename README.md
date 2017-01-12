@@ -73,7 +73,11 @@ To make local development easier there is a script that will cleanup your enviro
 > ./start.sh
 
 ## Running on Bluemix
-First run the app locally once. This way _node-sass_ will create the _.css_ file.
+First run the following:
+```
+npm run build-css
+```
+This way _node-sass_ will create the complete _.css_ file composing all the _.scss_ ones.
 
 ### Registering and enrolling users
 The SDK needs to register and enroll an admin user and any other users you would like to add. When this takes place the SDK receives enrollment certificates (ECerts) for each user. You only get these certificates once. So if you would redeploy or restart your app on Bluemix and the SDK wants to register and enroll the users again this would fail. Our solution to this problem is to register and enroll the users from your local environment before you deploy. When the ECerts are received, you can then push the app to Bluemix, including the ECerts. So the app that runs on Bluemix does not have to register and enroll the users again, because the ECerts are already available.
@@ -83,52 +87,67 @@ We managed to make all the procedure as much automatic as possible. Now you can 
 
 Perform the following steps to run the application on Bluemix:
 
-- Create a Blockchain Service on Bluemix
-- Update the manifest.yml file (it is in the root of the project):
+1. Create a Blockchain Service on Bluemix
+2. Update the _manifest.yml_ file (it is in the root of the project):
     - replace the name and host. The values can be anything, as long as they are unique
     - replace the name of the service. This should be the name of the Blockchain Service you just created
-- Copy the credentials of the Blockchain Service and overwrite the credentials in `credentials.json` in _blockchain/deployBluemix_. The suggestion is to get the credentials directly from the Bluemix Blockchain service dashboard.
-If you retrieve your Service Credentials from a [new console](https://new-console.ng.bluemix.net/#overview) instance of Bluemix then you will need to edit your credentials.json.  Add `"credentials": {` to line 2 and then add a closing `}` to the final line.
-- Download the tls certificate; you can find the url at the bottom of the _credentials.json_
-- Save the certificate in `src/build-chaincode`
-- Rename the file to `certificate.pem`
+3. Copy the credentials of the Blockchain Service and overwrite the credentials in `credentials.json` in _blockchain/deployBluemix_. The suggestion is to get the credentials directly from the Bluemix Blockchain service dashboard.
+If you retrieve your Service Credentials from a [console](https://new-console.ng.bluemix.net/) instance of Bluemix then you will need to edit your _credentials.json_.  Add `"credentials": {` to line 2 and then add a closing `}` to the final line.
+4. Download the TLS certificate; you can find the url at the bottom of the _credentials.json_
+5. Rename the file to `certificate.pem`
+6. Save the certificate in `src/build-chaincode` and `blockchain/deployBluemix`
 
-**Automatic one-call deployment**
+**Deployment and uploading procedure**
 
-Note: This method is suggested for fresh installations, that is both application and chaincode will be replaced with new ones. Do not use this method if you do not want to bind your application to a new chaincode.
+The first and fundamental operation to do in the beginning is to register and enroll all the users, in order to collect all their private keys which are going to be used every time the application communicates with the _Member Service_.
+Therefore, we will procede with 2 separated steps:
+1. Deployment of the chaincode (and it includes registering and enrolling all the users and adding all the data contained in `testData.json`)
+2. Uploading of the app to your Bluemix space
 
-If you want only to push a new version of the application, you have to be sure the _chaincode_id_ file is inside _blockchain/deployBluemix/_ and it contains the correct id.
+**1. Deployment**
+
+This will:
+- Register and enroll users to the _Bluemix MemberService_. That means, _WebAppAdmin_ user plus all the others listed in `testData.json`.
+It also saves the ECerts (private keys) in `blockchain/deployBluemix/keyValStore-[SHORT_ID_YOUR_NETWORK]`.
+- Send a deploy request to one of your _Bluemix Peer_. That means, deploying the chaincode and it also stores the _chaincodeID_ in `blockchain/deployBluemix/chaincode_id`.
+- Send an invoke request (with all the test data) to one of your _Bluemix Peer_.
+Run from the root folder of project:
+```
+npm run deploy
+```
+Then open the dashboard of the blockchain service on Bluemix. Wait until you see the chaincode id appear on the `Network` tab.  Ensure that it is running on all four peers and that all the way at the end it says `Up for x seconds/minutes`. If this is the case, then your chaincode has been deployed successfully!
+
+**Note:** It can take 2-3 minutes.
+
+**IMPORTANT:** Do not remove the keys once they are generated or it will be necessary to recreate the blockchain service, as the keys are unique and the _membersrvc_ will not create again for the same user once he is in its list.
+
+
+**2. Uploading app**
+
+This will push the app to your Bluemix space.
+
+**IMPORTANT:** Be sure your `manifest.yml` is configured correctly before executing the command below.
+
+**Note:** If you only want to push a new version of the application, you have to be sure the *chaincode_id* file is inside `blockchain/deployBluemix` and it contains the correct id listed under your bluemix blockchain service.
 
 To avoid the auto-deployment be sure `blockchain/deployBluemix/chaincode_id` exists (do not add it in your `.cfignore`!).
 
 Viceversa - Remove `blockchain/deployBluemix/chaincode_id` if you want your application to deploy a new chaincode.
 
-**Important:** Be sure your `manifest.yml` is configured correctly before executing the command below.
-
-Then you can run:
-
-> cf push
-
-For assistance with the cloud foundry cli, visit the [cloud foundry](https://github.com/cloudfoundry/cli#downloads) repo.  There are prerequisites for using the cf cli, such as homebrew.
-
-**Manual deployment**
-
-Note: Use this method to only deploy and invoke testData. This is also very useful in case you register issues with the automatic procedure and you would like to debug and identify the problem.
 
 Run from the root folder of project:
+```
+npm run push
 
-> NODE_ENV=production SERVICE=BLOCKCHAIN_SERVICE_NAME DEPLOYANDEXIT=true GOPATH=$(pwd) GPRC_TRACE=all DEBUG=hfc node app.js
-
-- Open the dashboard of the blockchain service on Bluemix. Wait until you see the chaincode id appear on the `Network` tab.  Ensure that it is running on all four peers and that all the way at the end it says `Up for x seconds/minutes`. After you initial deployment, each of the four peers should have two blocks - genesis block and the deployed chaincode. If this is the case, then your chaincode has been deployed successfully!
-**Note:** It can take 3-4 minutes.
-
-Both the methods register and enroll the _WebAppAdmin_ user and all the data listed in the _testData/testData.json_ file and saves the ECerts in `blockchain/deployBluemix/keyValStore`. This also deploys the chaincode and saves the chaincodeID in `blockchain/deployBluemix/chaincode_id`.
+```
+For assistance with the cloud foundry cli, visit the [cloud foundry](https://github.com/cloudfoundry/cli#downloads) repo.  There are prerequisites for using the cf cli, such as homebrew.
 
 **Debugging**
 
 After the app has been pushed to Bluemix you can view the logs with:
-> cf logs [NAME_OF_THE_APP] --recent
-
+```
+cf logs [NAME_OF_THE_APP] --recent
+```
 Where `NAME_OF_THE_APP` is the app name you provided in the `manifest.yml` file
 
 # Debugging chaincode
@@ -187,12 +206,34 @@ msg: 'Error: sql: no rows in result set' }
 
 **S:** You are probably using a wrong version of the `fabric-baseimage`. Please go back to _Setting up Hyperledger Fabric_ section and follow carefully all the steps.
 
+**T:** I deployed the application on Bluemix, I can see the chaincode deployed correctly and the application running and accessible, nevertheless **I cannot login**.
+
+**S:** That can be caused by a wrong deployment (due to a bad connection, for instance).
+Check into the logs of your application running on Bluemix if there is any meaningful error.
+Be sure you have under `blockchain/deployBluemix/keyValStore-[SHORT_ID_YOUR_NETWORK]` the keys for each user you try to login with.
+Check that into the logs of your chaincode container on the Bluemix service you have the complete output of the invoke request starting with:
+`[invoke] INFO : -- Invoking function add_test_data with args`.
+
+A possible way to solve the issue is doing the following:
+1. Remove the *chaincode_id* file
+2. Deploy again
+3. Push the application again (which will contain the updated _chaincodeID_)
+
+If the problem persists, look first for similar discussions about that issue and eventually open a new one.
+
 # Support and documentation
 [Hyperledger project](https://www.hyperledger.org/)
+
 [Hyperleder Fabric Complete Doc](https://hyperledger-fabric.readthedocs.io/en/latest/)
+
 [Official Hyperledger slack channel](https://hyperledgerproject.slack.com)
+
 [IRC](freenode.net) channel #hyperledger
+
 [Working Group Meetings](https://wiki.hyperledger.org/community/calendar-public-meetings)
+
 [Hyperledger Fabric Wiki](https://wiki.hyperledger.org/) 
+
 [Learn chaincode](https://github.com/IBM-Blockchain/learn-chaincode)
+
 [Hyperldger Fabric Client SDK (HFC)](https://fabric-sdk-node.readthedocs.io/en/latest/)
