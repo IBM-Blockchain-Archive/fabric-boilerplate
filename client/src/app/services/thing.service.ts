@@ -18,8 +18,9 @@ export class ThingService {
   }
 
   getThings() {
+    let user: any = JSON.parse(localStorage.getItem('currentUser')).user;
     return this._http
-      .get(this.actionUrl + '/john', {headers: this.headers})
+      .get(this.actionUrl + '/' + user.userID, {headers: this.headers})
       .map(res => res.json());
   }
 }
