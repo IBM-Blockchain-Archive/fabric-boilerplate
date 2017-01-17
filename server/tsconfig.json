@@ -2,12 +2,13 @@
     "compilerOptions": {
         "target": "es6",
         "module": "commonjs",
-        "allowJs": true,
         "declaration": false,
         "removeComments": true,
         "sourceMap": true,
         "noLib": false,
-        "outDir": "dist"
+        "outDir": "server",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true
     },
     "exclude": [
         "node_modules",
@@ -28,6 +29,7 @@
         "typings/index.d.ts"
     ],
     "files": [
+        "src/api/v1/ThingsController.ts",
         "src/auth/AuthController.ts",
         "src/auth/ClientAuthenticator.ts",
         "src/auth/index.ts",

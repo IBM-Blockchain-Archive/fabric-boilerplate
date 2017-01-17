@@ -1,15 +1,15 @@
 import { ChaincodeEnvironmentConfiguration, UserConfig, PeerConfig } from './ChaincodeEnvironmentConfiguration';
 
-const clients = require('../../resources/testData.json').clients;
+const testDataUsers = require('../../resources/testData.json').users;
 
 export class ChaincodeLocalConfig {
   public getConfiguration(): ChaincodeEnvironmentConfiguration {
-    const users = <UserConfig[]>clients.map((client: any) => {
+    const users = <UserConfig[]>testDataUsers.map((user: any) => {
       return {
-        enrollId: client.username,
-        role: 'client',
+        enrollId: user.userID,
+        role: 'user',
         affiliation: 'institution_a',
-        attributes: client.attributes
+        attributes: user.attributes
       };
     });
     users.push({

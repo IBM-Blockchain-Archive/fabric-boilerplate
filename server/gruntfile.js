@@ -1,7 +1,7 @@
 module.exports = function (grunt) {
     "use strict";
 
-    var outDir = 'dist';
+    var outDir = 'server';
     var buildTasks = ['newer:tslint', 'concurrent:build'];
 
     grunt.initConfig({

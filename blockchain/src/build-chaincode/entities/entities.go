@@ -5,40 +5,40 @@ type ECertResponse struct {
 }
 
 type TestData struct {
-	Clients []Client `json:"clients"`
-	Things  []Thing  `json:"things"`
+	Users  []User `json:"users"`
+	Things []Thing  `json:"things"`
 }
 
 type TestDataElement interface {
 	ID() string
 }
 
-type Client struct {
-	TestDataElement `json:"-"`
-	ClientID string `json:"clientID"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Salt     string `json:"salt"`
-	Hash     string `json:"hash"`
+type User struct {
+	TestDataElement 	`json:"-"`
+	UserID   	string 	`json:"userID"`
+	Username 	string 	`json:"username"`
+	Password 	string 	`json:"password"`
+	Salt     	string 	`json:"salt"`
+	Hash     	string 	`json:"hash"`
 }
 
 type Thing struct {
-	TestDataElement    `json:"-"`
-	ThingID      string `json:"thingID"`
-	SomeProperty string `json:"someProperty"`
-	ClientID     string `json:"clientID"`
+	TestDataElement    	`json:"-"`
+	ThingID      	string 	`json:"thingID"`
+	SomeProperty 	string 	`json:"someProperty"`
+	UserID    	string 	`json:"userID"`
 }
 
-type ConsumerAuthenticationResult struct {
-	Client        Client
+type UserAuthenticationResult struct {
+	User        User
 	Authenticated bool
 }
 
 type Users struct {
-	CLients []Client `json:"consumers"`
+	Users []User `json:"users"`
 }
 
-func (t *Client) ID() string {
+func (t *User) ID() string {
 	return t.Username
 }
 

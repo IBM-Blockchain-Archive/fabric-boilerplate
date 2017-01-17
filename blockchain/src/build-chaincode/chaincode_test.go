@@ -15,7 +15,7 @@ func Test_WillReturnThatUserIsUnauthenticatedWhenUserDoesNotExist(t *testing.T) 
 		t.Error(err.Error())
 	}
 
-	var result entities.ConsumerAuthenticationResult
+	var result entities.UserAuthenticationResult
 	err = json.Unmarshal(resultAsBytes, &result)
 	if err != nil {
 		t.Error(err.Error())
@@ -29,7 +29,7 @@ func Test_WillReturnThatUserIsUnauthenticatedWhenUserDoesNotExist(t *testing.T) 
 func Test_WillReturnThatUserIsAuthenticatedWhenUserExists(t *testing.T) {
 	scc := new(SimpleChaincode)
 	stub := shim.NewMockStub("ex02", scc)
-	user := entities.Client{
+	user := entities.User{
 		Hash: "passwordHash",
 		Username: "john",
 	}
@@ -40,7 +40,7 @@ func Test_WillReturnThatUserIsAuthenticatedWhenUserExists(t *testing.T) {
 		t.Error(err.Error())
 	}
 
-	var result entities.ConsumerAuthenticationResult
+	var result entities.UserAuthenticationResult
 	err = json.Unmarshal(resultAsBytes, &result)
 	if err != nil {
 		t.Error(err.Error())
