@@ -13,7 +13,6 @@ import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import * as path from 'path';
-import * as cors from 'cors';
 import {Container} from 'typedi';
 
 class App {
@@ -27,8 +26,6 @@ class App {
         process.on('unhandledRejection', (error: Error, promise: Promise<any>) => {
             logger.error(error.stack);
         });
-
-        app.use(cors());
 
         app.use((req: any, res: any, next: NextFunction) => {
             req.blockchain = blockchainService;

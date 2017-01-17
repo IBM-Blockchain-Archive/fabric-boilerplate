@@ -37,20 +37,16 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, functionName 
 	} else if functionName == "addTestdata" {
 		return nil, t.addTestdata(stub, args[0])
 	} else if functionName == "createThing" {
-
 		thingAsJSON := args[0]
 
 		var thing entities.Thing
 		if err := json.Unmarshal([]byte(thingAsJSON), &thing); err != nil {
-
 			return nil, errors.New("Error while unmarshalling thing, reason: " + err.Error())
 		}
 
 		thingAsBytes, err := json.Marshal(thing);
 		if err != nil {
-			fmt.Println("Error marshalling thing, reason: " + err.Error())
-
-			return nil, errors.New("Error")
+			return nil, errors.New("Error marshalling thing, reason: " + err.Error())
 		}
 
 		util.StoreObjectInChain(stub, thing.ThingID, util.ThingsIndexName, thingAsBytes)
@@ -84,17 +80,15 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, functionName s
 		thingsByUserID, err := util.GetThingsByUserID(stub, args[0])
 
 		if err != nil {
-			return nil, errors.New("could not retrieve things by user id: " + args[0] + ", reason: " +
-				err.Error())
+			return nil, errors.New("could not retrieve things by user id: " + args[0] + ", reason: " + err.Error())
 		}
 
-		resultAsBytes, err := json.Marshal(thingsByUserID)
+		thingsAsBytes, err := json.Marshal(thingsByUserID)
 		if err != nil {
-			return nil, errors.New("Could not marshal thingsByUserID result, reason: " +
-				err.Error())
+			return nil, errors.New("Could not marshal thingsByUserID result, reason: " + err.Error())
 		}
 
-		return resultAsBytes, nil
+		return thingsAsBytes, nil
 	}
 
 	return nil, errors.New("Received unknown query function name")
@@ -151,42 +145,30 @@ func (t *SimpleChaincode) addTestdata(stub shim.ChaincodeStubInterface, testData
 	}
 
 	for _, user := range testData.Users {
-		err = t.storeObjectInChain(stub, util.UsersIndexName, &user)
+		userAsBytes, err := json.Marshal(user);
+		if err != nil {
+			return errors.New("Error marshalling testUser, reason: " + err.Error())
+		}
+
+		err = util.StoreObjectInChain(stub, user.UserID, util.UsersIndexName, userAsBytes)
 		if err != nil {
 			return errors.New("error in storing object, reason: " + err.Error())
 		}
 	}
 
 	for _, thing := range testData.Things {
-		err = t.storeObjectInChain(stub, util.ThingsIndexName, &thing)
+		thingAsBytes, err := json.Marshal(thing);
+		if err != nil {
+			return errors.New("Error marshalling testThing, reason: " + err.Error())
+		}
+
+		err = util.StoreObjectInChain(stub, thing.ThingID, util.ThingsIndexName, thingAsBytes)
 		if err != nil {
 			return errors.New("error in storing object, reason: " + err.Error())
 		}
 	}
 
 	return nil
-}
-
-func (t *SimpleChaincode) storeObjectInChain(chaincodeStub shim.ChaincodeStubInterface, indexName string,
-testDataElement entities.TestDataElement) error {
-	testDataElementAsJSON, err := json.Marshal(testDataElement)
-	if err != nil {
-		return errors.New(fmt.Sprintf("Error marshalling %T ", testDataElementAsJSON))
-	}
-
-	fmt.Println("adding ", testDataElementAsJSON)
-
-	id, err := util.WriteIDToBlockchainIndex(chaincodeStub, indexName, testDataElement.ID())
-	if err != nil {
-		return errors.New(fmt.Sprintf("Error creating new id for %T", testDataElementAsJSON))
-	}
-
-	err = chaincodeStub.PutState(string(id), []byte(testDataElementAsJSON))
-	if err != nil {
-		return errors.New(fmt.Sprintf("Error putting %T data on ledger", testDataElementAsJSON))
-	}
-
-	return nil;
 }
 
 //======================================================================================================================

@@ -5,8 +5,8 @@ type ECertResponse struct {
 }
 
 type TestData struct {
-	Users  []User `json:"users"`
-	Things []Thing  `json:"things"`
+	Users  		[]User 	 `json:"users"`
+	Things 		[]Thing  `json:"things"`
 }
 
 type TestDataElement interface {
@@ -30,8 +30,8 @@ type Thing struct {
 }
 
 type UserAuthenticationResult struct {
-	User        User
-	Authenticated bool
+	User        	User
+	Authenticated 	bool
 }
 
 type Users struct {

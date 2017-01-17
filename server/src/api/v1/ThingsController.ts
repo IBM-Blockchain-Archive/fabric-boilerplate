@@ -1,7 +1,7 @@
 import {Get, Post, JsonController, Param, Body, Req, UseBefore} from 'routing-controllers';
 import {JSONWebToken} from '../../utils/JSONWebToken';
 import {Thing} from '../../entities/thing.model';
-import {UserAuthenticatorMiddleware} from '../../auth/UserAuthenticatorMiddleware';
+import {UserAuthenticatorMiddleware} from '../../middleware/UserAuthenticatorMiddleware';
 import {CORSMiddleware} from '../../middleware/CORSMiddleware';
 
 @JsonController('/things')
