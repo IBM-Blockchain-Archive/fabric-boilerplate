@@ -33,7 +33,7 @@
         "src/auth/AuthController.ts",
         "src/auth/ClientAuthenticator.ts",
         "src/auth/index.ts",
-        "src/auth/UserAuthenticator.ts",
+        "src/utils/UserAuthenticator.ts",
         "src/blockchain/Blockchain.ts",
         "src/blockchain/BlockchainBluemix.ts",
         "src/blockchain/BlockchainFactory.ts",

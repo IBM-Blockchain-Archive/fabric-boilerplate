@@ -11,27 +11,26 @@ class DeployApp {
   private logger: winston.LoggerInstance;
 
   public constructor() {
-    this.logger = LoggerFactory.create();
+    this.logger = new LoggerFactory().create();
   }
 
   public async deploy(): Promise<void> {
-    const logger     = LoggerFactory.create();
-    const blockchain = BlockchainFactory.create(logger, Config.getServerDirectory());
+    const blockchain = BlockchainFactory.create(this.logger, Config.getServerDirectory());
 
     try {
       let chaincodeId      = await blockchain.init(DeployPolicy.ALWAYS);
       let blockchainClient = await blockchain.createClient(chaincodeId);
       blockchain.saveChaincodeId(chaincodeId);
 
-      new TestData(blockchainClient, logger).invokeTestData().then(() => {
-        logger.info('Deployed chaincode and added testdata. Chaincode Id:');
+      new TestData(blockchainClient, this.logger).invokeTestData().then(() => {
+        this.logger.info('Deployed chaincode and added testdata. Chaincode Id:');
         console.log(chaincodeId);
         process.exit(0);
       }).catch((err: Error) => {
         throw new Error(err.message);
       });
     } catch (err) {
-      logger.error(err.message);
+      this.logger.error(err.message);
       process.exit(1);
     }
   }

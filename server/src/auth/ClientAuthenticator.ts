@@ -1,16 +1,14 @@
 import {BlockchainClient} from '../blockchain/client/blockchainClient';
 import {LoggerInstance} from 'winston';
 import {Password} from '../utils/Password';
-import {UserAuthenticator} from './UserAuthenticator';
+import {UserAuthenticator} from '../utils/UserAuthenticator';
 import {BlockchainUserError} from '../utils/BlockchainUserError';
 
-export class ClientAuthenticator extends UserAuthenticator {
+export class ClientAuthenticator {
   public constructor(private logger: LoggerInstance,
                      private username: string,
                      private password: string,
-                     private blockchainClient: BlockchainClient) {
-    super();
-  }
+                     private blockchainClient: BlockchainClient) { }
 
   public async authenticate(): Promise<any> {
     this.logger.debug('Login attempt with username: ', this.username);
@@ -45,7 +43,7 @@ export class ClientAuthenticator extends UserAuthenticator {
       };
     }
 
-    if (!this.validPassword(authenticationResultClient.User, this.password)) {
+    if (!new UserAuthenticator().validPassword(authenticationResultClient.User, this.password)) {
       return {
         success: false,
         message: 'Authentication failed. User or password is incorrect.'
@@ -55,7 +53,7 @@ export class ClientAuthenticator extends UserAuthenticator {
     return {
       authenticated: authenticationResultClient.Authenticated,
       message:       null,
-      token:         this.generateToken(authenticationResultClient.User),
+      token:         new UserAuthenticator().generateToken(authenticationResultClient.User),
       user:          authenticationResultClient.User
     };
   }

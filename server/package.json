@@ -32,6 +32,7 @@
     "reflect-metadata": "^0.1.9",
     "routing-controllers": "^0.6.7",
     "shortid": "^2.2.6",
+    "typedi": "^0.4.3",
     "typescript": "^2.0.6",
     "winston": "^2.2.0"
   },

@@ -5,19 +5,20 @@ import {Routes} from './routes';
 import {BlockchainFactory} from './blockchain/BlockchainFactory';
 import {LoggerFactory} from './utils/LoggerFactory';
 import {Config} from './config';
-import {Response, NextFunction} from 'express';
+import {NextFunction} from 'express';
 import {DeployPolicy} from './blockchain/Blockchain';
-import {useExpressServer} from 'routing-controllers';
+import {useExpressServer, useContainer} from 'routing-controllers';
 import * as morgan from 'morgan';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import * as path from 'path';
 import * as cors from 'cors';
+import {Container} from 'typedi';
 
 class App {
     public async run(): Promise<void> {
-        const logger = LoggerFactory.create();
+        const logger = new LoggerFactory().create();
         const blockchain = BlockchainFactory.create(logger, Config.getServerDirectory());
         const chaincodeId = await blockchain.init(DeployPolicy.NEVER);
         const app = express();
@@ -34,6 +35,7 @@ class App {
             next();
         });
 
+        useContainer(Container);
         // initialize routing
         useExpressServer(app, {
             routePrefix: '/api/v1',
@@ -57,42 +59,12 @@ class App {
         new Routes(blockchainService, logger).register(expressRouter);
         app.use('/', expressRouter);
 
-        // catch 404 and forward to error handler
-        app.use((req: any, res: any) => {
-            res.status(404);
-            res.json({message: 'Not found'});
-        });
-
-        // error handlers
-        app.use((err: any, res: Response, next: NextFunction) => {
-            logger.error('Headers: %s\nOriginalUrl: %s\nMethod: %s\nBody: %s\nStacktrace: %s', this.objectToString(err.headers), err.originalUrl, err.method, this.objectToString(err.body), err.stack);
-            res.status(500);
-            res.json({
-                message: err.message,
-                error: process.env.NODE_ENV === 'development' ? err.stack : true,
-            });
-
-            next();
-        });
-
         const port = (process.env.VCAP_APP_PORT || 8080);
         const host = (process.env.VCAP_APP_HOST || 'localhost');
         app.listen(port);
 
         // print a message when the server starts listening
         logger.info(`[NodeJS] Express server listening at http://${host}:${port}`);
-    }
-
-    private objectToString(object: any): string {
-        let output = '';
-
-        for (let propertyName in object) {
-            if (object.hasOwnProperty(propertyName)) {
-                output += propertyName + ': ' + object[propertyName] + '\n';
-            }
-        }
-
-        return output;
     }
 }
 
