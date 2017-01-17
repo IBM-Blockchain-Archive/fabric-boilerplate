@@ -13,6 +13,7 @@ import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import * as path from 'path';
+import * as cors from 'cors';
 import {Container} from 'typedi';
 
 class App {
@@ -31,6 +32,8 @@ class App {
             req.blockchain = blockchainService;
             next();
         });
+
+        app.use(cors());
 
         useContainer(Container);
         // initialize routing
