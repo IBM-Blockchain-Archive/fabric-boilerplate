@@ -7,7 +7,7 @@
     "node": "~6.9.1"
   },
   "scripts": {
-    "start": "nodemon server/app.js",
+    "start": "rm -rf server && nodemon server/app.js",
     "deploy": "node server/deploy.js",
     "nodemon": "nodemon"
   },

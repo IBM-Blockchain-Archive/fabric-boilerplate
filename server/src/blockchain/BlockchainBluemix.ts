@@ -6,8 +6,7 @@ import {newFileKeyValStore, Chain, GRPCOptions} from 'hfc/lib/hfc';
 import * as fs from 'fs';
 import * as https from 'https';
 import {IncomingMessage} from 'http';
-import {WriteStream} from 'fs';
-import {Stats} from 'fs';
+import {WriteStream, Stats} from 'fs';
 
 export class BlockchainBluemix extends Blockchain {
   private certFilename: string;

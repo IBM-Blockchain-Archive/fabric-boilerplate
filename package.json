@@ -4,6 +4,10 @@
   "description": "Webapplication built on top of Hyperledger Fabric",
   "main": "docker-compose up",
   "os" : [ "darwin", "linux" ],
+  "engines": {
+    "npm": "~3.10.8",
+    "node": "~6.9.1"
+  },
   "scripts": {
     "start": "docker-compose up",
     "install": "npm run getbaseimage && npm run govend && docker-compose pull && docker-compose build",
