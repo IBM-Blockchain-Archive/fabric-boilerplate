@@ -57,8 +57,8 @@ Chaincode, angular and NodeJS should all be unit tested. We will create a contai
 6. `docker-compose build`  
 
 # Troubleshooting
-- `no rows in result set`: The memberservice remembers something outdated. Stop your app and run `./clear.sh`.
-- `name or token does not match`: The info in blockchain/data/keyValStore does not match with the connected memberservice. `./clear.sh`.
+- `no rows in result set`: The memberservice remembers something outdated. Stop your app and run `./clean.sh`.
+- `name or token does not match`: The info in blockchain/data/keyValStore does not match with the connected memberservice. `./clean.sh`.
 - `Can't connect to docker daemon.`: `sudo usermod -aG docker $(whoami)`, logout and login again.
 - `Error: /usr/src/app/node_modules/grpc/src/node/extension_binary/grpc_node.node: invalid ELF header`: The node_modules of the server were built outside of the container. Delete this directory and make a change in `server/package.json`. Then do `docker-compose build server`.
 

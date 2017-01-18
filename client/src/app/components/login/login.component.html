@@ -1,0 +1,9 @@
+<div>
+  <h1>LOGIN</h1>
+  <div>
+    <input type="text" placeholder="Username" autofocus [(ngModel)]="username">
+    <input type="password" placeholder="Password" [(ngModel)]="password">
+    <br>
+    <button (click)="login(username, password)">Submit</button>
+  </div>
+</div>

@@ -3,7 +3,13 @@ import {LoggerSettings} from './LoggerSettings';
 import * as winston from 'winston';
 
 export class LoggerFactory {
-  public static create(): LoggerInstance {
-    return new winston.Logger(new LoggerSettings().getLoggerSettings());
+  private static logger: LoggerInstance = null;
+
+  public create(): LoggerInstance {
+    if (LoggerFactory.logger === null) {
+      LoggerFactory.logger = new winston.Logger(new LoggerSettings().getLoggerSettings());
+    }
+
+    return LoggerFactory.logger;
   }
 }

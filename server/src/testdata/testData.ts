@@ -3,7 +3,7 @@
 const testData = require('../../resources/testData.json');
 import {BlockchainClient} from '../blockchain/client/blockchainClient';
 import {LoggerInstance} from 'winston';
-import {Client} from '../entities/client.model';
+import {User} from '../entities/user.model';
 
 export class TestData {
   public constructor(private blockchainClient: BlockchainClient, private logger: LoggerInstance) { }
@@ -16,7 +16,7 @@ export class TestData {
 
   private resetIndexes(): Promise<any> {
     this.logger.info('[TestData] Resetting indexes:');
-    const functionName = 'reset_indexes';
+    const functionName = 'resetIndexes';
     const args         = [];
     const enrollmentId = 'WebAppAdmin';
 
@@ -24,11 +24,11 @@ export class TestData {
   }
 
   private writeTestDataToLedger(testData: any): Promise<any>  {
-    testData.clients = testData.clients.map(
-        (user: any) => new Client(user.clientID, user.password, user.username)
+    testData.users = testData.users.map(
+        (user: any) => new User(user.userID, user.password, user.username)
     );
 
-    const functionName = 'add_testdata';
+    const functionName = 'addTestdata';
     const args         = [JSON.stringify(testData)];
     const enrollmentId = 'WebAppAdmin';
 

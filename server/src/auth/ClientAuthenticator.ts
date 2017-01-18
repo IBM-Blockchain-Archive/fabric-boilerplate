@@ -1,23 +1,21 @@
 import {BlockchainClient} from '../blockchain/client/blockchainClient';
 import {LoggerInstance} from 'winston';
 import {Password} from '../utils/Password';
-import {UserAuthenticator} from './UserAuthenticator';
+import {UserAuthenticator} from '../utils/UserAuthenticator';
 import {BlockchainUserError} from '../utils/BlockchainUserError';
 
-export class ClientAuthenticator extends UserAuthenticator {
+export class ClientAuthenticator {
   public constructor(private logger: LoggerInstance,
                      private username: string,
                      private password: string,
-                     private blockchainClient: BlockchainClient) {
-    super();
-  }
+                     private blockchainClient: BlockchainClient) { }
 
   public async authenticate(): Promise<any> {
     this.logger.debug('Login attempt with username: ', this.username);
 
-    let client: any;
+    let user: any;
     try {
-      client = await this.blockchainClient.query('get_client', [this.username], this.username);
+      user = await this.blockchainClient.query('getUser', [this.username], this.username);
     } catch (error) {
       if (typeof error === typeof BlockchainUserError) {
         return {
@@ -27,24 +25,25 @@ export class ClientAuthenticator extends UserAuthenticator {
       }
     }
 
-    if (!client) {
+    if (!user) {
+      console.log('not client error');
       return {
         success: false,
         message: 'Authentication failed. User or password is incorrect.'
       };
     }
 
-    const args = [this.username, new Password(this.password, client.salt).toHash()];
+    const args = [this.username, new Password(this.password, user.salt).toHash()];
 
-    let authenticationResultClient: AuthenticationResultClient = await this.blockchainClient.query('authenticateAsClient', args, this.username);
-    if (!authenticationResultClient.Authenticated || !authenticationResultClient.Client) {
+    let authenticationResultClient: AuthenticationResultClient = await this.blockchainClient.query('authenticateAsUser', args, this.username);
+    if (!authenticationResultClient.Authenticated || !authenticationResultClient.User) {
       return {
         success: false,
         message: 'Authentication failed. User or password is incorrect.'
       };
     }
 
-    if (!this.validPassword(authenticationResultClient.Client, this.password)) {
+    if (!new UserAuthenticator().validPassword(authenticationResultClient.User, this.password)) {
       return {
         success: false,
         message: 'Authentication failed. User or password is incorrect.'
@@ -54,13 +53,13 @@ export class ClientAuthenticator extends UserAuthenticator {
     return {
       authenticated: authenticationResultClient.Authenticated,
       message:       null,
-      token:         this.generateToken(authenticationResultClient.Client),
-      user:          authenticationResultClient.Client
+      token:         new UserAuthenticator().generateToken(authenticationResultClient.User),
+      user:          authenticationResultClient.User
     };
   }
 }
 
 interface AuthenticationResultClient {
-  Client: any;
+  User: any;
   Authenticated: boolean;
 }

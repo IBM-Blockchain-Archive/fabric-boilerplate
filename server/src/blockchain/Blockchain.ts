@@ -29,8 +29,8 @@ export abstract class Blockchain {
     if (!this.chaincodeEnvironmentConfiguration.network || !this.chaincodeEnvironmentConfiguration.network.ca) {
       throw new Error('Blockchain configuration not set correctly.');
     }
-    let ca     = this.chaincodeEnvironmentConfiguration.network.ca[Object.keys(this.chaincodeEnvironmentConfiguration.network.ca)[0]];
-    let peer   = this.chaincodeEnvironmentConfiguration.network.peers[0];
+    let ca = this.chaincodeEnvironmentConfiguration.network.ca[Object.keys(this.chaincodeEnvironmentConfiguration.network.ca)[0]];
+    let peer = this.chaincodeEnvironmentConfiguration.network.peers[0];
     this.chain = await this.configureChain(this.chain, ca, peer);
 
     this.logger.info('[SDK] Connected to memberservice and peer');
@@ -51,6 +51,7 @@ export abstract class Blockchain {
     if (!chaincodeId) {
       throw new Error('ChaincodeId cannot be empty.');
     }
+
     return new BlockchainClient(chaincodeId, this.chain, this.logger);
   }
 
@@ -65,8 +66,8 @@ export abstract class Blockchain {
 
         // Including a unique string as an argument to make sure each new deploy has a unique id
         let deployRequest = <DeployRequest>{
-          fcn:           'init',
-          args:          [], // new Date().getTime().toString()
+          fcn: 'init',
+          args: [], // new Date().getTime().toString()
           chaincodePath: path.basename(this.chaincodeEnvironmentConfiguration.chaincode.path)
         };
 
@@ -101,6 +102,7 @@ export abstract class Blockchain {
       this.chain.enroll(adminUser.enrollId, adminUser.enrollSecret, (err: any, webAppAdmin: Member) => {
         if (err) {
           this.logger.error('[SDK] Failed to register WebAppAdmin, ' + err);
+
           return reject(err);
         }
         this.logger.info('[SDK] Successfully registered WebAppAdmin');
@@ -154,10 +156,10 @@ export abstract class Blockchain {
         // User is not enrolled yet, so perform both registration and enrollment
         let registrationRequest = <RegistrationRequest> {
           enrollmentID: userToRegister.enrollId,
-          affiliation:  userToRegister.affiliation,
-          account:      '',
-          roles:        [userToRegister.role],
-          attributes:   [
+          affiliation: userToRegister.affiliation,
+          account: '',
+          roles: [userToRegister.role],
+          attributes: [
             {name: 'userID', value: userToRegister.attributes.userID}
           ]
         };

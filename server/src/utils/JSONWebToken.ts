@@ -14,8 +14,8 @@ export class JSONWebToken {
   }
 
   public getUserID(): string {
-    if (this.decodedToken.clientID) {
-      return this.decodedToken.clientID;
+    if (this.decodedToken.userID) {
+      return this.decodedToken.userID;
     } else {
       return undefined;
     }
