@@ -8,7 +8,7 @@ import 'rxjs/add/operator/map'
 export class AuthenticationService {
   public actionUrl: string;
   public token: string;
-  private TOKEN_KEY = 'rdw_token';
+  private TOKEN_KEY = 'token';
   public user: any;
 
   public constructor(private _http: Http,
@@ -16,11 +16,6 @@ export class AuthenticationService {
     this.actionUrl = _configuration.Server + 'auth/login';
     // set token if saved in local storage
     this.token = this.getToken();
-  }
-
-  private getToken(): string {
-    let userToken = JSON.parse(localStorage.getItem(this.TOKEN_KEY));
-    return userToken ? userToken.token : null;
   }
 
   public login(username: string, password: string): Observable<any> {
@@ -58,5 +53,10 @@ export class AuthenticationService {
     headers.append('x-access-token', this.getToken());
     headers.append('Content-Type', 'application/json');
     return headers;
+  }
+
+  private getToken(): string {
+    let userToken = JSON.parse(localStorage.getItem(this.TOKEN_KEY));
+    return userToken ? userToken.token : null;
   }
 }

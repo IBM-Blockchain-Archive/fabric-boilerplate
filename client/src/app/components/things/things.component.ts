@@ -13,7 +13,7 @@ export class ThingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._thingsService.getThings().subscribe(things => {
+    this._thingsService.getThingsByUser().subscribe(things => {
       console.log(things);
       this.things = things;
     });

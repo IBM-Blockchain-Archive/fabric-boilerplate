@@ -17,7 +17,7 @@ export class ThingService {
     this.headers = _authenticationService.createAuthorizationHeader();
   }
 
-  getThings() {
+  public getThingsByUser() {
     let user: any = JSON.parse(localStorage.getItem('currentUser')).user;
     return this._http
       .get(this.actionUrl + '/' + user.userID, {headers: this.headers})
