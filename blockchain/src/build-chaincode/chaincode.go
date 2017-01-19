@@ -86,7 +86,7 @@ func (t *SimpleChaincode) GetQueryResult(stub shim.ChaincodeStubInterface, funct
 			return nil, err
 		}
 
-		return t.authenticateAsUser(stub, user, args[1])
+		return t.authenticateAsUser(stub, user, args[1]), nil
 	} else if functionName == "getThingsByUserID" {
 		thingsByUserID, err := util.GetThingsByUserID(stub, args[0])
 		if err != nil {
