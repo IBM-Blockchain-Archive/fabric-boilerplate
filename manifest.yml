@@ -2,14 +2,14 @@ applications:
 - path: server
   memory: 512M
   instances: 1
-  name: testbp-server
-  host: testbp-server
+  name: "app name"
+  host: "host name"
   disk_quota: 1024M
   command: "NODE_ENV=production node dist/app.js"
 - path: client/dist
   memory: 64M
-  name: testbp-client
-  host: testbp-client
+  name: "app name"
+  host: "host name"
   buildpack: https://github.com/cloudfoundry/staticfile-buildpack.git
 services:
-- test-bp
+  "service name"
