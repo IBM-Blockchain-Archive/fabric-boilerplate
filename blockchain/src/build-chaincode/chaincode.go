@@ -64,31 +64,36 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, functionName 
 func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, functionName string, args []string) ([]byte, error) {
 	logger.Infof("Query is running " + functionName)
 
-	if functionName == "getUser" {
-		consumer, err := util.GetUser(stub, args[0])
+	result, err := t.GetQueryResult(stub, functionName, args)
+	if err != nil {
+		return nil, err
+	}
 
+	return json.Marshal(result)
+}
+
+func (t *SimpleChaincode) GetQueryResult(stub shim.ChaincodeStubInterface, functionName string, args []string) (interface{}, error) {
+	if functionName == "getUser" {
+		user, err := util.GetUser(stub, args[0])
 		if err != nil {
 			return nil, err
 		}
 
-		return json.Marshal(consumer)
+		return user, nil
 	} else if functionName == "authenticateAsUser" {
-		user, _ := util.GetUser(stub, args[0])
+		user, err := util.GetUser(stub, args[0])
+		if err != nil {
+			return nil, err
+		}
 
-		return json.Marshal(t.authenticateAsUser(stub, user, args[1]))
+		return t.authenticateAsUser(stub, user, args[1]), nil
 	} else if functionName == "getThingsByUserID" {
 		thingsByUserID, err := util.GetThingsByUserID(stub, args[0])
-
 		if err != nil {
 			return nil, errors.New("could not retrieve things by user id: " + args[0] + ", reason: " + err.Error())
 		}
 
-		thingsAsBytes, err := json.Marshal(thingsByUserID)
-		if err != nil {
-			return nil, errors.New("Could not marshal thingsByUserID result, reason: " + err.Error())
-		}
-
-		return thingsAsBytes, nil
+		return thingsByUserID, nil
 	}
 
 	return nil, errors.New("Received unknown query function name")
