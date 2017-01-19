@@ -5,7 +5,7 @@ import {Routes} from './routes';
 import {BlockchainFactory} from './blockchain/BlockchainFactory';
 import {LoggerFactory} from './utils/LoggerFactory';
 import {Config} from './config';
-import {NextFunction} from 'express';
+import {Request, Response, NextFunction, Router} from 'express';
 import {DeployPolicy} from './blockchain/Blockchain';
 import {useExpressServer, useContainer} from 'routing-controllers';
 import * as morgan from 'morgan';
@@ -28,8 +28,8 @@ class App {
             logger.error(error.stack);
         });
 
-        app.use((req: any, res: any, next: NextFunction) => {
-            req.blockchain = blockchainService;
+        app.use((request: any, response: any, next: NextFunction) => {
+            request.blockchain = blockchainService;
             next();
         });
 
@@ -47,7 +47,7 @@ class App {
         app.use('/', express.static(path.join(__dirname, '../client/dist')));
         app.use(morgan(null, <morgan.Options> {
             stream: {
-                skip: (req: any, res: any) => res.statusCode < 400,
+                skip: (request: Request, response: Response) => response.statusCode < 400,
                 write: (message: string): void => {
                     logger.debug(message);
                 }
@@ -55,7 +55,7 @@ class App {
         }));
 
         // routes
-        const expressRouter = express.Router();
+        const expressRouter: Router = express.Router();
         new Routes(blockchainService, logger).register(expressRouter);
         app.use('/', expressRouter);
 

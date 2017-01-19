@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
   public login(username: string, password: string) {
     this._authenticationService.login(username, password)
       .subscribe(result => {
-        if (result === true) {
+        if (result) {
           this._router.navigate(['./things']);
         }
       });

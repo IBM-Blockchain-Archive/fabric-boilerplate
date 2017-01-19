@@ -8,16 +8,16 @@ import {CORSMiddleware} from '../../middleware/CORSMiddleware';
 @UseBefore(UserAuthenticatorMiddleware, CORSMiddleware)
 export class ThingsController {
     @Get('/:id')
-    public getThingsByUserID(@Param('id') userID: string, @Req() req: any): any {
-        let enrollmentID = new JSONWebToken(req).getUserID();
+    public getThingsByUserID(@Param('id') userID: string, @Req() request: any): any {
+        let enrollmentID = new JSONWebToken(request).getUserID();
 
-        return req.blockchain.query('getThingsByUserID', [userID], enrollmentID);
+        return request.blockchain.query('getThingsByUserID', [userID], enrollmentID);
     }
 
     @Post('/')
-    public post(@Body() thing: Thing, @Req() req: any): any {
-        let enrollmentID = new JSONWebToken(req).getUserID();
+    public post(@Body() thing: Thing, @Req() request: any): any {
+        let enrollmentID = new JSONWebToken(request).getUserID();
 
-        return req.blockchain.invoke('createThing', [JSON.stringify(thing)], enrollmentID);
+        return request.blockchain.invoke('createThing', [JSON.stringify(thing)], enrollmentID);
     }
 }
