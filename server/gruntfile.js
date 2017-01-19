@@ -63,7 +63,6 @@ module.exports = function (grunt) {
     });
 
     require('load-grunt-tasks')(grunt);
-    grunt.loadNpmTasks('grunt-contrib-clean');
 
     grunt.registerTask('build', buildTasks);
     grunt.registerTask('default', ['build', 'concurrent:run']);
