@@ -1,1 +1,6 @@
-node_modules
+node_modules/
+client/assets/node_modules/
+src/build-chaincode/build-chaincode
+src/build-chaincode/vendor/
+blockchain/deployBluemix/credentials.json
+*.log

@@ -1,5 +1,5 @@
 // TO DEPLOY ON BLUEMIX MANUALLY
-// NODE_ENV=production SERVICE=Blockchain-test DEPLOYANDEXIT=true GOPATH=$(pwd) GPRC_TRACE=all DEBUG=hfc node app.js
+// NODE_ENV=production SERVICE=Blockchain-bp DEPLOYANDEXIT=true GOPATH=$(pwd) GPRC_TRACE=all DEBUG=hfc node app.js
 "use strict";
 const hfc = require('hfc');
 //const hfc = require('./hfc-patched'); // !!!
@@ -46,8 +46,8 @@ function init() {
         logger.info("[SDK] Running in bluemix mode");
         chain.setDevMode(false);
         chain.setECDSAModeForGRPC(true);
-        chain.setDeployWaitTime(300);
-        chain.setInvokeWaitTime(20);
+        chain.setDeployWaitTime(180);
+        chain.setInvokeWaitTime(5);
 
         process.env['GRPC_SSL_CIPHER_SUITES'] = 'ECDHE-RSA-AES128-GCM-SHA256:' +
             'ECDHE-RSA-AES128-SHA256:' +
@@ -72,7 +72,6 @@ function init() {
         });
     } else {
         logger.info("[SDK] Running in local mode");
-//        chain.setDeployWaitTime(60);
         chain.setMemberServicesUrl("grpc://"+ca.url);
         logger.debug("[SDK] CA:", "grpc://"+ca.url);
         chain.addPeer("grpc://"+peer.discovery_host+":"+peer.discovery_port);
@@ -122,7 +121,7 @@ var registerUsers = function(){
             // User is not enrolled yet, so perform both registration and enrollment
             var registrationRequest = {
                 enrollmentID: user.id,
-                affiliation: "institution_a",
+                affiliation: onBluemix ? "group1" : "institution_a",
                 account: onBluemix ? "group1" : ""
             };
 
