@@ -1,8 +1,8 @@
 module.exports = function (grunt) {
     "use strict";
 
-    var outDir = 'dist';
-    var buildTasks = ['newer:tslint', 'clean', 'concurrent:build'];
+    let outDir = 'dist';
+    let buildTasks = ['newer:tslint', 'clean', 'concurrent:build'];
 
     grunt.initConfig({
         watch: {
@@ -31,13 +31,13 @@ module.exports = function (grunt) {
                 logConcurrentOutput: true
             },
             run: ['nodemon', 'watch'],
-            build: ['ts', 'copy']
+            build: ['ts']
         },
         nodemon: {
             dev: {
                 script: outDir + '/app.js',
                 watch: [outDir],
-                delay: 1000,
+                delay: 2000,
                 ext: 'js',
                 legacyWatch: true,
                 options: {
@@ -46,18 +46,6 @@ module.exports = function (grunt) {
                         NODE_ENV: 'development'
                     }
                 }
-            }
-        },
-        copy: {
-            default: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: 'src',
-                        src: ['resources/*'],
-                        dest: 'dist/'
-                    }
-                ]
             }
         }
     });
