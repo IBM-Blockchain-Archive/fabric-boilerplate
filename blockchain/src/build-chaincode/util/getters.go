@@ -51,7 +51,7 @@ func GetUser(stub shim.ChaincodeStubInterface, username string) (entities.User, 
 
 	var user entities.User
 	if err = json.Unmarshal(userAsBytes, &user); err != nil {
-		return user, errors.New("Cannot get user, reason: " + err.Error())
+		return entities.User{}, errors.New("Cannot get user, reason: " + err.Error())
 	}
 
 	return user, nil

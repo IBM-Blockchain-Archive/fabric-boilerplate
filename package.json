@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@gitlab.com/Ewold/ts-refactured-bp.git"
+    "url": "git+ssh://git@github.ibm.com:CICBlockchain/blockchain-boilerplate.git"
   },
   "keywords": [
     "hyperledger",
@@ -34,7 +34,7 @@
   "author": "IBM Client Innovation Center Benelux",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://gitlab.com/Ewold/ts-refactured-bp/issues"
+    "url": "https://github.ibm.com/CICBlockchain/blockchain-boilerplate/issues"
   },
-  "homepage": "https://gitlab.com/Ewold/ts-refactured-bp#README",
+  "homepage": "https://github.ibm.com/CICBlockchain/blockchain-boilerplate"
 }

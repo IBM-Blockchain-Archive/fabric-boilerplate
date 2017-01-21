@@ -58,7 +58,7 @@ Notes:
 6. `docker-compose build`  
 
 ## Tests
-Chaincode, angular and NodeJS should all be unit tested. We included a simple test for the chaincode and will add other frameworks later. Run with `npm run test`.
+Chaincode, angular and NodeJS should all be unit tested. We included a simple test for the chaincode and will add other frameworks later. Run with `npm test`. The quickest way to write chaincode is probably to start with a test.
 
 # Troubleshooting
 - `no rows in result set`: The memberservice remembers something outdated. Stop your app and run `./clean.sh`.

@@ -1,15 +1,15 @@
 applications:
-- name: testbp-server
-  host: testbp-server
+- name: APPNAME-server
+  host: APPNAME-api
   path: server
   memory: 512M
   instances: 1
   disk_quota: 1024M
   command: "NODE_ENV=production node dist/app.js"
-- name: testbp-client
-  host: testbp-client
+- name: APPNAME-client
+  host: APPNAME
   path: client/dist
   memory: 64M
   buildpack: https://github.com/cloudfoundry/staticfile-buildpack.git
 services:
-- test-bp
+- BLOCKCHAINSERVICENAME

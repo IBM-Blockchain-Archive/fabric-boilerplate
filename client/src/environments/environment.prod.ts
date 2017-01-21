@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://testbp-client.eu-gb.mybluemix.net/'
+  apiUrl: 'http://APPNAME-api.eu-gb.mybluemix.net/'
 };
