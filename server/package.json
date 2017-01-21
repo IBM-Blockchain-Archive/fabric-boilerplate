@@ -10,6 +10,7 @@
     "start": "nodemon dist/app.js",
     "deploy": "node dist/deploy.js",
     "test": "mocha -R nyan -r ts-node/register test/*.ts",
+    "e2e": "mocha -R nyan -r ts-node/register test/e2e/*.ts",
     "nodemon": "nodemon"
   },
   "dependencies": {
@@ -41,6 +42,7 @@
   "devDependencies": {
     "@types/chai": "^3.4.34",
     "@types/mocha": "^2.2.38",
+    "@types/supertest": "^2.0.0",
     "chai": "^3.5.0",
     "grunt": "^1.0.1",
     "grunt-concurrent": "^2.3.1",
@@ -53,6 +55,7 @@
     "load-grunt-tasks": "^3.5.2",
     "mocha": "^3.2.0",
     "nodemon": "^1.11.0",
+    "supertest": "^2.0.1",
     "ts-node": "^2.0.0",
     "tslint": "^3.12.1",
     "tslint-microsoft-contrib": "^2.0.12"

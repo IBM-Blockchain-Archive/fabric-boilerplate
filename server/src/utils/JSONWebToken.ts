@@ -6,18 +6,25 @@ export class JSONWebToken {
   private decodedToken: any;
 
   public constructor(request: Request) {
-    this.decodedToken = jwt.decode(request.headers['x-access-token']);
+    this.decodedToken = jwt.decode(JSONWebToken.getTokenFromRequest(request));
   }
 
   public getUsername(): string {
-    return this.decodedToken.username;
+    return this.decodedToken ? this.decodedToken.username : null;
   }
 
   public getUserID(): string {
-    if (this.decodedToken.userID) {
-      return this.decodedToken.userID;
-    } else {
-      return undefined;
+    return this.decodedToken ? this.decodedToken.userID : null;
+  }
+
+  public static getTokenFromRequest(request: Request): string {
+    let token = request.headers['x-access-token'];
+    if (!token) {
+      token = request.body ? request.body.token : null;
     }
+    if (!token) {
+      token = request.query ? request.query.token : null;
+    }
+    return token;
   }
 }

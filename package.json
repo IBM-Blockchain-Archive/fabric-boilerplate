@@ -18,6 +18,8 @@
     "govend": "docker-compose run utils bash -c 'cd blockchain/src/build-chaincode && GOPATH=$(pwd)/../.. govend -rv' && sudo chown -R $USER blockchain",
     "test-go": "docker-compose run utils bash -c 'cd blockchain/src/build-chaincode && GOPATH=$(pwd)/../.. go test'",
     "test-server": "docker-compose build server && docker-compose run server bash -c 'npm test'",
+    "test-client": "docker-compose run -p 9876:9876 client bash -c 'npm test'",
+    "test-e2e": "docker-compose exec server bash -c 'npm run e2e'",
     "test": "npm -s run test-server && npm -s run test-go",
     "cf": "docker build --tag cf . && docker run -it --rm -v $(pwd)/server/resources:/usr/src/app/server/resources cf"
   },
