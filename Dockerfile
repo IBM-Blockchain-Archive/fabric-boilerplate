@@ -47,7 +47,7 @@ RUN cd blockchain/src/build-chaincode && govend -rtv
 
 # Build server and client
 RUN cd server && grunt build
-RUN cd client && ng build --env=prod
+RUN cd client && ng build --prod
 
 # Set CloudFoundry url
 RUN cf api $API_ENDPOINT

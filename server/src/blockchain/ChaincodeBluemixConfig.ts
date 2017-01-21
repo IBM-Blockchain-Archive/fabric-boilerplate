@@ -3,7 +3,7 @@ import { ChaincodeEnvironmentConfiguration, UserConfig } from './ChaincodeEnviro
 export class ChaincodeBluemixConfig {
   public getConfiguration(): ChaincodeEnvironmentConfiguration {
     const credentials = require('../../resources/credentials.json').credentials;
-    const clients = require('../../resources/testData.json').clients;
+    const users = require('../../resources/testData.json').users;
     let env = <ChaincodeEnvironmentConfiguration>{
       network: credentials,
       chaincode: {
@@ -15,9 +15,10 @@ export class ChaincodeBluemixConfig {
       }
     };
     // Add users from testdata
-    env.network.users = env.network.users.concat(clients.map((client: any) => {
+    env.network.users = env.network.users.concat(users.map((user: any) => {
           return <UserConfig>{
-            enrollId: client.username,
+            enrollId: user.username,
+            attributes: user.attributes,
             role: 'client',
             affiliation: 'group1'
           };

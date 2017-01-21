@@ -4,9 +4,12 @@
       "userID": "john",
       "username": "john",
       "password": "passw0rd",
-      "attributes": {
-        "userID": "john"
-      }
+      "attributes": [
+        {
+          "name": "userID",
+          "value": "john"
+        }
+      ]
     }
   ],
   "things": [

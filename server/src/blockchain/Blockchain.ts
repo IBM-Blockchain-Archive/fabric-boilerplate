@@ -158,10 +158,8 @@ export abstract class Blockchain {
           enrollmentID: userToRegister.enrollId,
           affiliation: userToRegister.affiliation,
           account: '',
-          roles: [userToRegister.role],
-          attributes: [
-            {name: 'userID', value: userToRegister.attributes.userID}
-          ]
+          attributes: userToRegister.attributes || [],
+          roles: [userToRegister.role]
         };
 
         this.chain.registerAndEnroll(registrationRequest, (err: Error) => {

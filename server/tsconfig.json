@@ -6,7 +6,7 @@
         "removeComments": true,
         "sourceMap": true,
         "noLib": false,
-        "outDir": "server",
+        "outDir": "dist",
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true
     },

@@ -33,7 +33,7 @@ export class TestData {
     const enrollmentId = 'WebAppAdmin';
 
     return this.blockchainClient.invoke(functionName, args, enrollmentId).then((result: any) => {
-      this.logger.info('[TestData] Created invoke to add testdata');
+      this.logger.info('[TestData] Added testdata');
     }).catch((err: any) => {
       this.logger.error(err);
     });

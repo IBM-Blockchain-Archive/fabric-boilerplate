@@ -7,8 +7,8 @@
     "node": "~6.9.1"
   },
   "scripts": {
-    "start": "nodemon server/app.js",
-    "deploy": "node server/deploy.js",
+    "start": "nodemon dist/app.js",
+    "deploy": "node dist/deploy.js",
     "nodemon": "nodemon"
   },
   "dependencies": {
