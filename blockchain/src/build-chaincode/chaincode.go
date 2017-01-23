@@ -17,7 +17,7 @@ var logger = shim.NewLogger("fabric-boilerplate")
 //	SimpleChaincode - A blank struct for use with Shim (An IBM Blockchain included go file used for get/put state
 //					  and other IBM Blockchain functions)
 //==============================================================================================================================
-type SimpleChaincode struct {
+type Chaincode struct {
 }
 
 //==============================================================================================================================
@@ -25,7 +25,7 @@ type SimpleChaincode struct {
 //  		 initial arguments passed are passed on to the called function.
 //==============================================================================================================================
 
-func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, functionName string, args []string) ([]byte, error) {
+func (t *Chaincode) Invoke(stub shim.ChaincodeStubInterface, functionName string, args []string) ([]byte, error) {
 	logger.Infof("Invoke is running " + functionName)
 
 	if functionName == "init" {
@@ -45,7 +45,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, functionName 
 //	Query - Called on chaincode query. Takes a function name passed and calls that function. Passes the
 //  		initial arguments passed are passed on to the called function.
 //=================================================================================================================================
-func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, functionName string, args []string) ([]byte, error) {
+func (t *Chaincode) Query(stub shim.ChaincodeStubInterface, functionName string, args []string) ([]byte, error) {
 	logger.Infof("Query is running " + functionName)
 
 	if functionName == "get_client" {
@@ -88,7 +88,7 @@ func main() {
 	logLevel, _ := shim.LogLevel(os.Getenv("SHIM_LOGGING_LEVEL"))
 	shim.SetLoggingLevel(logLevel)
 
-	err := shim.Start(new(SimpleChaincode))
+	err := shim.Start(new(Chaincode))
 	if err != nil {
 		fmt.Printf("Error starting SimpleChaincode: %s", err)
 	}
@@ -98,7 +98,7 @@ func main() {
 //  Init Function - Called when the user deploys the chaincode
 //==============================================================================================================================
 
-func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *Chaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	return nil, nil
 }
 
@@ -106,7 +106,7 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 //  Invoke Functions
 //==============================================================================================================================
 
-func (t *SimpleChaincode) add_user(stub shim.ChaincodeStubInterface, index string, userJSONObject string) error {
+func (t *Chaincode) add_user(stub shim.ChaincodeStubInterface, index string, userJSONObject string) error {
 	id, err := util.WriteIDToBlockchainIndex(stub, util.UsersIndexName, index)
 	if err != nil {
 		return errors.New("Error creating new id for user " + index)
@@ -120,7 +120,7 @@ func (t *SimpleChaincode) add_user(stub shim.ChaincodeStubInterface, index strin
 	return nil
 }
 
-func (t *SimpleChaincode) add_testdata(stub shim.ChaincodeStubInterface, testDataAsJson string) error {
+func (t *Chaincode) add_testdata(stub shim.ChaincodeStubInterface, testDataAsJson string) error {
 	var testData entities.TestData
 	err := json.Unmarshal([]byte(testDataAsJson), &testData)
 	if err != nil {
@@ -144,7 +144,7 @@ func (t *SimpleChaincode) add_testdata(stub shim.ChaincodeStubInterface, testDat
 	return nil
 }
 
-func (t *SimpleChaincode) storeObjectInChain(chaincodeStub shim.ChaincodeStubInterface, indexName string, testDataElement entities.TestDataElement) error {
+func (t *Chaincode) storeObjectInChain(chaincodeStub shim.ChaincodeStubInterface, indexName string, testDataElement entities.TestDataElement) error {
 	testDataElementAsJSON, err := json.Marshal(testDataElement)
 	if err != nil {
 		return errors.New(fmt.Sprintf("Error marshalling %T ", testDataElementAsJSON))
@@ -169,7 +169,7 @@ func (t *SimpleChaincode) storeObjectInChain(chaincodeStub shim.ChaincodeStubInt
 //		Query Functions
 //==============================================================================================================================
 
-func (t *SimpleChaincode) authenticateAsClient(stub shim.ChaincodeStubInterface, client entities.Client, passwordHash string) (entities.ConsumerAuthenticationResult) {
+func (t *Chaincode) authenticateAsClient(stub shim.ChaincodeStubInterface, client entities.Client, passwordHash string) (entities.ConsumerAuthenticationResult) {
 	if client == (entities.Client{}) {
 		fmt.Println("User not found")
 		return entities.ConsumerAuthenticationResult{

@@ -8,7 +8,7 @@ import (
 )
 
 func Test_WillReturnThatUserIsUnauthenticatedWhenUserDoesNotExist(t *testing.T) {
-	scc := new(SimpleChaincode)
+	scc := new(Chaincode)
 	resultAsBytes, err := scc.Query(shim.NewMockStub("ex02", scc), "authenticateAsClient", []string{"john", "passw0rd"})
 
 	if err != nil {
@@ -27,7 +27,7 @@ func Test_WillReturnThatUserIsUnauthenticatedWhenUserDoesNotExist(t *testing.T) 
 }
 
 func Test_WillReturnThatUserIsAuthenticatedWhenUserExists(t *testing.T) {
-	scc := new(SimpleChaincode)
+	scc := new(Chaincode)
 	stub := shim.NewMockStub("ex02", scc)
 	user := entities.Client{
 		Hash: "passwordHash",
