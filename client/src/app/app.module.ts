@@ -5,6 +5,8 @@ import {HttpModule} from '@angular/http';
 import {routing, appRoutingProviders} from './app.routing';
 import {Configuration} from './app.constants'
 
+import {AuthGuard} from './guards/index';
+
 import {AppComponent} from './app.component';
 import {LoginComponent} from './components/login/login.component';
 import {ThingsComponent} from './components/things/things.component';
@@ -28,6 +30,7 @@ import {AuthenticationService} from './services/authentication.service'
     appRoutingProviders,
     Configuration,
     AuthenticationService,
+    AuthGuard,
     ThingService
   ],
   bootstrap: [AppComponent]
