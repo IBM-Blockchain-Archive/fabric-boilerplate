@@ -12,12 +12,13 @@ import {AuthenticationService} from './../../services/authentication.service'
 export class LoginComponent implements OnInit {
   title = 'app works';
 
-  constructor(private _http: Http,
-              private _router: Router,
+  constructor(private _router: Router,
               private _authenticationService: AuthenticationService) {
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
+    // reset login status
+    this._authenticationService.logout();
   }
 
   public login(username: string, password: string) {
