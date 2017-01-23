@@ -7,7 +7,16 @@ import (
 	"build-chaincode/entities"
 )
 
-func GetThingsByClientID(stub shim.ChaincodeStubInterface, clientID string) ([]string, error) {
+func GetCurrentBlockchainUser(stub shim.ChaincodeStubInterface) (entities.User, error) {
+	userIDAsBytes, err := stub.ReadCertAttribute("userID")
+	if err != nil {
+		return entities.User{}, errors.New("Could not retrieve user by certificate. Reason: " + err.Error())
+	}
+
+	return GetUser(stub, string(userIDAsBytes))
+}
+
+func GetThingsByUserID(stub shim.ChaincodeStubInterface, userID string) ([]string, error) {
 	thingsIndex, err := GetIndex(stub, ThingsIndexName)
 	if err != nil {
 		return []string{}, errors.New("Unable to retrieve thingsIndex, reason: " + err.Error())
@@ -26,7 +35,7 @@ func GetThingsByClientID(stub shim.ChaincodeStubInterface, clientID string) ([]s
 			return []string{}, errors.New("Error while unmarshalling thingAsBytes, reason: " + err.Error())
 		}
 
-		if thing.ClientID == clientID {
+		if thing.UserID == userID {
 			thingIDs = append(thingIDs, thing.ThingID)
 		}
 	}
@@ -34,44 +43,41 @@ func GetThingsByClientID(stub shim.ChaincodeStubInterface, clientID string) ([]s
 	return thingIDs, nil
 }
 
-func GetClient(stub shim.ChaincodeStubInterface, username string) (entities.Client, error) {
-	consumerAsBytes, err := stub.GetState(username)
-
+func GetUser(stub shim.ChaincodeStubInterface, username string) (entities.User, error) {
+	userAsBytes, err := stub.GetState(username)
 	if err != nil {
-		return entities.Client{}, errors.New("Could not retrieve information for this client")
+		return entities.User{}, errors.New("Could not retrieve information for this user")
 	}
 
-	var consumer entities.Client
-
-	err = json.Unmarshal(consumerAsBytes, &consumer)
-	if err != nil {
-		return entities.Client{}, errors.New("User not a client user, reason: " + err.Error())
+	var user entities.User
+	if err = json.Unmarshal(userAsBytes, &user); err != nil {
+		return entities.User{}, errors.New("Cannot get user, reason: " + err.Error())
 	}
 
-	return consumer, nil
+	return user, nil
 }
 
-func GetAllClients(stub shim.ChaincodeStubInterface) ([]entities.Client, error) {
-	clientsIndex, err := GetIndex(stub, ClientsIndexName)
+func GetAllUsers(stub shim.ChaincodeStubInterface) ([]entities.User, error) {
+	usersIndex, err := GetIndex(stub, UsersIndexName)
 	if err != nil {
-		return []entities.Client{}, errors.New("Could not retrieve clientIdex, reason: " + err.Error())
+		return []entities.User{}, errors.New("Could not retrieve userIndex, reason: " + err.Error())
 	}
 
-	var clients []entities.Client
-	for _, clientID := range clientsIndex {
-		clientAsBytes, err := stub.GetState(clientID)
+	var users []entities.User
+	for _, userID := range usersIndex {
+		userAsBytes, err := stub.GetState(userID)
 		if err != nil {
-			return []entities.Client{}, errors.New("Could not retrieve client with ID: " + clientID + ", reason: " + err.Error())
+			return []entities.User{}, errors.New("Could not retrieve user with ID: " + userID + ", reason: " + err.Error())
 		}
 
-		var client entities.Client
-		err = json.Unmarshal(clientAsBytes, &client)
+		var user entities.User
+		err = json.Unmarshal(userAsBytes, &user)
 		if err != nil {
-			return []entities.Client{}, errors.New("Error while unmarshalling client, reason: " + err.Error())
+			return []entities.User{}, errors.New("Error while unmarshalling user, reason: " + err.Error())
 		}
 
-		clients = append(clients, client)
+		users = append(users, user)
 	}
 
-	return clients, nil
+	return users, nil
 }

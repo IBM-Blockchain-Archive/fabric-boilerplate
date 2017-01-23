@@ -3,7 +3,14 @@
   "version": "0.1.0",
   "description": "Webapplication built on top of Hyperledger Fabric",
   "main": "docker-compose up",
-  "os" : [ "darwin", "linux" ],
+  "os": [
+    "darwin",
+    "linux"
+  ],
+  "engines": {
+    "npm": "~3.10.8",
+    "node": "~6.9.1"
+  },
   "scripts": {
     "start": "docker-compose up",
     "install": "npm run getbaseimage && npm run govend && docker-compose pull && docker-compose build",
@@ -14,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@gitlab.com/Ewold/ts-refactured-bp.git"
+    "url": "git+ssh://git@github.ibm.com:CICBlockchain/blockchain-boilerplate.git"
   },
   "keywords": [
     "hyperledger",
@@ -27,7 +34,7 @@
   "author": "IBM Client Innovation Center Benelux",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://gitlab.com/Ewold/ts-refactured-bp/issues"
+    "url": "https://github.ibm.com/CICBlockchain/blockchain-boilerplate/issues"
   },
-  "homepage": "https://gitlab.com/Ewold/ts-refactured-bp#README"
+  "homepage": "https://github.ibm.com/CICBlockchain/blockchain-boilerplate"
 }

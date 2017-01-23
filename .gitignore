@@ -2,3 +2,4 @@
 .idea
 *.log
 npm-debug.log.*
+server/server

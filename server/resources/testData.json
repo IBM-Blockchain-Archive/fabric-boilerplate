@@ -1,16 +1,27 @@
 {
-  "clients": [
+  "users": [
     {
-      "consumerID": "SJe4b6gZl",
+      "userID": "john",
       "username": "john",
-      "password": "passw0rd"
+      "password": "passw0rd",
+      "attributes": [
+        {
+          "name": "userID",
+          "value": "john"
+        }
+      ]
     }
   ],
   "things": [
     {
-      "thingID": "871694840003082547",
-      "clientID": "SJe4b6gZl",
-      "someParameter": "8716948000003"
+      "thingID": "1",
+      "userID": "john",
+      "someProperty": "8716948000003"
+    },
+    {
+      "thingID": "2",
+      "userID": "john",
+      "someProperty": "124914266456"
     }
   ]
 }

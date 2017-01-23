@@ -11,12 +11,12 @@ type Users struct {
 }
 
 func (t *Users) GetAll() (entities.Users, error) {
-	clients, err := util.GetAllClients(t.ChaincodeStub)
+	users, err := util.GetAllUsers(t.ChaincodeStub)
 	if err != nil {
 		return entities.Users{}, err
 	}
 
 	return entities.Users {
-		Clients: clients,
+		Users: users,
 	}, nil
 }

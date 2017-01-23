@@ -9,13 +9,13 @@ import (
 
 func Test_WillReturnThatUserIsUnauthenticatedWhenUserDoesNotExist(t *testing.T) {
 	scc := new(Chaincode)
-	resultAsBytes, err := scc.Query(shim.NewMockStub("ex02", scc), "authenticateAsClient", []string{"john", "passw0rd"})
+	resultAsBytes, err := scc.Query(shim.NewMockStub("ex02", scc), "authenticateAsUser", []string{"john", "passw0rd"})
 
 	if err != nil {
 		t.Error(err.Error())
 	}
 
-	var result entities.ConsumerAuthenticationResult
+	var result entities.UserAuthenticationResult
 	err = json.Unmarshal(resultAsBytes, &result)
 	if err != nil {
 		t.Error(err.Error())
@@ -29,18 +29,18 @@ func Test_WillReturnThatUserIsUnauthenticatedWhenUserDoesNotExist(t *testing.T) 
 func Test_WillReturnThatUserIsAuthenticatedWhenUserExists(t *testing.T) {
 	scc := new(Chaincode)
 	stub := shim.NewMockStub("ex02", scc)
-	user := entities.Client{
+	user := entities.User{
 		Hash: "passwordHash",
 		Username: "john",
 	}
 	stub.State[user.Username], _ = json.Marshal(user)
-	resultAsBytes, err := scc.Query(stub, "authenticateAsClient", []string{user.Username, user.Hash})
+	resultAsBytes, err := scc.Query(stub, "authenticateAsUser", []string{user.Username, user.Hash})
 
 	if err != nil {
 		t.Error(err.Error())
 	}
 
-	var result entities.ConsumerAuthenticationResult
+	var result entities.UserAuthenticationResult
 	err = json.Unmarshal(resultAsBytes, &result)
 	if err != nil {
 		t.Error(err.Error())

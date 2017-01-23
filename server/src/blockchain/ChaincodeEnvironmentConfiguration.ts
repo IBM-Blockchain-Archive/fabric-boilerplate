@@ -26,9 +26,15 @@ export interface UserConfig {
   enrollSecret?: string;
   role?: string;
   affiliation?: string;
+  attributes?: UserAttribute[];
 }
 
 export interface PeerConfig {
   discovery_host: string;
   discovery_port: number;
+}
+
+export interface UserAttribute {
+  name: string;
+  value: string;
 }

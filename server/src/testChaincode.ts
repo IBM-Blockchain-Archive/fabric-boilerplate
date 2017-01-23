@@ -12,7 +12,7 @@ class TestChaincode {
 
         let cid = await blockchain.init(DeployPolicy.NEVER);
         let client = await blockchain.createClient(cid);
-        return client.query('getHomeUsage', ['SJe4b6gZl'], 'jeroen');
+        return client.query('getHomeUsage', ['passw0rd'], 'john');
     }
 }
 
