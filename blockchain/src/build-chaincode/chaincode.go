@@ -83,7 +83,7 @@ func (t *SimpleChaincode) GetQueryResult(stub shim.ChaincodeStubInterface, funct
 	} else if functionName == "authenticateAsUser" {
 		user, err := util.GetUser(stub, args[0])
 		if err != nil {
-			return nil, err
+			logger.Infof("User with id %v not found.", args[0])
 		}
 
 		return t.authenticateAsUser(stub, user, args[1]), nil

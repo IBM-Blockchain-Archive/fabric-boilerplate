@@ -2,13 +2,14 @@ import {Injectable} from '@angular/core';
 import {Http, Response, Headers} from '@angular/http';
 import {Observable} from 'rxjs';
 import {Configuration} from '../app.constants';
-import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/map';
 
 @Injectable()
 export class AuthenticationService {
   public actionUrl: string;
   public token: string;
   private TOKEN_KEY = 'token';
+  private USER_KEY = 'currentUser';
   public user: any;
 
   public constructor(private _http: Http,
@@ -21,30 +22,29 @@ export class AuthenticationService {
   public login(username: string, password: string): Observable<any> {
     return this._http.post(this.actionUrl, {username: username, password: password})
       .map((response: Response) => {
-        let user = response.json() && response.json().user;
-        // +login successful if there's a jwt token in the response
-        let token = response.json() && response.json().token;
-        if (token) {
-          // set token property
-          this.token = token;
-
-          // store username and jwt token in local storage to keep user logged in between page refreshes
-          localStorage.setItem(this.TOKEN_KEY, JSON.stringify({token}));
-          localStorage.setItem('currentUser', JSON.stringify({user}));
-
-          // return true to indicate successful +login
-          return true;
-        } else {
-          // return false to indicate failed +login
+        if (!response || !response.json || !response.json()) {
           return false;
         }
+
+        let user = response.json().user;
+        let token = response.json().token;
+        if (!token) {
+          return false; // Login unsuccessful if there's no token in the response
+        }
+        this.token = token;
+
+        // store username and jwt token in local storage to keep user logged in between page refreshes
+        localStorage.setItem(this.TOKEN_KEY, JSON.stringify({token}));
+        localStorage.setItem(this.USER_KEY,  JSON.stringify({user}));
+
+        return true;
       }).catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }
 
+  // clear token and remove user from local storage to log user out
   public logout(): void {
-    // clear token remove user from local storage to log user out
     this.token = null;
-    localStorage.removeItem('currentUser');
+    localStorage.removeItem(this.USER_KEY);
     localStorage.removeItem(this.TOKEN_KEY);
   }
 

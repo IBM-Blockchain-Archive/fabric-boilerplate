@@ -1,6 +1,9 @@
 # Use with docker-compose -f docker-compose.yml -f remote-blockchain.yml up.
 #
 # By overwriting the command with 'true' the container exits gracefully on startup
+#
+# NOTE: this is experimental and not thoroughly tested.
+#
 vp0:
   command: "true"
 

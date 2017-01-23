@@ -1,13 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {Headers, Http} from '@angular/http';
 import 'rxjs/add/operator/map';
-import {Router} from "@angular/router";
-import {AuthenticationService} from './../../services/authentication.service'
+import {Router} from '@angular/router';
+import {AuthenticationService} from '../../services/authentication.service';
 
 @Component({
   selector: 'app-login',
-  templateUrl: 'login.component.html',
-  styleUrls: ['login.component.css']
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
   title = 'app works';

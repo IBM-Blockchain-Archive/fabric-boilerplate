@@ -45,16 +45,13 @@ func GetThingsByUserID(stub shim.ChaincodeStubInterface, userID string) ([]strin
 
 func GetUser(stub shim.ChaincodeStubInterface, username string) (entities.User, error) {
 	userAsBytes, err := stub.GetState(username)
-
 	if err != nil {
 		return entities.User{}, errors.New("Could not retrieve information for this user")
 	}
 
 	var user entities.User
-
-	err = json.Unmarshal(userAsBytes, &user)
-	if err != nil {
-		return entities.User{}, errors.New("User not a user user, reason: " + err.Error())
+	if err = json.Unmarshal(userAsBytes, &user); err != nil {
+		return entities.User{}, errors.New("Cannot get user, reason: " + err.Error())
 	}
 
 	return user, nil

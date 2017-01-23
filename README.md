@@ -3,7 +3,7 @@ This is a boilerplate application to get you up and running quickly with your ow
 
 The boilerplate uses Hyperledger Fabric v0.6-developer-preview and HFC 0.6.5.
 
-This boilerplate has been created and is maintained by the IBM CIC Groningen Blockchain team.
+This boilerplate has been created and is maintained by the IBM CIC Benelux Blockchain team. 
 
 ## Prerequisites
 - Docker and docker-compose (https://www.docker.com/)
@@ -12,7 +12,7 @@ To have good support in your IDE it's advisable to also install TypeScript, TSLi
 
 ## Getting started
 1. `git clone` this repo  
-2. `cd` into the main directory and run `npm install`  (or, if you don't have npm, `./install.sh`).
+2. `cd` into the main directory and run `npm install` (or, if you don't have npm, `./install.sh`).
 
 This will pull the baseimage, download the Go dependencies of the chaincode and build your containers.
 
@@ -43,10 +43,11 @@ When you end docker-compose, the containers still exist. They keep state:
 
 So if you start the app again, you can use your old chaincode. If you want to clear, just run with `docker-compose --force-recreate`.  
 
-// TODO: chaincode deployment!
+Currently if you change the chaincode you will have to recreate the containers. In the future we will add a filewatcher for the chaincode as well.
 
-## Tests
-Chaincode, angular and NodeJS should all be unit tested. We will create a container that can run all of them.
+Notes:
+- if anyone updates the npm packages all developers have to rebuild the containers  
+- if you add angular components from your host environment, make sure you have the correct angular-cli version!  
 
 ## Updating the Fabric
 1. Update the HFC client in the package.json  
@@ -55,6 +56,9 @@ Chaincode, angular and NodeJS should all be unit tested. We will create a contai
 4. `npm run govend` from the project root  
 5. Update the baseimage and tag as latest
 6. `docker-compose build`  
+
+## Tests
+Chaincode, angular and NodeJS should all be unit tested. We included a simple test for the chaincode and will add other frameworks later. Run with `npm test`. The quickest way to write chaincode is probably to start with a test.
 
 # Troubleshooting
 - `no rows in result set`: The memberservice remembers something outdated. Stop your app and run `./clean.sh`.
@@ -65,6 +69,7 @@ Chaincode, angular and NodeJS should all be unit tested. We will create a contai
 HFC:
 
 - `handshake failed`: is there a `certificate.pem` in the `blockchain/src/build-chaincode` dir?
+- NPM modules not found: `docker-compose build`
 
 ## Running on Bluemix
 
@@ -77,13 +82,14 @@ The SDK needs to register and enroll an admin user and any other users you would
 The easiest way to deploy a chaincode is to do it from you local environment before you push the app to Bluemix. We made a script that deploys the chaincode and stores the chaincodeID in a file. After that you push the app to Bluemix (including the chaincodeID file), your app can interact with the chaincode.
 
 Perform the following steps to run the application on Bluemix:
-#### Credentials
+#### Credentials and urls
 - Create a Blockchain Service on Bluemix
 - Update the manifest.yml file in the root of the project:
     - replace the names and hosts of both servers. The values can be anything, as long as they are unique.
     - change the settings in `client/src/environments` to refer to the correct API endpoint of the server
     - replace the name of the service on the last line of the manifest. This should be the name of the Blockchain Service you just created.
 - Copy the credentials of the Blockchain Service and overwrite the credentials in `server/resources/credentials.json`. If you retrieve your Service Credentials from a [new console](https://new-console.ng.bluemix.net/#overview) instance of Bluemix then you will need to edit your credentials.json. Add `"credentials": {` to line 2 and then add a closing `}` to the final line.  Your finished payload should be 233 lines.  
+- If needed, change the cloudfoundry API url in the `Dockerfile`.
 - Delete the `resources/keyValStore-bluemix` directory if it exists, it contains keys to the previously used service.
 
 #### Deployment
@@ -92,7 +98,7 @@ Perform the following steps to run the application on Bluemix:
 - Open the dashboard of the blockchain service on Bluemix. Wait until you see the chaincode id appear on the `Network` tab. Ensure that it is running on all four peers and that all the way at the end it says `Up for x seconds/minutes`. After your initial deployment, each of the four peers should have two blocks - a genesis block and the deployed chaincode. If this is the case, then your chaincode has been deployed successfully!
 - Deploy app to Bluemix: cd up one level and do `cf push`, still from within the container.
 
-For assistance with the cloud foundry cli, visit the [cloud foundry](https://github.com/cloudfoundry/cli#downloads) repo. There are prerequisites for using the cf cli, such as homebrew.
+For assistance with the cloud foundry cli, visit the [cloud foundry](https://github.com/cloudfoundry/cli#downloads) repo.  
 
 After the app has been pushed to Bluemix, you can view the logs with:
 
@@ -104,21 +110,7 @@ Where NAME_OF_THE_APP is the app name you provided in the manifest.yml file.
 Hyperledger project:                https://www.hyperledger.org/    
 Official Hyperledger slack channel: https://hyperledgerproject.slack.com   
 IRC:                                #hyperledger on freenode.net    
-Working Group Meetings:             https://github.com/hyperledger/hyperledger/wiki/PublicMeetingCalendar    
-Wiki:                               https://github.com/hyperledger/hyperledger/wiki     
-Learn chaincode:                    https://github.com/IBM-Blockchain/learn-chaincode    
-HFC:                                https://www.npmjs.com/package/hfc/
-
-# Flow of the startup
-
-blockchainApp - starts different components of the blockchain sequentially:
-
-- A logger: will be the logger for the process
-- A blockchain: Will configure the blockchain and checks if the blockchain needs to be deployed on bluemix or not. It uses the following files:
-    - BlockchainFactory: determines if application is bluemix or not and start the following processes:
-        - BlockchainBluemix: deploys on bluemix
-        - BlockchainLocal: deploys locally
-    - ChaincodeBluemixConfig and ChaincodeLocalConfig
-        - both use ChaincodeEnviroment config to extend their own config.
-- A blockchainService: connects the node to the blockchain network, enrolls users who have the rights to invoke and query and check if a redeploy is needed.
-- Testdata: creates an instance of testdata. Testdata.js/.ts will use resources/testdata to invoke new testdata.
+Wiki:                               https://wiki.hyperledger.org/     
+HFC:                                https://www.npmjs.com/package/hfc/  
+Bluemix                             https://console.ng.bluemix.net/docs/  
+IBM on blockchain:                  https://www.ibm.com/blockchain/what-is-blockchain.html  

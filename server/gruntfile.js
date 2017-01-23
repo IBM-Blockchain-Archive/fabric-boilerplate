@@ -1,7 +1,7 @@
 module.exports = function (grunt) {
     "use strict";
 
-    var outDir = 'server';
+    var outDir = 'dist';
     var buildTasks = ['newer:tslint', 'clean', 'concurrent:build'];
 
     grunt.initConfig({
@@ -25,7 +25,7 @@ module.exports = function (grunt) {
                 src: ['src/**/*.ts', '!src/build-chaincode/**']
             }
         },
-        clean: ['./server'],
+        clean: ['./' + outDir],
         concurrent: {
             options: {
                 logConcurrentOutput: true
