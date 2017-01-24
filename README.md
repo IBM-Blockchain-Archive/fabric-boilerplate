@@ -1,14 +1,14 @@
 # Fabric boilerplate
-This is a boilerplate application to get you up and running quickly with your own blockchain application. With this boilerplate you get an application that you can run locally as well as on IBM Bluemix. There is a simple AngularJS frontend application, a NodeJS backend application and of course a blockchain network. Locally, the boilerplate starts up a blockchain network using Docker containers; on Bluemix you can use the Blockchain service.
+This is a boilerplate application to get you up and running quickly with your own blockchain application. With this boilerplate you get an application that you can run locally as well as on IBM Bluemix. There is a simple Angular frontend application, a NodeJS backend application and of course a blockchain network, all running in containers. Locally, the boilerplate starts up a blockchain network using Docker containers; on Bluemix you can use the Blockchain service.
 
-The boilerplate uses Hyperledger Fabric v0.6-developer-preview and HFC 0.6.5.
+The boilerplate uses Hyperledger Fabric v0.6.1-preview and HFC 0.6.5.
 
-This boilerplate has been created and is maintained by the IBM CIC Benelux Blockchain team. 
+It has been created and is maintained by the IBM CIC Benelux Blockchain team. Pull requests are more than welcome!
 
 ## Prerequisites
 - Docker and docker-compose (https://www.docker.com/)
 
-To have good support in your IDE it's advisable to also install TypeScript, TSLint and Golang.  
+To have good support in your IDE it's advisable to also install NPM, TypeScript, TSLint and Golang.
 
 ## Getting started
 1. `git clone` this repo  
@@ -47,7 +47,7 @@ Currently if you change the chaincode you will have to recreate the containers. 
 
 Notes:
 - if anyone updates the npm packages all developers have to rebuild the containers  
-- if you add angular components from your host environment, make sure you have the correct angular-cli version!  
+- if you add angular components from your host environment, make sure you have the correct angular-cli version! To be sure you can enter the client container and do it from there.
 
 ## Updating the Fabric
 1. Update the HFC client in the package.json  
@@ -58,7 +58,14 @@ Notes:
 6. `docker-compose build`  
 
 ## Tests
-Chaincode, angular and NodeJS should all be unit tested. We included a simple test for the chaincode and will add other frameworks later. Run with `npm test`. The quickest way to write chaincode is probably to start with a test.
+We support unittests for the server, client and chaincode. Especially for writing chaincode we recommend a test-driven approach to save time. You can find the commands to run the tests in the package.json in the root:  
+- `npm run test-go` (`blockchain/src/build-chaincode/chaincode_test.go` contains mock functions for the chaincode stub)
+- `npm run test-server` (see the `server/tests` directory)
+- `npm run test-client` (each component has its own test, courtesy of angular-cli)
+- `npm run test-e2e` (needs the application to be running, it hits the API endpoints for end to end testing)
+- `npm test` runs all the tests except for e2e.
+
+You can also run the server tests directly from the server directory with `npm test` and `npm run e2e`.
 
 # Troubleshooting
 - `no rows in result set`: The memberservice remembers something outdated. Stop your app and run `./clean.sh`.
@@ -86,16 +93,16 @@ Perform the following steps to run the application on Bluemix:
 - Create a Blockchain Service on Bluemix
 - Update the manifest.yml file in the root of the project:
     - replace the names and hosts of both servers. The values can be anything, as long as they are unique.
-    - change the settings in `client/src/environments` to refer to the correct API endpoint of the server
     - replace the name of the service on the last line of the manifest. This should be the name of the Blockchain Service you just created.
+- Change the settings in `client/src/environments` to refer to the correct API endpoint of the server
 - Copy the credentials of the Blockchain Service and overwrite the credentials in `server/resources/credentials.json`. If you retrieve your Service Credentials from a [new console](https://new-console.ng.bluemix.net/#overview) instance of Bluemix then you will need to edit your credentials.json. Add `"credentials": {` to line 2 and then add a closing `}` to the final line.  Your finished payload should be 233 lines.  
 - If needed, change the cloudfoundry API url in the `Dockerfile`.
-- Delete the `resources/keyValStore-bluemix` directory if it exists, it contains keys to the previously used service.
+- Delete the `server/resources/keyValStore-bluemix` directory if it exists, it contains keys to the previously used service.
 
 #### Deployment
 - Get into our CloudFoundry container by running `npm run cf`.  
-- From within the container, register the users and deploy the chaincode with `cd server && npm run deploy` (This can take about 30 seconds)
-- Open the dashboard of the blockchain service on Bluemix. Wait until you see the chaincode id appear on the `Network` tab. Ensure that it is running on all four peers and that all the way at the end it says `Up for x seconds/minutes`. After your initial deployment, each of the four peers should have two blocks - a genesis block and the deployed chaincode. If this is the case, then your chaincode has been deployed successfully!
+- From within the container, register the users and deploy the chaincode with `cd server && npm run deploy` (This can take a few minutes)
+- Open the dashboard of the blockchain service on Bluemix. Wait until you see the chaincode id appear on the `Network` tab. Ensure that it is running on all four peers and that all the way at the end it says `Up for x seconds/minutes`. The blocks with transactions for the deployment and the invocation of the testdata function should be visible on the `Blockchain` tab.
 - Deploy app to Bluemix: cd up one level and do `cf push`, still from within the container.
 
 For assistance with the cloud foundry cli, visit the [cloud foundry](https://github.com/cloudfoundry/cli#downloads) repo.  
@@ -107,10 +114,10 @@ After the app has been pushed to Bluemix, you can view the logs with:
 Where NAME_OF_THE_APP is the app name you provided in the manifest.yml file.
 
 # Support and documentation
-Hyperledger project:                https://www.hyperledger.org/    
-Official Hyperledger slack channel: https://hyperledgerproject.slack.com   
-IRC:                                #hyperledger on freenode.net    
-Wiki:                               https://wiki.hyperledger.org/     
+Hyperledger project:                https://www.hyperledger.org/
+Official Hyperledger slack channel: https://hyperledgerproject.slack.com
+IRC:                                #hyperledger on freenode.net
+Wiki:                               https://wiki.hyperledger.org/
 HFC:                                https://www.npmjs.com/package/hfc/  
 Bluemix                             https://console.ng.bluemix.net/docs/  
 IBM on blockchain:                  https://www.ibm.com/blockchain/what-is-blockchain.html  

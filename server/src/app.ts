@@ -21,13 +21,14 @@ class App {
         const logger = new LoggerFactory().create();
         const blockchain = BlockchainFactory.create(logger, Config.getServerDirectory());
         const chaincodeId = await blockchain.init(DeployPolicy.NEVER);
-        const app = express();
         logger.debug('[App]', 'Using chaincode id', chaincodeId);
+
         const blockchainService = await blockchain.createClient(chaincodeId);
         process.on('unhandledRejection', (error: Error, promise: Promise<any>) => {
             logger.error(error.stack);
         });
 
+        const app = express();
         app.use((request: any, response: any, next: NextFunction) => {
             request.blockchain = blockchainService;
             next();

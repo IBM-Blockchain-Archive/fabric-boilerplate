@@ -6,7 +6,7 @@ import {LoggerFactory} from './utils/LoggerFactory';
 import {Config} from './config';
 import * as winston from 'winston';
 import {DeployPolicy} from './blockchain/Blockchain';
-import { BlockchainClient } from './blockchain/client/blockchainClient';
+import {BlockchainClient} from './blockchain/client/blockchainClient';
 
 class DeployApp {
   private logger: winston.LoggerInstance;
@@ -29,7 +29,6 @@ class DeployApp {
       setTimeout(() => {
         this.invokeTestDataAndExit(blockchainClient, chaincodeId);
       }, timeout);
-
     } catch (err) {
       this.logger.error(err.message);
       process.exit(1);
