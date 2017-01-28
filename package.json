@@ -25,7 +25,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.ibm.com:CICBlockchain/blockchain-boilerplate.git"
+    "url": "git+ssh://git@github.com/IBM-Blockchain/fabric-boilerplate.git"
   },
   "keywords": [
     "hyperledger",
@@ -38,7 +38,7 @@
   "author": "IBM Client Innovation Center Benelux",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.ibm.com/CICBlockchain/blockchain-boilerplate/issues"
+    "url": "https://github.com/IBM-Blockchain/fabric-boilerplate/issues"
   },
-  "homepage": "https://github.ibm.com/CICBlockchain/blockchain-boilerplate"
+  "homepage": "https://github.com/IBM-Blockchain/fabric-boilerplate"
 }

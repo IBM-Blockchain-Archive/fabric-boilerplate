@@ -15,12 +15,14 @@ export class ThingsController {
     @Get('/:id')
     public getThingsByUserID(@Param('id') userID: string, @Req() request: any): any {
         let enrollmentID = new JSONWebToken(request).getUserID();
+
         return request.blockchain.query('getThingsByUserID', [userID], enrollmentID);
     }
 
     @Post('/')
     public post(@Body() thing: Thing, @Req() request: any): any {
         let enrollmentID = new JSONWebToken(request).getUserID();
+
         return request.blockchain.invoke('createThing', [JSON.stringify(thing)], enrollmentID);
     }
 }

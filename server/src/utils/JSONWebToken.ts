@@ -25,6 +25,7 @@ export class JSONWebToken {
     if (!token) {
       token = request.query ? request.query.token : null;
     }
+
     return token;
   }
 }
