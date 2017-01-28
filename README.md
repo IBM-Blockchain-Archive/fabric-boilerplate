@@ -1,4 +1,4 @@
-# Fabric boilerplate
+# Fabric boilerplate [![Build Status](https://travis-ci.org/IBM-Blockchain/fabric-boilerplate.svg?branch=v2)](https://travis-ci.org/IBM-Blockchain/fabric-boilerplate)
 This is a boilerplate application to get you up and running quickly with your own blockchain application. With this boilerplate you get an application that you can run locally as well as on IBM Bluemix. There is a simple Angular frontend application, a NodeJS backend application and of course a blockchain network, all running in containers. Locally, the boilerplate starts up a blockchain network using Docker containers; on Bluemix you can use the Blockchain service.
 
 The boilerplate uses Hyperledger Fabric v0.6.1-preview and HFC 0.6.5.
