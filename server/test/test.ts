@@ -1,7 +1,8 @@
-import { User } from '../src/entities/user.model';
+import {User} from '../src/entities/user.model';
 import 'mocha';
 import * as chai from 'chai';
-let should = chai.should();
+
+const should = chai.should();
 
 describe('A user', function() {
   describe('when created', () => {

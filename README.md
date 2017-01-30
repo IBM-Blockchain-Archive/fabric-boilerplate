@@ -14,7 +14,9 @@ To have good support in your IDE it's advisable to also install NPM, TypeScript,
 1. `git clone` this repo  
 2. `cd` into the main directory and run `npm install` (or, if you don't have npm, `./install.sh`).
 
-This will pull the baseimage, download the Go dependencies of the chaincode and build your containers.
+This will pull the baseimage, peer and memberservie, download the Go dependencies of the chaincode and build your containers. It will take a while.  
+
+To get rid of missing module errors in your IDE, also run `npm install` from the `server` and `client` directory. This is not mandatory to run the application.
 
 ## Running the application
 To run the application, simply do `docker-compose up`.
@@ -25,7 +27,7 @@ This will start the three tiers of our application in separate containers:
 3. The NodeJS server, which registers the users and deploys the chaincode on first boot  
 4. The Angular frontend, which connects to the server through a REST API.  
 
-The app is running on `http://localhost:4200/`. You can login with the user credentials you find in `resources/testData.json`  
+The app is running on `http://localhost:4200/`. You can login with the user credentials you find in `server/resources/testData.json`  
 
 ## Development
 Both the frontend and the server use filewatchers. Any change in the source files will trigger the transpiler and restart that part of the application.  

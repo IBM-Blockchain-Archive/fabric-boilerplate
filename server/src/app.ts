@@ -23,14 +23,14 @@ class App {
         const chaincodeId = await blockchain.init(DeployPolicy.NEVER);
         logger.debug('[App]', 'Using chaincode id', chaincodeId);
 
-        const blockchainService = await blockchain.createClient(chaincodeId);
+        const blockchainClient = await blockchain.createClient(chaincodeId);
         process.on('unhandledRejection', (error: Error, promise: Promise<any>) => {
             logger.error(error.stack);
         });
 
         const app = express();
         app.use((request: any, response: any, next: NextFunction) => {
-            request.blockchain = blockchainService;
+            request.blockchain = blockchainClient;
             next();
         });
 
@@ -57,11 +57,11 @@ class App {
 
         // routes
         const expressRouter: Router = express.Router();
-        new Routes(blockchainService, logger).register(expressRouter);
+        new Routes(blockchainClient, logger).register(expressRouter);
         app.use('/', expressRouter);
 
-        const port = (process.env.VCAP_APP_PORT || 8080);
-        const host = (process.env.VCAP_APP_HOST || 'localhost');
+        const port = (process.env.VCAP_PORT || process.env.PORT || 8080);
+        const host = (process.env.VCAP_HOST || process.env.HOST || 'localhost');
         app.listen(port);
 
         // print a message when the server starts listening
