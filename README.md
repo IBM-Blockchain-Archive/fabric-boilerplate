@@ -116,10 +116,10 @@ After the app has been pushed to Bluemix, you can view the logs with:
 Where NAME_OF_THE_APP is the app name you provided in the manifest.yml file.
 
 # Support and documentation
-Hyperledger project:                https://www.hyperledger.org/
-Official Hyperledger slack channel: https://hyperledgerproject.slack.com
-IRC:                                #hyperledger on freenode.net
-Wiki:                               https://wiki.hyperledger.org/
+Hyperledger project:                https://www.hyperledger.org/  
+Official Hyperledger slack channel: https://hyperledgerproject.slack.com  
+IRC:                                #hyperledger on freenode.net  
+Wiki:                               https://wiki.hyperledger.org/  
 HFC:                                https://www.npmjs.com/package/hfc/  
 Bluemix                             https://console.ng.bluemix.net/docs/  
 IBM on blockchain:                  https://www.ibm.com/blockchain/what-is-blockchain.html  
