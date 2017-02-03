@@ -1,0 +1,57 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "declaration": false,
+        "removeComments": true,
+        "sourceMap": true,
+        "noLib": false,
+        "outDir": "dist",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true
+    },
+    "exclude": [
+        "node_modules",
+        "typings/**/*.d.ts",
+        "src/build-chaincode/vendor/github.com/hyperledger/fabric/*"
+    ],
+    "filesGlob": [
+        "src/api/v1/**/*.ts",
+        "src/auth/*.ts",
+        "src/blockchain/*.ts",
+        "src/blockchain/deployBluemix/**.ts",
+        "src/blockchain/deployLocal/**.ts",
+        "src/chargePoint/*.ts",
+        "src/testdata/*.ts",
+        "src/utils/*.ts",
+        "src/app.js",
+        "src/*.ts",
+        "typings/index.d.ts"
+    ],
+    "files": [
+        "src/api/v1/ThingsController.ts",
+        "src/auth/AuthController.ts",
+        "src/auth/ClientAuthenticator.ts",
+        "src/auth/index.ts",
+        "src/utils/UserAuthenticator.ts",
+        "src/blockchain/Blockchain.ts",
+        "src/blockchain/BlockchainBluemix.ts",
+        "src/blockchain/BlockchainFactory.ts",
+        "src/blockchain/BlockchainLocal.ts",
+        "src/blockchain/ChaincodeBluemixConfig.ts",
+        "src/blockchain/ChaincodeEnvironmentConfiguration.ts",
+        "src/blockchain/ChaincodeLocalConfig.ts",
+        "src/testdata/testData.ts",
+        "src/utils/BlockchainUserError.ts",
+        "src/utils/Directory.ts",
+        "src/utils/JSONWebToken.ts",
+        "src/utils/LoggerFactory.ts",
+        "src/utils/LoggerSettings.ts",
+        "src/utils/Password.ts",
+        "src/app.ts",
+        "src/config.ts",
+        "src/deploy.ts",
+        "src/routes.ts",
+        "src/testChaincode.ts"
+    ]
+}

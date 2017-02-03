@@ -1,0 +1,27 @@
+{
+  "users": [
+    {
+      "userID": "john",
+      "username": "john",
+      "password": "passw0rd",
+      "attributes": [
+        {
+          "name": "userID",
+          "value": "john"
+        }
+      ]
+    }
+  ],
+  "things": [
+    {
+      "thingID": "1",
+      "userID": "john",
+      "someProperty": "8716948000003"
+    },
+    {
+      "thingID": "2",
+      "userID": "john",
+      "someProperty": "124914266456"
+    }
+  ]
+}
