@@ -3,5 +3,6 @@ import { environment } from '../environments/environment';
 
 @Injectable()
 export class Configuration {
-    public Server: string = environment.apiUrl;
+    public apiHost: string = environment.apiHost;
+    public apiPrefix: string = environment.apiPrefix;
 }

@@ -6,7 +6,6 @@ vp0:
   environment:
     - CORE_PEER_ID=vp0
     - CORE_PEER_DISCOVERY_PERIOD=1s
-    - CORE_PEER_DISCOVERY_TOUCHPERIOD=1s
     - CORE_SECURITY_ENROLLID=test_vp0
     - CORE_SECURITY_ENROLLSECRET=MwYpmSRjupbT
     - CORE_PEER_PKI_ECA_PADDR=membersrvc:7054
@@ -19,14 +18,13 @@ vp0:
   links:
     - membersrvc
 
-# TODO: connection issues when started the second time
 #vp1:
 #  extends:
 #    file: compose-defaults.yml
 #    service: vp
 #  environment:
 #    - CORE_PEER_ID=vp1
-#    - CORE_PEER_DISCOVERY_ROOTNODE=vp0:7051
+#    - CORE_PEER_DISCOVERY_TOUCHPERIOD=1s
 #    - CORE_SECURITY_ENROLLID=test_vp1
 #    - CORE_SECURITY_ENROLLSECRET=5wgHK9qqYaPy
 #    - CORE_PEER_PKI_ECA_PADDR=membersrvc:7054
@@ -57,6 +55,7 @@ server:
     - ./server/src:/usr/src/app/src
     - ./server/resources:/usr/src/app/resources
     - ./blockchain/src:/usr/src/blockchain/src
+    - ./server/tsconfig.json:/usr/src/app/tsconfig.json # TS filenames get added automatically to this file on build
   links:
     - membersrvc
     - vp0
