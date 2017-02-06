@@ -1,3 +1,6 @@
+# Notice
+This is the old version of our boilerplate using JavaScript and AngularJS. Please check out the [v2-typescript](https://github.com/IBM-Blockchain/fabric-boilerplate/tree/v2-typescript) branch for the new and improved version with almost no dependencies, a modernized stack, easier development and deployment to Bluemix, and cleaner code.
+
 # Fabric boilerplate
 This is a boilerplate application to get you up and running quickly with your own blockchain application. With this boilerplate you get an application that you can run locally as well as on IBM Bluemix. There is a simple AngularJS frontend application, a NodeJS backend application and of course a blockchain network. Locally, the boilerplate starts up a blockchain network using Docker containers; on Bluemix you can use the Blockchain service.
 
