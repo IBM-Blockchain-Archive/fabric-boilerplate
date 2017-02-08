@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://APPNAME-api.eu-gb.mybluemix.net/'
+  apiHost: 'http://APPNAME-api.eu-gb.mybluemix.net/',
+  apiPrefix: 'api/v1/'
 };

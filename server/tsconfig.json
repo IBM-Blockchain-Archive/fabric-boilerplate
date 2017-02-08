@@ -29,11 +29,8 @@
         "typings/index.d.ts"
     ],
     "files": [
+        "src/api/v1/AuthController.ts",
         "src/api/v1/ThingsController.ts",
-        "src/auth/AuthController.ts",
-        "src/auth/ClientAuthenticator.ts",
-        "src/auth/index.ts",
-        "src/utils/UserAuthenticator.ts",
         "src/blockchain/Blockchain.ts",
         "src/blockchain/BlockchainBluemix.ts",
         "src/blockchain/BlockchainFactory.ts",
@@ -43,15 +40,15 @@
         "src/blockchain/ChaincodeLocalConfig.ts",
         "src/testdata/testData.ts",
         "src/utils/BlockchainUserError.ts",
+        "src/utils/ClientAuthenticator.ts",
         "src/utils/Directory.ts",
         "src/utils/JSONWebToken.ts",
         "src/utils/LoggerFactory.ts",
         "src/utils/LoggerSettings.ts",
         "src/utils/Password.ts",
+        "src/utils/UserAuthenticator.ts",
         "src/app.ts",
         "src/config.ts",
-        "src/deploy.ts",
-        "src/routes.ts",
-        "src/testChaincode.ts"
+        "src/deploy.ts"
     ]
 }

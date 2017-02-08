@@ -13,7 +13,7 @@ export class ThingService {
   constructor(private _http: Http,
               private _configuration: Configuration,
               private _authenticationService: AuthenticationService){
-    this.actionUrl = _configuration.Server + 'api/v1/things';
+    this.actionUrl = `${_configuration.apiHost}${_configuration.apiPrefix}things`;
     this.headers = _authenticationService.createAuthorizationHeader();
   }
 

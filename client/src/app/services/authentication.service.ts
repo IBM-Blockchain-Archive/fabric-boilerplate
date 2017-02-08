@@ -8,13 +8,13 @@ import 'rxjs/add/operator/map';
 export class AuthenticationService {
   public actionUrl: string;
   public token: string;
-  private TOKEN_KEY = 'token';
-  private USER_KEY = 'currentUser';
+  private TOKEN_KEY: string = 'token';
+  private USER_KEY: string = 'currentUser';
   public user: any;
 
   public constructor(private _http: Http,
                      private _configuration: Configuration) {
-    this.actionUrl = _configuration.Server + 'auth/login';
+    this.actionUrl = `${_configuration.apiHost}${_configuration.apiPrefix}login`;
     // set token if saved in local storage
     this.token = this.getToken();
   }
