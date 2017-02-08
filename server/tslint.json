@@ -79,7 +79,7 @@
       "check-accessor",
       "check-constructor"
     ],
-    "no-inferrable-types": true
+    "no-inferrable-types": false
   },
   "compilerOptions": {
     "allowUnusedLabels": false,
