@@ -9,6 +9,15 @@ module.exports = function (grunt) {
             ts: {
                 files: 'src/**/*.ts',
                 tasks: buildTasks
+            },
+            packageJSON: {
+                files: 'package.json',
+                tasks: ['shell:installNPMPackages', 'build']
+            }
+        },
+        shell: {
+            installNPMPackages: {
+                command: "npm install"
             }
         },
         ts: {

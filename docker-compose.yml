@@ -56,6 +56,7 @@ server:
     - ./server/resources:/usr/src/app/resources
     - ./blockchain/src:/usr/src/blockchain/src
     - ./server/tsconfig.json:/usr/src/app/tsconfig.json # TS filenames get added automatically to this file on build
+    - ./server/package.json:/usr/src/app/package.json
   links:
     - membersrvc
     - vp0
