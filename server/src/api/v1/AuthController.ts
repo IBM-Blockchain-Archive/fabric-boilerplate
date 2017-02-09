@@ -8,31 +8,31 @@ import {ClientAuthenticator, AuthenticationResponse} from '../../utils/ClientAut
 import {LoggerFactory} from '../../utils/LoggerFactory';
 
 class LoginParams {
-    public username: string;
-    public password: string;
+  public username: string;
+  public password: string;
 }
 
 @JsonController()
 export class AuthController {
-    private logger: winston.LoggerInstance = Container.get(LoggerFactory).create();
-    private blockchainClient: BlockchainClient = Container.get(BlockchainClient);
+  private logger: winston.LoggerInstance     = Container.get(LoggerFactory).create();
+  private blockchainClient: BlockchainClient = Container.get(BlockchainClient);
 
-    @Post('/login')
-    public async loginAsClient(@Body() loginParams: LoginParams, @Res() response: Response): Promise<AuthenticationResponse> {
-        let clientAuthenticator = new ClientAuthenticator(
-            this.logger,
-            loginParams.username,
-            loginParams.password,
-            this.blockchainClient
-        );
+  @Post('/login')
+  public async loginAsClient(@Body() loginParams: LoginParams, @Res() response: Response): Promise<AuthenticationResponse> {
+    let clientAuthenticator = new ClientAuthenticator(
+      this.logger,
+      loginParams.username,
+      loginParams.password,
+      this.blockchainClient
+    );
 
-        try {
-            return clientAuthenticator.authenticate();
-        } catch (error) {
-            return Promise.reject(<AuthenticationResponse>{
-                success: false,
-                message: 'Server error occurred'
-            });
-        }
+    try {
+      return clientAuthenticator.authenticate();
+    } catch (error) {
+      return Promise.reject(<AuthenticationResponse>{
+        success: false,
+        message: 'Server error occurred'
+      });
     }
+  }
 }

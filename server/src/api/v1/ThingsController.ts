@@ -8,19 +8,19 @@ import {BlockchainClient} from '../../blockchain/client/blockchainClient';
 @JsonController('/things')
 @UseBefore(UserAuthenticatorMiddleware)
 export class ThingsController {
-    private blockchainClient: BlockchainClient = Container.get(BlockchainClient);
+  private blockchainClient: BlockchainClient = Container.get(BlockchainClient);
 
-    @Get('/:id')
-    public getThingsByUserID(@Param('id') userID: string, @Req() request: any): any {
-        let enrollmentID = new JSONWebToken(request).getUserID();
+  @Get('/:id')
+  public getThingsByUserID(@Param('id') userID: string, @Req() request: any): any {
+    let enrollmentID = new JSONWebToken(request).getUserID();
 
-        return this.blockchainClient.query('getThingsByUserID', [userID], enrollmentID);
-    }
+    return this.blockchainClient.query('getThingsByUserID', [userID], enrollmentID);
+  }
 
-    @Post('/')
-    public post(@Body() thing: Thing, @Req() request: any): any {
-        let enrollmentID = new JSONWebToken(request).getUserID();
+  @Post('/')
+  public post(@Body() thing: Thing, @Req() request: any): any {
+    let enrollmentID = new JSONWebToken(request).getUserID();
 
-        return this.blockchainClient.invoke('createThing', [JSON.stringify(thing)], enrollmentID);
-    }
+    return this.blockchainClient.invoke('createThing', [JSON.stringify(thing)], enrollmentID);
+  }
 }
