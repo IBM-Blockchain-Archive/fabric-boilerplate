@@ -1,7 +1,7 @@
 'use strict';
 import {Response} from 'express';
 import * as winston from 'winston';
-import {Container} from 'typedi';
+import {Service} from 'typedi';
 import {JsonController, Post, Res, Body} from 'routing-controllers';
 import {BlockchainClient} from '../../blockchain/client/blockchainClient';
 import {ClientAuthenticator, AuthenticationResponse} from '../../utils/ClientAuthenticator';
@@ -13,9 +13,14 @@ class LoginParams {
 }
 
 @JsonController()
+@Service()
 export class AuthController {
-  private logger: winston.LoggerInstance     = Container.get(LoggerFactory).create();
-  private blockchainClient: BlockchainClient = Container.get(BlockchainClient);
+  private logger: winston.LoggerInstance;
+
+  public constructor(loggerFactory: LoggerFactory,
+                     private blockchainClient: BlockchainClient) {
+    this.logger = loggerFactory.create();
+  }
 
   @Post('/login')
   public async loginAsClient(@Body() loginParams: LoginParams, @Res() response: Response): Promise<AuthenticationResponse> {
