@@ -1,6 +1,5 @@
-'use strict';
 import {Request} from 'express';
-const jwt = require('jsonwebtoken');
+import * as jwt from 'jsonwebtoken';
 
 export class JSONWebToken {
   private decodedToken: any;
