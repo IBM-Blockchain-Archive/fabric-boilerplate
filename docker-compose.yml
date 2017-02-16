@@ -77,7 +77,16 @@ client:
 # Utils: we have go and cf here
 utils:
   image: cesarev/fabric-boilerplate
-#  user: $UID # TODO
+#  user: $UID # TODOr
+  environment:
+  - GOPATH=/usr/src/app
+  volumes:
+  - .:/usr/src/app
+  command: "true"
+
+# Gobuild: used to provide quick feedback on build of chaincode
+gobuild:
+  image: cesarev/fabric-boilerplate
   environment:
   - GOPATH=/usr/src/app
   volumes:
