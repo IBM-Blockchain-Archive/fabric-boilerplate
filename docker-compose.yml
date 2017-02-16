@@ -82,5 +82,4 @@ utils:
   - GOPATH=/usr/src/app
   volumes:
   - .:/usr/src/app
-  command: "true"
-  # bash -c "cd ../blockchain/src/build-chaincode && GOPATH=$(pwd)/../.. go test"
+  command: bash -c 'cd blockchain/src/build-chaincode && GOPATH=$$(pwd)/../.. go build chaincode.go && echo "Build successfully"'
