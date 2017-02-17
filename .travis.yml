@@ -14,9 +14,11 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
   - docker-compose build server
+  - docker-compose build client
   - docker-compose build utils
   - docker-compose run utils bash -c 'cd blockchain/src/build-chaincode && GOPATH=$(pwd)/../.. govend -rv'
 
 script:
   - docker-compose run utils bash -c 'cd blockchain/src/build-chaincode && GOPATH=$(pwd)/../.. go test'
   - docker-compose run server bash -c 'npm test'
+  - docker-compose run client bash -c 'ng lint'
