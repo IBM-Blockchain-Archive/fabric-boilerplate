@@ -9,7 +9,7 @@
       "check-space"
     ],
     "curly": true,
-    "eofline": true,
+    "eofline": false,
     "forin": true,
     "indent": [
       true,
@@ -18,9 +18,13 @@
     "label-position": true,
     "max-line-length": [
       true,
-      140
+      400
     ],
-    "member-access": false,
+    "member-access": [
+      true,
+      "check-accessor",
+      "check-constructor"
+    ],
     "member-ordering": [
       true,
       "static-before-instance",
@@ -39,7 +43,7 @@
     "no-construct": true,
     "no-debugger": true,
     "no-duplicate-variable": true,
-    "no-empty": false,
+    "no-empty": true,
     "no-eval": true,
     "no-inferrable-types": true,
     "no-shadowed-variable": true,
@@ -62,9 +66,7 @@
       "single"
     ],
     "radix": true,
-    "semicolon": [
-      "always"
-    ],
+    "semicolon": true,
     "triple-equals": [
       true,
       "allow-null-check"
@@ -103,5 +105,11 @@
     "no-access-missing-member": true,
     "templates-use-public": true,
     "invoke-injectable": true
+  },
+  "compilerOptions": {
+    "allowUnusedLabels": false,
+    "noImplicitReturns": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true
   }
 }
