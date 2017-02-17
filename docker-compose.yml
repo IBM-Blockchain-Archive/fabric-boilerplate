@@ -77,7 +77,7 @@ client:
 # Utils: we have go and cf here
 utils:
   image: cesarev/fabric-boilerplate
-#  user: $UID # TODOr
+#  user: $UID # TODO
   environment:
   - GOPATH=/usr/src/app
   volumes:
