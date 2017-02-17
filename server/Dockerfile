@@ -1,6 +1,6 @@
 #FROM cesarev/fabric-boilerplate
 FROM node:6
-RUN npm install -g grunt
+RUN npm install -g grunt --loglevel error
 RUN mkdir -p /usr/src/app/
 
 # use cached layer for node modules

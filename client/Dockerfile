@@ -3,7 +3,7 @@ FROM node:6
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-RUN npm install -g angular-cli
+RUN npm install -g angular-cli --loglevel error
 
 # use cached layer for node modules
 ADD package.json /tmp/package.json
