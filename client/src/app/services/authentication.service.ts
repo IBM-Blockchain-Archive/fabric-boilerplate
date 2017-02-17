@@ -8,7 +8,7 @@ import 'rxjs/add/operator/map';
 export class AuthenticationService {
   public actionUrl: string;
   public token: string;
-  private TOKEN_KEY: string = 'token';
+  private TOKEN_KEY = 'token';
   private USER_KEY: string = 'currentUser';
   public user: any;
 
