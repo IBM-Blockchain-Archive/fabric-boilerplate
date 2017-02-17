@@ -14,7 +14,6 @@ type TestDataElement interface {
 }
 
 type User struct {
-	TestDataElement 	`json:"-"`
 	UserID   	string 	`json:"userID"`
 	Username 	string 	`json:"username"`
 	Password 	string 	`json:"password"`
@@ -23,7 +22,6 @@ type User struct {
 }
 
 type Thing struct {
-	TestDataElement    	`json:"-"`
 	ThingID      	string 	`json:"thingID"`
 	SomeProperty 	string 	`json:"someProperty"`
 	UserID    	string 	`json:"userID"`
