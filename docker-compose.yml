@@ -83,4 +83,12 @@ utils:
   volumes:
   - .:/usr/src/app
   command: "true"
-  # bash -c "cd ../blockchain/src/build-chaincode && GOPATH=$(pwd)/../.. go test"
+
+# Gobuild: used to provide quick feedback on build of chaincode
+gobuild:
+  image: cesarev/fabric-boilerplate
+  environment:
+  - GOPATH=/usr/src/app
+  volumes:
+  - .:/usr/src/app
+  command: bash -c 'cd blockchain/src/build-chaincode && GOPATH=$$(pwd)/../.. go build chaincode.go && echo "Build successfully"'
