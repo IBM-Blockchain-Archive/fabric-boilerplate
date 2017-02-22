@@ -72,7 +72,7 @@ client:
       - ./client/src:/usr/src/app/src
       - ./client/angular-cli.json:/usr/src/app/angular-cli.json
       - ./client/tslint.json:/usr/src/app/tslint.json
-  command: ng lint && ng serve --host 0.0.0.0
+  command: bash -c 'ng lint && ng serve --host 0.0.0.0'
 
 # Utils: we have go and cf here
 utils:
