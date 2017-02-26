@@ -2,27 +2,26 @@ import {Get, Post, JsonController, Param, Body, Req, UseBefore} from 'routing-co
 import {JSONWebToken} from '../../utils/JSONWebToken';
 import {Thing} from '../../entities/thing.model';
 import {UserAuthenticatorMiddleware} from '../../middleware/UserAuthenticatorMiddleware';
-import {CORSMiddleware} from '../../middleware/CORSMiddleware';
-import {LoggerFactory} from '../../utils/LoggerFactory';
+import {BlockchainClient} from '../../blockchain/client/blockchainClient';
 import {Service} from 'typedi';
 
 @JsonController('/things')
-@UseBefore(UserAuthenticatorMiddleware, CORSMiddleware)
+@UseBefore(UserAuthenticatorMiddleware)
 @Service()
 export class ThingsController {
-    public constructor(private loggerFactory: LoggerFactory) { }
+  public constructor(private blockchainClient: BlockchainClient) { }
 
-    @Get('/:id')
-    public getThingsByUserID(@Param('id') userID: string, @Req() request: any): any {
-        let enrollmentID = new JSONWebToken(request).getUserID();
+  @Get('/:id')
+  public getThingsByUserID(@Param('id') userID: string, @Req() request: any): any {
+    let enrollmentID = new JSONWebToken(request).getUserID();
 
-        return request.blockchain.query('getThingsByUserID', [userID], enrollmentID);
-    }
+    return this.blockchainClient.query('getThingsByUserID', [userID], enrollmentID);
+  }
 
-    @Post('/')
-    public post(@Body() thing: Thing, @Req() request: any): any {
-        let enrollmentID = new JSONWebToken(request).getUserID();
+  @Post('/')
+  public post(@Body() thing: Thing, @Req() request: any): any {
+    let enrollmentID = new JSONWebToken(request).getUserID();
 
-        return request.blockchain.invoke('createThing', [JSON.stringify(thing)], enrollmentID);
-    }
+    return this.blockchainClient.invoke('createThing', [JSON.stringify(thing)], enrollmentID);
+  }
 }

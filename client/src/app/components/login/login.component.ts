@@ -9,10 +9,12 @@ import {AuthenticationService} from '../../services/authentication.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  title = 'app works';
+  public title = 'app works';
+  public username = '';
+  public password = '';
 
-  constructor(private _router: Router,
-              private _authenticationService: AuthenticationService) {
+  public constructor(private _router: Router,
+                     private _authenticationService: AuthenticationService) {
   }
 
   public ngOnInit(): void {

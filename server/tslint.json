@@ -7,16 +7,14 @@
     "indent": [true, "spaces"],
     "label-position": true,
     "linebreak-style": [true, "LF"],
-    "label-undefined": true,
     "max-line-length": [true, 400],
     "no-arg": true,
     "no-bitwise": true,
     "no-console": false,
     "no-consecutive-blank-lines": true,
     "no-construct": true,
-    "no-constructor-vars": false,
+    "no-parameter-properties": false,
     "no-debugger": true,
-    "no-duplicate-key": true,
     "no-duplicate-variable": true,
     "no-empty": true,
     "no-eval": true,
@@ -24,8 +22,6 @@
     "no-switch-case-fall-through": true,
     "no-trailing-whitespace": true,
     "no-unused-expression": true,
-    "no-unused-variable": true,
-    "no-unreachable": true,
     "no-use-before-declare": true,
     "no-var-requires": false,
     "no-namespace": true,
@@ -49,7 +45,6 @@
       "property-declaration",
       "parameter",
       "member-variable-declaration"],
-    "use-strict": false,
     "variable-name": [
       true,
       "allow-leading-underscore"
@@ -84,6 +79,12 @@
       "check-accessor",
       "check-constructor"
     ],
-    "no-inferrable-types": true
+    "no-inferrable-types": false
+  },
+  "compilerOptions": {
+    "allowUnusedLabels": false,
+    "noImplicitReturns": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true
   }
 }

@@ -1,72 +1,65 @@
-'use strict';
-
 import 'reflect-metadata';
-import {Routes} from './routes';
+import {useExpressServer, useContainer} from 'routing-controllers';
+import {Container} from 'typedi';
+import {Request, Response} from 'express';
+import * as morgan from 'morgan';
+import * as express from 'express';
+import * as winston from 'winston';
+import * as cors from 'cors';
+
 import {BlockchainFactory} from './blockchain/BlockchainFactory';
 import {LoggerFactory} from './utils/LoggerFactory';
 import {Config} from './config';
-import {Request, Response, NextFunction, Router} from 'express';
 import {DeployPolicy} from './blockchain/Blockchain';
-import {useExpressServer, useContainer} from 'routing-controllers';
-import * as morgan from 'morgan';
-import * as bodyParser from 'body-parser';
-import * as cookieParser from 'cookie-parser';
-import * as express from 'express';
-import * as path from 'path';
-import * as cors from 'cors';
-import {Container} from 'typedi';
+import {BlockchainClient} from './blockchain/client/blockchainClient';
 
 class App {
-    public async run(): Promise<void> {
-        const logger = new LoggerFactory().create();
-        const blockchain = BlockchainFactory.create(logger, Config.getServerDirectory());
-        const chaincodeId = await blockchain.init(DeployPolicy.NEVER);
-        logger.debug('[App]', 'Using chaincode id', chaincodeId);
+  private logger: winston.LoggerInstance = new LoggerFactory().create();
 
-        const blockchainClient = await blockchain.createClient(chaincodeId);
-        process.on('unhandledRejection', (error: Error, promise: Promise<any>) => {
-            logger.error(error.stack);
-        });
+  public async run(): Promise<void> {
+    const app = express();
+    app.use(cors());
 
-        const app = express();
-        app.use((request: any, response: any, next: NextFunction) => {
-            request.blockchain = blockchainClient;
-            next();
-        });
+    // Dependency injection
+    useContainer(Container);
+    Container.set(LoggerFactory, new LoggerFactory());
+    Container.set(BlockchainClient, await this.initializeBlockchain());
 
-        app.use(cors());
+    // initialize routing
+    useExpressServer(app, {
+      routePrefix: '/api/v1',
+      controllers: [__dirname + '/api/v1/*.js']
+    });
 
-        useContainer(Container);
-        // initialize routing
-        useExpressServer(app, {
-            routePrefix: '/api/v1',
-            controllers: [__dirname + '/api/v1/*.js']
-        });
-        app.use(bodyParser.json());
-        app.use(bodyParser.urlencoded({extended: false}));
-        app.use(cookieParser());
-        app.use('/', express.static(path.join(__dirname, '../client/dist')));
-        app.use(morgan(null, <morgan.Options> {
-            stream: {
-                skip: (request: Request, response: Response) => response.statusCode < 400,
-                write: (message: string): void => {
-                    logger.debug(message);
-                }
-            }
-        }));
+    // Log requests
+    app.use(morgan('dev', <morgan.Options> {
+      stream: {
+        skip:  (request: Request, response: Response) => response.statusCode < 400,
+        write: (message: string): void => {
+          this.logger.debug(message);
+        }
+      }
+    }));
 
-        // routes
-        const expressRouter: Router = express.Router();
-        new Routes(blockchainClient, logger).register(expressRouter);
-        app.use('/', expressRouter);
+    // Start server
+    const port = (process.env.VCAP_PORT || process.env.PORT || 8080);
+    const host = (process.env.VCAP_HOST || process.env.HOST || 'localhost');
+    app.listen(port);
+    this.logger.info(`[App] Express server listening at http://${host}:${port}`);
+  }
 
-        const port = (process.env.VCAP_PORT || process.env.PORT || 8080);
-        const host = (process.env.VCAP_HOST || process.env.HOST || 'localhost');
-        app.listen(port);
+  private async initializeBlockchain(): Promise<BlockchainClient> {
+    const blockchain       = BlockchainFactory.create(this.logger, Config.getServerDirectory());
+    const chaincodeId      = await blockchain.init(DeployPolicy.NEVER);
+    const blockchainClient = await blockchain.createClient(chaincodeId);
+    this.logger.debug('[App]', 'Using chaincode id', chaincodeId);
 
-        // print a message when the server starts listening
-        logger.info(`[NodeJS] Express server listening at http://${host}:${port}`);
-    }
+    return blockchainClient;
+  }
 }
+
+process.on('unhandledRejection', (error: Error, promise: Promise<any>) => {
+  this.logger.error('Unhandled rejection', error.stack);
+});
 
 new App().run();

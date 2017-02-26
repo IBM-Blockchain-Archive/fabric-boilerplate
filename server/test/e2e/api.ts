@@ -16,7 +16,7 @@ describe('the running server', () => {
             this.timeout(5000);
 
             server
-                .post('/auth/login')
+                .post('/api/v1/login')
                 .send({username: 'john', password: 'passw0rd'})
                 .expect(200)
                 .expect('Content-Type', /json/)
@@ -26,7 +26,7 @@ describe('the running server', () => {
                     }
 
                     should.exist(res.body.token);
-                    expect(res.body.authenticated).to.be.true;
+                    expect(res.body.success).to.be.true;
                     token = res.body.token;
                     done(err);
                 });
