@@ -1,0 +1,14 @@
+# Use with docker-compose -f docker-compose.yml -f block-explorer.yml up.
+#
+# Visit localhost:9090 in your browser to get an overview of the network
+explorer:
+  image: yeasy/blockchain-explorer:latest
+  expose:
+    - "9090"
+  hostname: explorer
+  environment:
+    - HYP_REST_ENDPOINT=http://vp0:7050
+  ports:
+    - "9090:9090"
+  links:
+    - vp0

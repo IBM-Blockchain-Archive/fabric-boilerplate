@@ -1,12 +1,5 @@
-node_modules/
-client/assets/node_modules/
-blockchain/deployLocal/*
-!blockchain/deployLocal/.gitkeep
-*.css
 .DS_Store
-/.idea
+.idea
 *.log
-src/build-chaincode/vendor
-blockchain/deployBluemix/keyValStore*/
-blockchain/deployBluemix/chaincode_id
-src/build-chaincode/build-chaincode
+npm-debug.log.*
+server/server

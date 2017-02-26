@@ -1,0 +1,90 @@
+{
+  "rules": {
+    "class-name": true,
+    "curly": true,
+    "eofline": false,
+    "forin": true,
+    "indent": [true, "spaces"],
+    "label-position": true,
+    "linebreak-style": [true, "LF"],
+    "max-line-length": [true, 400],
+    "no-arg": true,
+    "no-bitwise": true,
+    "no-console": false,
+    "no-consecutive-blank-lines": true,
+    "no-construct": true,
+    "no-parameter-properties": false,
+    "no-debugger": true,
+    "no-duplicate-variable": true,
+    "no-empty": true,
+    "no-eval": true,
+    "no-string-literal": true,
+    "no-switch-case-fall-through": true,
+    "no-trailing-whitespace": true,
+    "no-unused-expression": true,
+    "no-use-before-declare": true,
+    "no-var-requires": false,
+    "no-namespace": true,
+    "no-internal-module": true,
+    "no-reference": true,
+    "only-arrow-functions": true,
+    "new-parens": true,
+    "one-line": [
+      true,
+      "check-open-brace",
+      "check-catch",
+      "check-else",
+      "check-whitespace"
+    ],
+    "quotemark": [true, "single", "avoid-escape"],
+    "semicolon": true,
+    "triple-equals": [true, "allow-null-check"],
+    "typedef": [true,
+      "call-signature",
+      "parameter",
+      "property-declaration",
+      "parameter",
+      "member-variable-declaration"],
+    "variable-name": [
+      true,
+      "allow-leading-underscore"
+    ],
+    "typedef-whitespace": [
+      true,
+      {
+        "call-signature": "nospace",
+        "property-declaration": "nospace",
+        "index-signature": "nospace",
+        "parameter": "nospace",
+        "variable-declaration": "nospace"
+      },
+      {
+        "call-signature": "space",
+        "property-declaration": "space",
+        "index-signature": "space",
+        "parameter": "space",
+        "variable-declaration": "space"
+      }
+    ],
+    "whitespace": [
+      true,
+      "check-branch",
+      "check-decl",
+      "check-operator",
+      "check-separator",
+      "check-type"
+    ],
+    "member-access": [
+      true,
+      "check-accessor",
+      "check-constructor"
+    ],
+    "no-inferrable-types": false
+  },
+  "compilerOptions": {
+    "allowUnusedLabels": false,
+    "noImplicitReturns": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true
+  }
+}

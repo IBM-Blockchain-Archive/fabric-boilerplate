@@ -1,0 +1,5 @@
+dist
+node_modules
+resources/keyValueStore-bluemix
+resources/chaincodeId-bluemix
+/.tscache

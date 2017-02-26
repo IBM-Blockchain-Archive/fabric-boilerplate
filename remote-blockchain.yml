@@ -1,0 +1,18 @@
+# Use with docker-compose -f docker-compose.yml -f remote-blockchain.yml up.
+#
+# By overwriting the command with 'true' the container exits gracefully on startup
+#
+# NOTE: this is experimental and not thoroughly tested.
+#
+vp0:
+  command: "true"
+
+membersrvc:
+  command: "true"
+
+# Enter the addresses of a peer and the memberservice here.
+# TODO: Volume for KeyValueStore
+server:
+  environment:
+    - MEMBERSRVC_ADDR=192.168.178.196:7054
+    - PEER_ADDR=192.168.178.196:7051

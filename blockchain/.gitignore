@@ -1,0 +1,4 @@
+src/build-chaincode/chaincode
+src/build-chaincode/vendor
+src/build-chaincode/build-chaincode
+src/build-chaincode/Dockerfile

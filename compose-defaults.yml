@@ -2,17 +2,19 @@ vp:
   image: hyperledger/fabric-peer:x86_64-0.6.1-preview
   volumes:
     - /var/run/docker.sock:/var/run/docker.sock
-#    - ./blockchain/core.yaml:/opt/gopath/src/github.com/hyperledger/fabric/peer/core.yaml
   environment:
     - CORE_PEER_ADDRESSAUTODETECT=true
-    - CORE_VM_ENDPOINT=unix:///var/run/docker.sock
-    - CORE_LOGGING_LEVEL=INFO
-    - CORE_PEER_PKI_ECA_PADDR=membersrvc:7054
-    - CORE_PEER_PKI_TCA_PADDR=membersrvc:7054
-    - CORE_PEER_PKI_TLSCA_PADDR=membersrvc:7054
     - CORE_SECURITY_ENABLED=true
-#    activate for testing in a simulated bluemix blockchain service environment
-#    - CORE_PEER_VALIDATOR_CONSENSUS_PLUGIN=pbft
-#    - CORE_PBFT_GENERAL_MODE=batch
-#    - CORE_PBFT_GENERAL_N=4
-  command: sh -c "sleep 5; peer node start"
+    - CORE_SECURITY_PRIVACY=true
+  expose:
+    - "7050"  # Rest
+    - "7051"  # Grpc
+    - "7052"  # Peer CLI
+    - "7053"  # Peer Event
+    - "7054"  # eCAP
+    - "7055"  # eCAA
+    - "7056"  # tCAP
+    - "7057"  # eCAA
+    - "7058"  # tlsCAP
+    - "7059"  # tlsCAA
+  command: sh -c "sleep 8; peer node start"

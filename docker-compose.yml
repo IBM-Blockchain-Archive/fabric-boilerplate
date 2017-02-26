@@ -1,28 +1,20 @@
-membersrvc:
-  image: hyperledger/fabric-membersrvc:x86_64-0.6.1-preview
-  ports:
-    - "7054:7054"
-  environment:
-    - MEMBERSRVC_CA_ACA_ENABLED=true
-    - MEMBERSRVC_LOGGING_LEVEL=DEBUG
-#  volumes:
-#    - ./blockchain/membersrvc.yaml:/opt/gopath/src/github.com/hyperledger/fabric/membersrvc/membersrvc.0.6.yaml
-  command: membersrvc
-
+# Blockchain
 vp0:
   extends:
     file: compose-defaults.yml
     service: vp
-  ports:
-    - "7050:7050"
-    - "7051:7051"
-    - "7053:7053"
   environment:
     - CORE_PEER_ID=vp0
     - CORE_PEER_DISCOVERY_PERIOD=1s
-    - CORE_PEER_DISCOVERY_TOUCHPERIOD=1s
     - CORE_SECURITY_ENROLLID=test_vp0
     - CORE_SECURITY_ENROLLSECRET=MwYpmSRjupbT
+    - CORE_PEER_PKI_ECA_PADDR=membersrvc:7054
+    - CORE_PEER_PKI_TCA_PADDR=membersrvc:7054
+    - CORE_PEER_PKI_TLSCA_PADDR=membersrvc:7054
+  ports:
+    - "7050:7050"
+    - "7051:7051"
+#  command: sh -c "while ! nc membersrvc 7054 </dev/null; do sleep 1; done; peer node start"
   links:
     - membersrvc
 
@@ -32,36 +24,71 @@ vp0:
 #    service: vp
 #  environment:
 #    - CORE_PEER_ID=vp1
-#    - CORE_PEER_DISCOVERY_ROOTNODE=vp0:7051
+#    - CORE_PEER_DISCOVERY_TOUCHPERIOD=1s
 #    - CORE_SECURITY_ENROLLID=test_vp1
 #    - CORE_SECURITY_ENROLLSECRET=5wgHK9qqYaPy
+#    - CORE_PEER_PKI_ECA_PADDR=membersrvc:7054
+#    - CORE_PEER_PKI_TCA_PADDR=membersrvc:7054
+#    - CORE_PEER_PKI_TLSCA_PADDR=membersrvc:7054
 #  links:
 #    - vp0
 #    - membersrvc
-#
-#    activate for testing in a simulated bluemix blockchain service environment
-#vp2:
-#  extends:
-#    file: compose-defaults.yml
-#    service: vp
-#  environment:
-#    - CORE_PEER_ID=vp2
-#    - CORE_PEER_DISCOVERY_ROOTNODE=vp1:7051
-#    - CORE_SECURITY_ENROLLID=test_vp2
-#    - CORE_SECURITY_ENROLLSECRET=vQelbRvja7cJ
-#  links:
-#    - vp1
-#    - membersrvc
-#
-#vp3:
-#  extends:
-#    file: compose-defaults.yml
-#    service: vp
-#  environment:
-#    - CORE_PEER_ID=vp3
-#    - CORE_PEER_DISCOVERY_ROOTNODE=vp2:7051
-#    - CORE_SECURITY_ENROLLID=test_vp3
-#    - CORE_SECURITY_ENROLLSECRET=9LKqKH5peurL
-#  links:
-#    - vp2
-#    - membersrvc
+
+membersrvc:
+   image: hyperledger/fabric-membersrvc:x86_64-0.6.1-preview
+   ports:
+     - "7054:7054"
+   environment:
+       - MEMBERSRVC_CA_ACA_ENABLED=true
+   command: membersrvc
+
+# NodeJS app. Deploys if needed, watches src dir for transpiling and reloading.
+server:
+  build: server
+  ports:
+    - "8080:8080"
+  environment:
+    - NODE_ENV=development
+    - MEMBERSRVC_ADDR=membersrvc:7054
+    - PEER_ADDR=vp0:7051
+  volumes:
+    - ./server/src:/usr/src/app/src
+    - ./server/resources:/usr/src/app/resources
+    - ./blockchain/src:/usr/src/blockchain/src
+    - ./server/tsconfig.json:/usr/src/app/tsconfig.json # TS filenames get added automatically to this file on build
+    - ./server/package.json:/usr/src/app/package.json
+  links:
+    - membersrvc
+    - vp0
+  command: bash -c "sleep 8; cat chaincodeId || (grunt build; npm run deploy;) && grunt"
+
+# Web client
+client:
+  build: client
+  ports:
+      - "4200:4200"
+      - "49153:49153"
+  volumes:
+      - ./client/src:/usr/src/app/src
+      - ./client/angular-cli.json:/usr/src/app/angular-cli.json
+      - ./client/tslint.json:/usr/src/app/tslint.json
+  command: bash -c 'ng lint && ng serve --host 0.0.0.0'
+
+# Utils: we have go and cf here
+utils:
+  image: cesarev/fabric-boilerplate
+#  user: $UID # TODO
+  environment:
+  - GOPATH=/usr/src/app
+  volumes:
+  - .:/usr/src/app
+  command: "true"
+
+# Gobuild: used to provide quick feedback on build of chaincode
+gobuild:
+  image: cesarev/fabric-boilerplate
+  environment:
+  - GOPATH=/usr/src/app
+  volumes:
+  - .:/usr/src/app
+  command: bash -c 'cd blockchain/src/build-chaincode && GOPATH=$$(pwd)/../.. go build chaincode.go && echo "Build successfully"'

@@ -1,8 +1,0 @@
-{
-  "ignore": ["blockchain/data/*", "chaincode/*", "logs/*", "node_modules/**/node_modules", ".git", "client/*", "nodemon.json"],
-  "verbose": false,
-  "env": {
-    "PORT": 8080,
-    "NODE_ENV": "development"
-  }
-}
