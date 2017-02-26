@@ -72,7 +72,7 @@ client:
       - ./client/src:/usr/src/app/src
       - ./client/angular-cli.json:/usr/src/app/angular-cli.json
       - ./client/tslint.json:/usr/src/app/tslint.json
-  command: ng lint && ng serve --host 0.0.0.0
+  command: bash -c 'ng lint && ng serve --host 0.0.0.0'
 
 # Utils: we have go and cf here
 utils:
@@ -83,4 +83,12 @@ utils:
   volumes:
   - .:/usr/src/app
   command: "true"
-  # bash -c "cd ../blockchain/src/build-chaincode && GOPATH=$(pwd)/../.. go test"
+
+# Gobuild: used to provide quick feedback on build of chaincode
+gobuild:
+  image: cesarev/fabric-boilerplate
+  environment:
+  - GOPATH=/usr/src/app
+  volumes:
+  - .:/usr/src/app
+  command: bash -c 'cd blockchain/src/build-chaincode && GOPATH=$$(pwd)/../.. go build chaincode.go && echo "Build successfully"'

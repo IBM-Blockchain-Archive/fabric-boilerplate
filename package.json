@@ -16,7 +16,7 @@
     "install": "npm run getbaseimage && npm run govend && docker-compose pull && docker-compose build",
     "getbaseimage": "docker pull hyperledger/fabric-baseimage:x86_64-0.2.2 && docker tag hyperledger/fabric-baseimage:x86_64-0.2.2 hyperledger/fabric-baseimage:latest",
     "govend": "docker-compose run utils bash -c 'cd blockchain/src/build-chaincode && GOPATH=$(pwd)/../.. govend -rv' && sudo chown -R $USER blockchain",
-    "test-go": "docker-compose run utils bash -c 'cd blockchain/src/build-chaincode && GOPATH=$(pwd)/../.. go test'",
+    "test-go": "docker-compose run utils bash -c 'cd blockchain/src/build-chaincode && GOPATH=$(pwd)/../.. go test $(ls -d1 ./*/ | grep -v vendor | tr \"\n\" \" \" ) ./ '",
     "test-server": "docker-compose build server && docker-compose run server bash -c 'npm test'",
     "test-client": "docker-compose run -p 9876:9876 client bash -c 'npm test'",
     "test-e2e": "docker-compose exec server bash -c 'npm run e2e'",
