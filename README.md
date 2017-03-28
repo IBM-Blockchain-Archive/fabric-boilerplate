@@ -45,7 +45,7 @@ When you end docker-compose, the containers still exist. They keep state:
   - chaincodeId of the last deployment  
   - keyValStore with the private keys of the users  
 
-So if you start the app again, you can use your old chaincode. If you want to clear, just run with `docker-compose --force-recreate`.  
+So if you start the app again, you can use your old chaincode. If you want to clear, just run with `docker-compose up --force-recreate`.  
 
 Currently if you change the chaincode you will have to recreate the containers. In the future we will add a filewatcher for the chaincode as well.
 
