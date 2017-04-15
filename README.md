@@ -45,7 +45,7 @@ When you end docker-compose, the containers still exist. They keep state:
   - chaincodeId of the last deployment  
   - keyValStore with the private keys of the users  
 
-So if you start the app again, you can use your old chaincode. If you want to clear, just run with `docker-compose --force-recreate`.  
+So if you start the app again, you can use your old chaincode. If you want to clear, just run with `docker-compose up --force-recreate`.  
 
 Currently if you change the chaincode you will have to recreate the containers. In the future we will add a filewatcher for the chaincode as well.
 
@@ -98,7 +98,7 @@ Perform the following steps to run the application on Bluemix:
 - Update the manifest.yml file in the root of the project:
     - replace the names and hosts of both servers. The values can be anything, as long as they are unique.
     - replace the name of the service on the last line of the manifest. This should be the name of the Blockchain Service you just created.
-- Change the settings in `client/src/environments` to refer to the correct API endpoint of the server
+- Change the settings in client/src/environments/environment.prod.ts` to refer to the correct API endpoint of the server
 - Copy the credentials of the Blockchain Service and overwrite the credentials in `server/resources/credentials.json`. If you retrieve your Service Credentials from a [new console](https://new-console.ng.bluemix.net/#overview) instance of Bluemix then you will need to edit your credentials.json. Add `"credentials": {` to line 2 and then add a closing `}` to the final line.  Your finished payload should be 233 lines.  
 - If needed, change the cloudfoundry API url in the `Dockerfile`.
 - Delete the `server/resources/keyValStore-bluemix` directory if it exists, it contains keys to the previously used service.
