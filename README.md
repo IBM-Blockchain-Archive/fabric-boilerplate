@@ -9,33 +9,10 @@ The boilerplate uses Hyperledger Fabric **v0.6.1-developer-preview** and **HFC 0
 This boilerplate has been created and is maintained by the IBM CIC Groningen Blockchain team
 
 ## Prerequisites
-- [Go](https://golang.org/)
-- [Govend](https://github.com/govend/govend) 
-Once you have installed _go_, you can download the package with `go get -u github.com/govend/govend`.
-**Important:** Be sure your `GOPATH` variable is defined, the directory exists, you have the right permissions to read/write in it and the installation (command above) completes correctly (empty output in console). Furthermore, to be able to use `govend` bin to download the _vendor_ directory, you need to add your `GOPATH/bin` to the global `PATH` variable. For instance, add them to *.bash_profile* or *.profile* (e.g.):
-```
-export GOPATH=/whatever/directory/you/want
-# e.g. /home/john/gopath  or  /Users/John/mygopath
-export PATH=$PATH:$GOPATH/bin
-```
-**Important:** Remember to restart any instance of terminal running in order to apply the changes.
-
-You can test the installation running the following command (once you cloned the project):
-`npm run installgo`
-
-**Please pay attention to this step or you will not be able to build your chaincode.**
 - [NodeJS](https://nodejs.org/)
 - [Docker](https://www.docker.com/)
-- [Nodemon](https://github.com/remy/nodemon)
-
-Once you have installed _node_ and _npm_, you can install the module with: `npm install nodemon -g`
 
 ## Preparing your environment
-
-### Cloning and installing
-Use git clone from your preferred workspace folder to clone your project-code with:  
-1. git clone https://github.com/IBM-Blockchain/fabric-boilerplate.git   
-2. cd `fabric-boilerplate` and run `npm install`  
 
 ### Setting up Hyperledger Fabric
 1. Pull _peer_ image: `docker pull hyperledger/fabric-peer:x86_64-0.6.1-preview`
@@ -52,28 +29,20 @@ hyperledger/fabric-membersrvc   x86_64-0.6.1-preview   b3654d32e4f9
 hyperledger/fabric-peer         x86_64-0.6.1-preview   21cb00fb27f4
 ```
 
+### Cloning
+Use git clone from your preferred workspace folder to clone your project-code with:  
+```
+git clone https://github.com/IBM-Blockchain/fabric-boilerplate.git
+```
+
 ## Running the application automatically
-From your WORKSPACE/fabric-boilerplate folder:
+From your `WORKSPACE/fabric-boilerplate` folder:
+```
+docker-compose up --force-recreate
+```
 
-> docker-compose up
-
-This will start up a local blockchain network with two validating peers and a memberservice.
+This will start up a local blockchain network with 1 validating peer (the second one can be enabled from `docker-compose.yml` file) and a memberservice.
 The first time you run this script it will take a little while to download the necessary images.
-
-You can see if your local blockchain network is running by going to `localhost:7050/chain` in your browser.
-Once the network is up and running, open a second terminal and from your WORKSPACE/fabric-boilerplate folder:
-
-> npm start
-
-This will start up a NodeJS application that serves the frontend, deploys the chaincode to the network and will register the users with the memberservice. The application is configured to run with nodemon and node-sass to automatically restart the server when you make changes during development.
-
-Check if the app is running at `http://localhost:8080/` in your browser. You can login with the user credentials you find in `testData/testData.json`  
-
-To make local development easier there is a script that will cleanup your environment, start the blockchain network and run the app. From your _WORKSPACE/fabric-boilerplate_ folder:
-
-**Warning:** This script ask you either to clean or not your environment. Be aware answering **yes** you will **permanently deleted** all your containers (not images).
-
-> ./start.sh
 
 ## Running on Bluemix
 First run the following:

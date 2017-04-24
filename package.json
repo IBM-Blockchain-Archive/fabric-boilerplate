@@ -17,6 +17,7 @@
     "nodemon": "GOPATH=$(pwd) nodemon ./bin/www",
     "deploy": "NODE_ENV=production DEPLOYANDEXIT=true GOPATH=$(pwd) GPRC_TRACE=all DEBUG=hfc node app.js",
     "push": "cf push",
+    "clean": "rm -rf ./blockchain/deployLocal/keyValStore ./blockchain/deployLocal/chaincode_id",
     "start": "npm run build-css | npm run watch-css | npm run nodemon"
   },
   "dependencies": {
