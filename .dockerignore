@@ -1,0 +1,3 @@
+node_modules/
+client/assets/node_modules/
+src/build-chaincode/vendor/

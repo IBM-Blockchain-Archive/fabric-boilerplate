@@ -1,7 +1,7 @@
 membersrvc:
   image: hyperledger/fabric-membersrvc:x86_64-0.6.1-preview
   ports:
-    - "7054:7054"
+    - 7054:7054
   environment:
     - MEMBERSRVC_CA_ACA_ENABLED=true
     - MEMBERSRVC_LOGGING_LEVEL=DEBUG
@@ -14,9 +14,9 @@ vp0:
     file: compose-defaults.yml
     service: vp
   ports:
-    - "7050:7050"
-    - "7051:7051"
-    - "7053:7053"
+    - 7050:7050
+    - 7051:7051
+    - 7053:7053
   environment:
     - CORE_PEER_ID=vp0
     - CORE_PEER_DISCOVERY_PERIOD=1s
@@ -26,6 +26,39 @@ vp0:
   links:
     - membersrvc
 
+fabric-app:
+  image: cesarev/fabric-boilerplate:v1-javascript
+  ports:
+    - 3000:3000
+    - 8080:8080
+  tty: true
+  links:
+    - membersrvc
+    - vp0
+  volumes:
+    - ./api:/usr/src/app/api
+    - ./auth:/usr/src/app/auth
+    - ./bin:/usr/src/app/bin
+    - ./blockchain:/usr/src/app/blockchain
+    - ./client/app:/usr/src/app/client/app
+    - ./client/assets/css:/usr/src/app/client/assets/css
+    - ./client/assets/images:/usr/src/app/client/assets/images
+    - ./client/assets/package.json:/usr/src/app/client/assets/package.json
+    - ./client/assets/index.html:/usr/src/app/client/assets/index.html
+    - ./services:/usr/src/app/services
+    - ./src/build-chaincode/data:/usr/src/app/src/build-chaincode/data
+    - ./src/build-chaincode/invoke:/usr/src/app/src/build-chaincode/invoke
+    - ./src/build-chaincode/query:/usr/src/app/src/build-chaincode/query
+    - ./src/build-chaincode/utils:/usr/src/app/src/build-chaincode/utils
+    - ./src/build-chaincode/chaincode.go:/usr/src/app/src/build-chaincode/chaincode.go
+    - ./testdata:/usr/src/app/testdata
+    - ./utils:/usr/src/app/utils
+    - ./package.json:/usr/src/app/package.json
+    - ./app.js:/usr/src/app/app.js
+    - ./config.js:/usr/src/app/config.js
+    - ./nodemon.json:/usr/src/app/nodemon.json
+    - ./routes.js:/usr/src/app/routes.js
+  command: bash -c "sleep 8; npm run clean | npm run build-css | node ./bin/www"
 #vp1:
 #  extends:
 #    file: compose-defaults.yml
